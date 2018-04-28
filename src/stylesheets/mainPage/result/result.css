@@ -1,0 +1,12 @@
+.result-search{
+    height: 100px;
+    width: 100%;
+}
+
+.result-view{
+    height: auto;
+    min-height: calc(100vh - 230px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}

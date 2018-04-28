@@ -1,7 +1,7 @@
 .main-wrapper{
     height: auto;
     min-width: 800px;
-    width: 96vw;
+    width: 100%;
     margin: 0 auto;
     text-align: left;
 }
@@ -20,7 +20,7 @@
 
 .main-content{
     width: 100%;
-    height: calc(100vh - 200px - 50px);
+    height: calc(100vh - 230px);
     margin-bottom: 50px;
     min-height: 600px;
 }

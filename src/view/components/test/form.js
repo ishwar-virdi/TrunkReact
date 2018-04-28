@@ -47,7 +47,7 @@ class Form extends Component{
                     <input type="submit"/>
                 </form>
                 <form method="post" action="http://localhost:3001/api/register">
-                    <input type="hidden" name="token" value="J9sMYlmS1lYLQR8XPsSigFt4yfNyBxLr"/>
+                    <input type="hidden" name="token" value={this.state.result}/>
                     <input name="username" type="text"/>
                     <input name="password" type="password"/>
                     <input type="submit"/>
