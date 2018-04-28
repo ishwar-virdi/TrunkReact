@@ -1,35 +1,49 @@
-table {
-    border-collapse: collapse;
+.transaction-table {
+    border-collapse: separate;
+    border-spacing: 0px;
     width: 95%;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
 }
 
-th {
+.transaction-table tr:hover {
+    background: #d3d3d3;
+}
+
+.table-header td {
     background-color: grey;
     font-weight: bold;
     font-size: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
-th:first-child {
+thead td:first-child {
+    -webkit-border-radius: 8px 0 0 0;
+    -moz-border-radius: 8px 0 0 0;
     border-radius: 8px 0 0 0;
 }
 
-th:last-child {
+thead td:last-child {
+    -webkit-border-radius: 0 8px 0 0;
+    -moz-border-radius: 0 8px 0 0;
     border-radius: 0 8px 0 0;
 }
 
-tr {
+.table-row td {
     font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-tr:last-child td:first-child {
+tbody tr:last-child td:first-child {
     border-radius: 0 0 0 8px;
+    -webkit-border-radius: 0 0 0 8px;
+    -moz-border-radius: 0 0 0 8px;
 }
 
-tr:last-child td:last-child {
+tbody tr:last-child td:last-child {
     border-radius: 0 0 8px 0;
+    -webkit-border-radius: 0 0 8px 0;
+    -moz-border-radius: 0 0 8px 0;
 }
