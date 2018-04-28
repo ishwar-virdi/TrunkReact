@@ -4,6 +4,7 @@ import Title from "../../components/content/title";
 import "../../../stylesheets/mainPage/detail/detail.css";
 import SearchBar from "../../components/content/searchBar";
 import Footer from "../../components/content/footer";
+import TransactionTable from "../detail/transactionTable"
 
 class detail extends Component{
 
@@ -20,26 +21,11 @@ class detail extends Component{
                 <Header clickedClass="History"/>
                 <div className="body">
                     <Title title="SHOW RESULTS - TIME"/>
-                    <SearchBar />
-
+                    <div className="result-search">
+                        <SearchBar />
+                    </div>
                     <div className="detail-view">
-                        <table>
-                            <tr>
-                                <th>Bethany</th>
-                                <th>Lastname</th>
-                                <th>Age</th>
-                            </tr>
-                            <tr>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td>Eve</td>
-                                <td>Jackson</td>
-                                <td>94</td>
-                            </tr>
-                        </table>
+                        <TransactionTable />
                     </div>
                 </div>
                 <Footer />

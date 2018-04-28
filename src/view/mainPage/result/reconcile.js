@@ -3,6 +3,7 @@ import FormSeperateLayerfrom from "./formSeperateLayer";
 import { Link,Redirect } from 'react-router-dom';
 import "../../../stylesheets/mainPage/result/reconcile.css";
 import moment from "moment";
+
 class Reconcile extends React.Component {
     constructor(props) {
         super(props);

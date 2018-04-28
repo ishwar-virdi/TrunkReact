@@ -5,6 +5,7 @@ import SearchBar from "../../components/content/searchBar";
 import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
+
 class result extends Component{
 
     constructor(props) {
@@ -17,14 +18,14 @@ class result extends Component{
     render(){
         return (
             <div className="container">
-                <Header clickedClass="Result"/>
+                <Header clickedClass="Result" />
                 <div className="body">
-                    <Title title="RECONCILIATION PROGRESS"/>
+                    <Title title="RECONCILIATION PROGRESS" />
                     <div className="result-search">
-                        <SearchBar/>
+                        <SearchBar />
                     </div>
                     <div className="result-view">
-                        <Reconcile/>
+                        <Reconcile />
                     </div>
                 </div>
                 <Footer/>
