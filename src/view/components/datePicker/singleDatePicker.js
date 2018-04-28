@@ -9,19 +9,19 @@ class SingDatePicker extends React.Component {
         super(props);
         this.state = {
             startDate:"",
-            focused:true
-        };
+        }
     }
 
     render() {
         return(
-            <SingleDatePicker
-                date={this.state.startDate}
-                onDateChange={startDate => this.setState({ startDate })}
-                focused={this.state.focused}
-                isOutsideRange={() => false}
-                onFocusChange={({ focused }) => this.setState({ focused })}
-            />
+            <div>
+                <SingleDatePicker
+                    date={this.state.date}
+                    onDateChange={date => this.setState({ date })}
+                    focused={this.state.focused}
+                    onFocusChange={({ focused }) => this.setState({ focused })}
+                />
+            </div>
         )
     };
 }
