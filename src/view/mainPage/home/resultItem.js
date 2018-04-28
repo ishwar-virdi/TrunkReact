@@ -1,6 +1,6 @@
 import React from 'react';
-import "../../stylesheets/title.css";
-import "../../stylesheets/resultItem.css"
+import "../../../stylesheets/content/title.css";
+import "../../../stylesheets/mainPage/home/resultItem.css"
 
 class ResultItem extends React.Component {
     constructor(props) {

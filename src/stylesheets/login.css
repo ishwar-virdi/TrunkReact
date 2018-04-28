@@ -48,6 +48,7 @@
     -moz-animation: stretchdelay 1.5s infinite ease-in-out;
     animation: opacityAni 1.5s infinite ease-in-out;
 }
+
 @-webkit-keyframes opacityAni {
     0% { -webkit-transform: scale(1.0) }
     100% {
@@ -61,7 +62,6 @@
     width: calc(100% - 80px);
     padding: 0px 40px 30px 40px;
 }
-
 
 .inputBox{
     color: black;
