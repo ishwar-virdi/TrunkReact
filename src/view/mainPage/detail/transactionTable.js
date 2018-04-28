@@ -4,6 +4,10 @@ import "../../../stylesheets/mainPage/detail/transactionTable.css";
 class TransactionTable extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            items: []
+        }
     }
 
     componentDidMount() {
@@ -67,70 +71,69 @@ class TransactionTable extends React.Component {
         });
     }
 
+    returnList = () => {
+        const items = this.state.items;
+        var list = [];
+
+        for (var i = 0; i < items.length; i++) {
+            list.push(<TransactionRow key={i} value={items[i]} />);
+        }
+
+        return list;
+
+    };
+
     render () {
+        var list = this.returnList();
+
         return (
             <table>
-                <tr>
-                    <th><input type="checkbox" name="selectAll" /></th>
-                    <th>Transaction Date/Time</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Account Number</th>
-                    <th>Transaction Type</th>
-                    <th>Reconciled?</th>
-                    <th>Rule</th>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="selectAll" /></td>
-                    <td>07/04/2018 15:18</td>
-                    <td>A fish</td>
-                    <td>$533</td>
-                    <td>12345678</td>
-                    <td>Direct Debit</td>
-                    <td>Yes</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="selectAll" /></td>
-                    <td>07/04/2018 15:18</td>
-                    <td>A fish</td>
-                    <td>$533</td>
-                    <td>12345678</td>
-                    <td>Direct Debit</td>
-                    <td>Yes</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="selectAll" /></td>
-                    <td>07/04/2018 15:18</td>
-                    <td>A fish</td>
-                    <td>$533</td>
-                    <td>12345678</td>
-                    <td>Direct Debit</td>
-                    <td>Yes</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="selectAll" /></td>
-                    <td>07/04/2018 15:18</td>
-                    <td>A fish</td>
-                    <td>$533</td>
-                    <td>12345678</td>
-                    <td>Direct Debit</td>
-                    <td>Yes</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="selectAll" /></td>
-                    <td>07/04/2018 15:18</td>
-                    <td>A fish</td>
-                    <td>$533</td>
-                    <td>12345678</td>
-                    <td>Direct Debit</td>
-                    <td>Yes</td>
-                    <td>1</td>
-                </tr>
+                <thead>
+                    <TransactionRow />
+                </thead>
+                <tbody>
+                    {list}
+                </tbody>
             </table>
+        );
+    }
+}
+
+class TransactionRow extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowClass: "reconciled-true"
+        };
+    }
+
+    componentDidMount() {
+
+    }
+
+    render() {
+        const value = this.props.value;
+
+        const dateTime = value.dateTime;
+        const description = value.description;
+        const amount = value.amount;
+        const accountNumber = value.accountNumber;
+        const transactionType = value.transactionType;
+        const reconciled = value.reconciled;
+        const rule = value.rule;
+
+        return (
+            <tr className={}>
+                <td><input type="checkbox" name="selectAll" /></td>
+                <td>{dateTime}</td>
+                <td>{description}</td>
+                <td>{amount}</td>
+                <td>{accountNumber}</td>
+                <td>{transactionType}</td>
+                <td>{reconciled}</td>
+                <td>{rule}</td>
+            </tr>
         );
     }
 }
