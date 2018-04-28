@@ -10,6 +10,14 @@
     background: #d3d3d3;
 }
 
+tbody tr:hover {
+    cursor: pointer;
+}
+
+input:hover {
+    cursor: pointer;
+}
+
 .table-header td {
     background-color: grey;
     font-weight: bold;

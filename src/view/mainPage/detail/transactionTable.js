@@ -1,5 +1,6 @@
 import React from "react";
 import "../../../stylesheets/mainPage/detail/transactionTable.css";
+import NumberFormat from 'react-number-format';
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class TransactionTable extends React.Component {
         this.setState({
             items: [
                 {
+                    uniqueId: "0",
                     isChecked: false,
                     dateTime: "07/04/2018 15:18",
                     description: "",
@@ -25,6 +27,7 @@ class TransactionTable extends React.Component {
                     rule: "1"
                 },
                 {
+                    uniqueId: "1",
                     isChecked: false,
                     dateTime: "09/04/2018 10:05",
                     description: "",
@@ -35,6 +38,7 @@ class TransactionTable extends React.Component {
                     rule: "1"
                 },
                 {
+                    uniqueId: "2",
                     isChecked: false,
                     dateTime: "09/04/2018 10:20",
                     description: "",
@@ -45,6 +49,7 @@ class TransactionTable extends React.Component {
                     rule: "4"
                 },
                 {
+                    uniqueId: "3",
                     isChecked: false,
                     dateTime: "09/04/2018 12:30",
                     description: "",
@@ -55,6 +60,7 @@ class TransactionTable extends React.Component {
                     rule: "5"
                 },
                 {
+                    uniqueId: "4",
                     isChecked: false,
                     dateTime: "09/04/2018 16:14",
                     description: "",
@@ -65,10 +71,11 @@ class TransactionTable extends React.Component {
                     rule: "1"
                 },
                 {
+                    uniqueId: "5",
                     isChecked: false,
                     dateTime: "07/04/2018 15:18",
                     description: "",
-                    amount: "533",
+                    amount: "1460",
                     accountNumber: "12345678",
                     transactionType: "Visa",
                     reconciled: true,
@@ -77,6 +84,36 @@ class TransactionTable extends React.Component {
             ]
         });
     }
+
+    markAsReconciled = () => {
+        var items = this.state.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].isChecked) {
+                items[i].reconciled = true;
+                items[i].rule = "Manually Marked"
+            }
+        }
+
+        this.setState({
+           items: items
+        });
+    };
+
+    markAsNotReconciled = () => {
+        var items = this.state.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].isChecked) {
+                items[i].reconciled = false;
+                items[i].rule = "Manually Marked"
+            }
+        }
+
+        this.setState({
+            items: items
+        });
+    };
 
     selectOne = (isChecked, index) => {
         var items = this.state.items;
@@ -93,7 +130,7 @@ class TransactionTable extends React.Component {
         var list = [];
 
         for (var i = 0; i < items.length; i++) {
-            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} onChange={this.selectOne} index={i}/>);
+            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i}/>);
         }
 
         return list;
@@ -137,14 +174,19 @@ class TransactionTable extends React.Component {
                         rule: "Rule"};
 
         return (
-            <table className="transaction-table">
-                <thead>
-                    <TransactionRow value={title} isHeader={true} onChange={this.selectAll}/>
-                </thead>
-                <tbody>
-                    {list}
-                </tbody>
-            </table>
+            <div>
+                <table className="transaction-table">
+                    <thead>
+                        <TransactionRow value={title} isHeader={true} selectChanged={this.selectAll}/>
+                    </thead>
+                    <tbody>
+                        {list}
+                    </tbody>
+                </table>
+                <br />
+                <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
+                <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
+            </div>
         );
     }
 }
@@ -152,28 +194,35 @@ class TransactionTable extends React.Component {
 class TransactionRow extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            rowClass: "reconciled-true"
-        };
     }
+
+    rowClicked = () => {
+        console.log("Row " + this.props.index + " was clicked!");
+    };
 
     render() {
         const value = this.props.value;
         let className = this.props.isHeader ? "table-header" : "table-row";
+        var amount = value.amount;
+        var reconciled = "Successful";
+
+        //Formats the amount if it is not the header
+        if (!this.props.isHeader)
+            amount = <NumberFormat value={amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
+
+        if (!value.reconciled)
+            reconciled = "Failed";
 
         const isChecked = value.isChecked;
         const dateTime = value.dateTime;
         const description = value.description;
-        const amount = value.amount;
         const accountNumber = value.accountNumber;
         const transactionType = value.transactionType;
-        const reconciled = value.reconciled;
         const rule = value.rule;
 
         return (
-            <tr className={className}>
-                <td><InputCheckbox value={isChecked} onChange={this.props.onChange} index={this.props.index}/></td>
+            <tr className={className} onClick={this.rowClicked}>
+                <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
                 <td>{dateTime}</td>
                 <td>{description}</td>
                 <td>{amount}</td>
@@ -192,6 +241,7 @@ class InputCheckbox extends React.Component {
     }
 
     handleOnChange = () => {
+        //If it is the "Select All" checkbox, then don't try and parse the props
         if (this.props.index != null)
             this.props.onChange(this.props.value, this.props.index);
         else

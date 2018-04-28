@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "^6.4.0",
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
     "jquery": "^3.3.1",
@@ -17,10 +18,10 @@
     "react-dom": "^16.3.1",
     "react-input-calendar": "^0.5.2",
     "react-moment-proptypes": "latest",
+    "react-number-format": "^3.3.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
-    "whatwg-fetch": "^2.0.4",
-    "ajv": "^6.4.0"
+    "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
     "start": "react-scripts start",

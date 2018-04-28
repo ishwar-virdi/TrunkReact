@@ -282,7 +282,7 @@ class ReconcileItem extends React.Component {
         this.state={
             btnClass:"reconcileItem ren-Item-hover",
             statusClass:"reconcile-status fl",
-            btn:"Show",
+            btn:"detail",
             recordIsTitle:false,
         };
         this.handleTimeClick = this.handleTimeClick.bind(this);
