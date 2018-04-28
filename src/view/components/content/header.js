@@ -8,7 +8,7 @@ class Header extends React.Component {
         this.state={
             clicked:props.clickedClass,
             redirect:null,
-            items:["Home","Result","Upload"],
+            items:["Home","Results","Upload"],
         };
 
     }
@@ -42,7 +42,7 @@ class Header extends React.Component {
                         </ul>
                     </div>
                     <div className="logout">
-                        <a className="gstBtn">LogOut</a>
+                        <a className="gstBtn">Log Out</a>
                     </div>
                 </div>
             </header>

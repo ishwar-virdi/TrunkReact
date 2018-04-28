@@ -24,7 +24,7 @@ class App extends Component {
                     <Route path="/home" component={dashboard} />
                     <Route path="/form" component={form} />
                     <Route path="/chart" component={chart} />
-                    <Route path="/result" component={history} />
+                    <Route path="/results" component={history} />
                     <Route path="/upload" component={upload} />
                     <Route path="/detail" component={detail} />
                     <Route path="/receipt" component={transactionReceipt} />

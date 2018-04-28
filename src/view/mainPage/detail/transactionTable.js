@@ -82,28 +82,53 @@ class TransactionTable extends React.Component {
                 </tr>
                 <tr>
                     <td><input type="checkbox" name="selectAll" /></td>
-                    <td>Smith</td>
-                    <td>50</td>
+                    <td>07/04/2018 15:18</td>
+                    <td>A fish</td>
+                    <td>$533</td>
+                    <td>12345678</td>
+                    <td>Direct Debit</td>
+                    <td>Yes</td>
+                    <td>1</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" name="selectAll" /></td>
-                    <td>Jackson</td>
-                    <td>94</td>
+                    <td>07/04/2018 15:18</td>
+                    <td>A fish</td>
+                    <td>$533</td>
+                    <td>12345678</td>
+                    <td>Direct Debit</td>
+                    <td>Yes</td>
+                    <td>1</td>
                 </tr>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" /></th>
-                    <th>Lastname</th>
-                    <th>Age</th>
+                    <td><input type="checkbox" name="selectAll" /></td>
+                    <td>07/04/2018 15:18</td>
+                    <td>A fish</td>
+                    <td>$533</td>
+                    <td>12345678</td>
+                    <td>Direct Debit</td>
+                    <td>Yes</td>
+                    <td>1</td>
                 </tr>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" /></th>
-                    <th>Lastname</th>
-                    <th>Age</th>
+                    <td><input type="checkbox" name="selectAll" /></td>
+                    <td>07/04/2018 15:18</td>
+                    <td>A fish</td>
+                    <td>$533</td>
+                    <td>12345678</td>
+                    <td>Direct Debit</td>
+                    <td>Yes</td>
+                    <td>1</td>
                 </tr>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" /></th>
-                    <th>Lastname</th>
-                    <th>Age</th>
+                    <td><input type="checkbox" name="selectAll" /></td>
+                    <td>07/04/2018 15:18</td>
+                    <td>A fish</td>
+                    <td>$533</td>
+                    <td>12345678</td>
+                    <td>Direct Debit</td>
+                    <td>Yes</td>
+                    <td>1</td>
                 </tr>
             </table>
         );
