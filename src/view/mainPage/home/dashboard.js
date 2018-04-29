@@ -1,8 +1,8 @@
 import React,{Component} from "react";
-import Header from "./components/header";
-import Title from "./components/title";
-import Result from "./components/content/result";
-import Footer from "./components/footer";
+import Header from "../../components/content/header";
+import Title from "../../components/content/title";
+import Result from "../../components/content/result";
+import Footer from "../../components/content/footer";
 class Dashboard extends Component{
 
     constructor(props) {

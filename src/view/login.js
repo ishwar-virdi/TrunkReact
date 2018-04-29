@@ -71,9 +71,8 @@ class Login extends Component{
             email:e.target.value,
             warning: validation(e.target.value,this.state.password),
         });
-
-
     }
+
     handlePasswordChange(e){
         this.setState({
             password:e.target.value,
@@ -151,7 +150,7 @@ class Login extends Component{
         return (
             <div className="container">
                     {
-                        redirect === "success" ||"" ? (<Redirect to="/dashboard" />)
+                        redirect === "success" ||"" ? (<Redirect to="/home" />)
                                 : null
                         }
                 <div className="login">
@@ -164,7 +163,6 @@ class Login extends Component{
                             {warnLabel}
                         </div>
                         <form>
-
                             <input onChange={this.handleEmailChange} className="inputBox" type="text" placeholder="Email"/>
                             <input onChange={this.handlePasswordChange} className="inputBox" type="password" placeholder="Password"/>
                             <div className="submit">

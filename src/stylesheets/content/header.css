@@ -5,6 +5,7 @@ header{
     height: 50px;
     background-color: white;
     box-shadow: 0px 0px 10px #aaa;
+    min-width: 800px;
 }
 
 .headerLayer{
@@ -64,6 +65,8 @@ header{
 
 .body{
     position: relative;
+    width: 98%;
+    margin: 0 auto;
     padding-top: 50px;
     min-width: 800px;
 }
