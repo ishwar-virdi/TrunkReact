@@ -85,6 +85,16 @@ class TransactionTable extends React.Component {
         });
     }
 
+    selectOne = (isChecked, index) => {
+        var items = this.state.items;
+
+        items[index].isChecked = !isChecked;
+
+        this.setState({
+            items: items
+        });
+    };
+
     markAsReconciled = () => {
         var items = this.state.items;
 
@@ -114,16 +124,6 @@ class TransactionTable extends React.Component {
             items: items
         });
     };
-
-    selectOne = (isChecked, index) => {
-        var items = this.state.items;
-
-        items[index].isChecked = !isChecked;
-
-        this.setState({
-            items: items
-        });
-    }
 
     returnList = () => {
         const items = this.state.items;
