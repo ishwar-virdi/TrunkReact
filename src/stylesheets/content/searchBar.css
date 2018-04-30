@@ -1,0 +1,105 @@
+.search-container{
+    height: 100%;
+    width: 100%;
+
+}
+
+.searchBar-rest{
+    float: left;
+    width: calc(100% - 600px);
+    height: 40px;
+    -webkit-transform: translate(0%,50%);
+    -ms-transform: translate(0%,50%);
+    transform: translate(0%,50%);
+}
+
+.searchBar-container{
+    position: absolute;
+    float: left;
+    left: calc(100% - 600px);
+    width: 600px;
+    height: 40px;
+    -webkit-transform: translate(0%,50%);
+    -ms-transform: translate(0%,50%);
+    transform: translate(0%,50%);
+}
+.searchBar-search-icon{
+    position: absolute;
+    top: 0;
+    left:0;
+    height: 25px;
+    width: 25px;
+}
+
+.searchBar-search-icon .icon{
+    color: #d9d9d9;
+    margin-left: 2px;
+    margin-top: 8px;
+    height: 25px;
+    width: 25px;
+    z-index: 0;
+}
+
+.searchBar-delete-icon{
+    position: absolute;
+    top: 0;
+    left: calc(100% - 140px);
+    margin-top: 10px;
+    height: 25px;
+    width: 25px;
+}
+
+.searchBar-delete-icon .icon{
+    color: #f1f1f1;
+    height: 20px;
+    width: 20px;
+}
+
+.searchBar-delete-icon .icon:hover{
+    color: #d9d9d9;
+    webkit-transition: all 0.8s ease;
+    -o-transition: all 0.8s ease;
+    transition: all 0.8s ease;
+    cursor: pointer;
+}
+
+.searchBar-box{
+    position: absolute;
+    height: 100%;
+    width: 490px;
+    float: left;
+}
+
+.searchBar-box input{
+    height: calc(100% - 4px);
+    width: calc(100% - 6px);
+    line-height: 40px;
+    padding-left: 2px;
+    font-size: 16px;
+}
+
+.searchBar-Submit{
+    border-radius: 5px;
+    height: 100%;
+    width: 100px;
+    float: right;
+    color: white;
+    background-color: #483291;
+    webkit-transition: all 0.8s ease;
+    -o-transition: all 0.8s ease;
+    transition: all 0.8s ease;
+}
+
+.searchBar-Submit p{
+    line-height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    height: 100%;
+    width: 100%;
+
+}
+
+.searchBar-Submit:hover{
+    background-color: #66CCFF;
+}
+

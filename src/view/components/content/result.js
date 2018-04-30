@@ -1,36 +1,13 @@
 import React from 'react';
-import "../../../stylesheets/result.css";
-import Chart from "../chart";
-import ResultItem from "../resultItem";
+import "../../../stylesheets/mainPage/home/result.css";
+import Chart from "./chart";
+import ResultItem from "../../mainPage/home/resultItem";
 import SingleDatePicker from "../datePicker/SingleDatePicker";
 
 class Result extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data :{
-                labels: ['January'],
-                datasets: [
-                    {
-                        label: 'My First dataset',
-                        backgroundColor: 'rgba(255,99,132,0.2)',
-                        borderColor: 'rgba(255,99,132,1)',
-                        borderWidth: 1,
-                        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                        hoverBorderColor: 'rgba(255,99,132,1)',
-                        data: [65]
-                    },
-                    {
-                        label: 'My First dataset',
-                        backgroundColor: 'rgba(255,99,132,0.2)',
-                        borderColor: 'rgba(255,99,132,1)',
-                        borderWidth: 1,
-                        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                        hoverBorderColor: 'rgba(255,99,132,1)',
-                        data: [65]
-                    }
-                ]
-            },
             datePicker: "Daily",
         };
     }
