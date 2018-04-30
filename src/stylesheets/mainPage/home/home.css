@@ -1,0 +1,5 @@
+.home-view{
+    height: calc(100vh - 130px);
+    min-height: 700px;
+    width: 100%;
+}

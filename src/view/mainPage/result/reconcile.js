@@ -151,6 +151,8 @@ class Reconcile extends React.Component {
             case "years":
                 time = parseInt(num) * 12;
                 break;
+            default:
+                throw new Error("time is wrong");
         }
         return time;
     };
@@ -269,6 +271,8 @@ class Reconcile extends React.Component {
                 break;
             case "search":
                 lists = this.returnSearchList();
+                break;
+            default:
                 break;
         }
 

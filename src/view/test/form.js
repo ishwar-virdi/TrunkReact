@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link} from 'react-router-dom';
 import axios from "axios/index";
-import {apiurl} from "../../../config/constants";
+import {apiurl} from "../../config/constants";
 
 class Form extends Component{
 

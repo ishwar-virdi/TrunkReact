@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../stylesheets/login.css';
 import {apiurl} from '../config/constants';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 
 let validation = (email,password)=>{
     let result = "";
@@ -39,6 +38,7 @@ class Login extends Component{
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
     }
@@ -48,12 +48,15 @@ class Login extends Component{
     }
 
     loadToken(){
-        axios.get(apiurl + "/api/token")
+        fetch(apiurl + "/api/token",{
+            credentials: 'include'
+        })
+            .then(res => res.json())
             .then(
                 (response) => {
                     this.setState({
                         isLoaded: true,
-                        token: response.data.token,
+                        token: response.token,
                     });
                 },
                 (error) => {
@@ -69,16 +72,14 @@ class Login extends Component{
             email:e.target.value,
             warning: validation(e.target.value,this.state.password),
         });
-
-
     }
+
     handlePasswordChange(e){
         this.setState({
             password:e.target.value,
             warning:validation(this.state.email,e.target.value)
         });
     }
-
 
     handleSubmit(event) {
         event.preventDefault();
@@ -88,19 +89,22 @@ class Login extends Component{
             let email = this.state.email.toLowerCase();
             let password = this.state.password;
 
-            axios({
+            fetch(apiurl + '/api/login', {
                 method: 'POST',
-                url: apiurl + "/api/login",
-                data: JSON.stringify({
+                credentials: 'include',
+                body: JSON.stringify({
                     token: token,
                     username: email,
                     password: password,
                 }),
-                headers: {'Content-Type' : 'application/json; charset=utf-8'}
-            })
-            .then(
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => (res.json()))
+                .then(
                     (response) => {
-                        let res = response.data.result;
+                        let res = response.result;
                         if(res==="expired"){
                             this.loadToken();
                             this.setState({
@@ -134,6 +138,13 @@ class Login extends Component{
         }
     }
 
+    handleReset(event){
+        this.setState({
+            email:"",
+            password:"",
+            warning:validation("","")
+        });
+    }
     render(){
         const {redirect,warning} = this.state;
 
@@ -142,11 +153,11 @@ class Login extends Component{
         ) : (
             null
         );
+
         return (
             <div className="container">
                     {
-                       // console.log(redirect);
-                        redirect === "success" || "" ? (<Redirect to={{pathname:'/home'}}/>)
+                        redirect === "success" ||"" ? (<Redirect to="/home" />)
                                 : null
                         }
                 <div className="login">
@@ -162,7 +173,7 @@ class Login extends Component{
                             <input value= {this.state.email} onChange={this.handleEmailChange} className="inputBox" type="text" placeholder="Email"/>
                             <input value= {this.state.password} onChange={this.handlePasswordChange} className="inputBox" type="password" placeholder="Password"/>
                             <div className="submit">
-                                <input className="submit-btn submit-btn-left" type="reset"/>
+                                <input onClick={this.handleReset} className="submit-btn submit-btn-left" type="reset"/>
                                 <input onClick={this.handleSubmit} className="submit-btn submit-btn-right" value="Login" type="submit"/>
                             </div>
                             <div className="forget">

@@ -1,0 +1,127 @@
+.reconcileItem{
+    height: 35px;
+    line-height: 35px;
+    width: 98%;
+    padding-left: 2%;
+    font-size: 16px;
+    text-align: left;
+}
+
+
+.ren-Item-hover:hover{
+    background-color: lightgrey;
+    webkit-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    cursor: pointer
+}
+
+.reconcile-date{
+    height: 100%;
+    width: calc(30% - 2px);
+    border-right: 2px solid #f7f7f7;
+}
+
+.title-hover:hover{
+    color: #2bbcb5;
+    webkit-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+/* Status */
+.reconcile-dateRange{
+    padding-left: 2px;
+    height: 100%;
+    width: calc(40% - 4px);
+    border-right: 2px solid #f7f7f7;
+    text-align: center;
+}
+
+.reconcile-noSuccess{
+    color: red;
+    text-decoration: underline;
+}
+
+
+.reconcile-status{
+    padding-left: 2px;
+    height: 100%;
+    width: calc(20% - 4px);
+    text-align: center;
+}
+
+.reconcile-border{
+    position: relative;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 5px;
+    height: 25px;
+    background-color: #f1f1f1;
+    box-shadow: 0px 0px 5px lightgray;
+    border-radius: 5px;
+}
+
+.reconcile-border p{
+    height: 100%;
+    line-height: 25px;
+    position: absolute;
+    margin-left: 50%;
+}
+
+.reconcile-progress-bar{
+    position: absolute;
+    height: 100%;
+    border-radius: 5px;
+    line-height: 25px;
+}
+
+
+.bgBlue{
+    background-color: #66CCFF;
+}
+
+.bgRed{
+    background-color: #d9534f;
+}
+
+.bgYellow{
+    background-color: #F6BB42;
+}
+.bgGreen{
+    background-color: #81b71a;
+}
+/* reconcile btn*/
+.reconcile-btn{
+    padding-left: 2px;
+    height: 100%;
+    width: calc(10% - 4px);
+    border-right: 2px solid #f7f7f7;
+    text-align: center;
+    font-weight: bold;
+}
+
+.reconcile-btn a{
+    color: #4285f4;
+}
+
+
+.reconcile-btn a:hover::before{
+    font-size: 18px;
+    position: relative;
+    content:"\5B";
+    color: #4285f4;
+    font-weight: bolder;
+    line-height: 16px;
+    left: -5px;
+}
+
+.reconcile-btn a:hover::after{
+    font-size: 18px;
+    position: relative;
+    content: "\5D";
+    color: #4285f4;
+    font-weight: bolder;
+    line-height: 16px;
+    right: -5px;
+}
