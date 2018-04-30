@@ -5,7 +5,9 @@ import login from './view/login';
 import form from './view/form';
 import chart from './view/components/chart';
 import Test from "./view/components/test";
-import dashboard from './view/dashboard';
+import dashboard from './view/mainPage/home/dashboard';
+import fileUpload from './view/mainPage/upload/upload';
+
 
 class App extends Component {
   render() {
@@ -17,6 +19,7 @@ class App extends Component {
               <Route path="/home" component={dashboard} />
               <Route path="/form" component={form} />
               <Route path="/test" component={Test} />
+              <Route path="/fileUpload" component={fileUpload} />
           </Switch>
       </div>
     );
