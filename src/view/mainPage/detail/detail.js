@@ -14,6 +14,7 @@ class detail extends Component{
         this.state = {
             id : props.match.params.id
         };
+
     }
 
     componentDidMount() {
@@ -32,7 +33,7 @@ class detail extends Component{
                         <TransactionTable/>
                     </div>
                 </div>
-                <Footer/>
+                <Footer />
             </div>
         )
     }
