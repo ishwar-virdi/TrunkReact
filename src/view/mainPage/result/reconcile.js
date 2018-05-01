@@ -1,8 +1,7 @@
 import React from "react";
 import FormSeperateLayerfrom from "./formSeperateLayer";
-
+import { Link } from 'react-router-dom';
 import "../../../stylesheets/mainPage/result/reconcile.css";
-import ReconcileItem from './reconcileItem';
 import moment from "moment";
 class Reconcile extends React.Component {
     constructor(props) {
@@ -280,6 +279,122 @@ class Reconcile extends React.Component {
         );
     }
 }
+
+class ReconcileItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            btnClass:"reconcileItem ren-Item-hover",
+            statusClass:"reconcile-status fl",
+            btn:"detail",
+            recordIsTitle:false,
+        };
+        this.handleTimeClick = this.handleTimeClick.bind(this);
+        this.handleStatusClick = this.handleStatusClick.bind(this);
+        this.handleMethodClick = this.handleMethodClick.bind(this);
+    }
+
+    componentDidMount() {
+        this.isTitle(this.props.value);
+        this.isSuccess(this.props.value);
+    }
+
+    componentDidUpdate(previousProps){
+
+        if(
+            previousProps.value.status !== this.props.value.status
+            || previousProps.value.method !== this.props.value.method
+        ){
+            if(this.props.value.status === "Not Success"){
+                this.setState({
+                    statusClass:"reconcile-status reconcile-noSuccess fl",
+                });
+            }else{
+                this.setState({
+                    statusClass:"reconcile-status fl",
+                });
+            }
+            //console.log(this.state.values.status&&this.state.values.status !== "Status");
+            //this.isSuccess();
+        }
+    }
+
+    isTitle = (value) =>{
+        if(value.isTitle === true || ""){
+            this.setState({
+                btnClass:"reconcileItem gl-title",
+                btn:"",
+                recordIsTitle:true
+            });
+        }
+    };
+    isSuccess = (value) =>{
+        if(
+            value.status !== "Success"
+            &&value.status !== "Status"
+        ){
+            this.setState({
+                statusClass:"reconcile-status reconcile-noSuccess fl",
+            });
+            //console.log("reconcile-status reconcile-noSuccess fl");
+        }else{
+            this.setState({
+                statusClass:"reconcile-status fl",
+            });
+            //console.log("reconcile-status fl");
+        }
+    };
+
+    handleTimeClick(e){
+        this.props.setSort("time");
+    }
+    handleStatusClick(e){
+        this.props.setSort("status");
+    }
+    handleMethodClick(e){
+        this.props.setSort("method");
+    }
+    render() {
+        const value = this.props.value;
+        const {recordIsTitle} = this.state;
+
+        const time = recordIsTitle ? (
+            <p className="title-hover" onClick={this.handleTimeClick}>{value.time}</p>
+        ) : (
+            <p>{value.time}</p>
+        );
+        const showBtn = (
+            <Link to={this.state.btn}>{this.state.btn}</Link>
+        );
+        const status = recordIsTitle ? (
+            <p className="title-hover" onClick={this.handleStatusClick}>{value.status}</p>
+        ) : (
+            <p>{value.status}</p>
+        );
+        const method = recordIsTitle ? (
+            <p className="title-hover" onClick={this.handleMethodClick}>{value.method}</p>
+        ) : (
+            <p>{value.method}</p>
+        );
+        return (
+            <div className={this.state.btnClass}>
+                <div className="reconcile-date fl">
+                    {time}
+                </div>
+                <div className="reconcile-btn fl">
+                    {showBtn}
+                </div>
+                <div className={this.state.statusClass}>
+                    {status}
+                </div>
+                <div className="reconcile-method fl ">
+                    {method}
+                </div>
+            </div>
+        );
+    }
+}
+
 
 
 export default Reconcile;

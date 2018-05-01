@@ -16,7 +16,7 @@
 .env.test.local
 .env.production.local
 
-.idea/*
+.idea/workspace.xml
 package-lock.json
 
 npm-debug.log*

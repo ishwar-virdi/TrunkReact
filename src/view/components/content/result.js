@@ -2,7 +2,7 @@ import React from 'react';
 import "../../../stylesheets/mainPage/home/result.css";
 import Chart from "./chart";
 import ResultItem from "../../mainPage/home/resultItem";
-import SingleDatePicker from "../datePicker/SingleDatePicker";
+import SingleDatePicker from "../datePicker/singleDatePicker";
 
 class Result extends React.Component {
     constructor(props) {
