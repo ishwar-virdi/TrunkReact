@@ -64,7 +64,7 @@ class Dashboard extends Component{
         super(props);
         this.state = {
             updated: false,
-            chartIndex:1,
+            chartIndex:100,
             chartData:null,
             option:{
                 responsive: true,
@@ -133,7 +133,7 @@ class Dashboard extends Component{
             labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
             datasets: [
                 {
-                    label: "Team points 1",
+                    label: "Team points 11",
                     data: [203, 385, 21, 123, 105],
                     backgroundColor: "#E57373",
                 },
@@ -192,7 +192,7 @@ class Dashboard extends Component{
             throw new Error("action is wrong");
         }
 
-        if(nextIndex < 0 || nextIndex > 2){
+        if(nextIndex < 96 || nextIndex > 104){
             return
         }
 
@@ -207,17 +207,20 @@ class Dashboard extends Component{
         }
 
         let index = this.state.chartIndex;
+
         let chartData;
-        if(index === 0){
+        if(index === 96){
             chartData = this.chartSmall;
-        }else if(index === 1){
+            this.setState({chartData, updated: !this.state.updated});
+        }else if(index === 100){
             chartData = this.chartMid;
-        }else if(index === 2){
+            this.setState({chartData, updated: !this.state.updated});
+        }else if(index === 104){
             chartData = this.chartLarge;
+            this.setState({chartData, updated: !this.state.updated});
         }else{
-            throw new Error("index is wrong");
         }
-        this.setState({chartData, updated: !this.state.updated});
+
     }
 
     render(){
