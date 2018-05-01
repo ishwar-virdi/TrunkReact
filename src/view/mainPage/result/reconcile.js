@@ -4,6 +4,29 @@ import FormSeperateLayerfrom from "./formSeperateLayer";
 import "../../../stylesheets/mainPage/result/reconcile.css";
 import ReconcileItem from './reconcileItem';
 import moment from "moment";
+let history = [
+    {month:0,letter:"Recently"},
+    {month:1,letter:"One month ago"},
+    {month:2,letter:"Two month ago"},
+    {month:4,letter:"Four month ago"},
+    {month:8,letter:"Eight month ago"},
+    {month:12,letter:"One year ago"},
+    {month:24,letter:"Two year ago"},
+    {month:36,letter:"Three year ago"},
+    {month:48,letter:"Older..."}
+];
+const historyBackUp = [
+    {month:0,letter:"Recently"},
+    {month:1,letter:"One month ago"},
+    {month:2,letter:"Two month ago"},
+    {month:4,letter:"Four month ago"},
+    {month:8,letter:"Eight month ago"},
+    {month:12,letter:"One year ago"},
+    {month:24,letter:"Two year ago"},
+    {month:36,letter:"Three year ago"},
+    {month:48,letter:"Older..."}
+    ];
+let removeIndex = [];
 class Reconcile extends React.Component {
     constructor(props) {
         super(props);
@@ -14,30 +37,7 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
-            items: [],
-            historyBackUp:[
-                {month:0,letter:"Recently"},
-                {month:1,letter:"One month ago"},
-                {month:2,letter:"Two month ago"},
-                {month:4,letter:"Four month ago"},
-                {month:8,letter:"Eight month ago"},
-                {month:12,letter:"One year ago"},
-                {month:24,letter:"Two year ago"},
-                {month:36,letter:"Three year ago"},
-                {month:48,letter:"Older..."}
-            ],
-            history:[
-                {month:0,letter:"Recently"},
-                {month:1,letter:"One month ago"},
-                {month:2,letter:"Two month ago"},
-                {month:4,letter:"Four month ago"},
-                {month:8,letter:"Eight month ago"},
-                {month:12,letter:"One year ago"},
-                {month:24,letter:"Two year ago"},
-                {month:36,letter:"Three year ago"},
-                {month:48,letter:"Older..."}
-            ],
-            removeIndex:[],
+            items: []
         }
     }
 
@@ -143,13 +143,13 @@ class Reconcile extends React.Component {
                 time = 1;
                 break;
             case "months":
-                time = parseInt(num);
+                time = Number(num);
                 break;
             case "year":
                 time = 12;
                 break;
             case "years":
-                time = parseInt(num) * 12;
+                time = Number(num) * 12;
                 break;
             default:
                 throw new Error("time is wrong");
@@ -157,7 +157,6 @@ class Reconcile extends React.Component {
         return time;
     };
     isTimeTitle = (totalTime)=>{
-        let history = this.state.history;
         if(history.length === 1 && totalTime >= history[0].month){
             return true;
         }
@@ -168,23 +167,22 @@ class Reconcile extends React.Component {
             }else if(totalTime >= history[i].month && totalTime < history[i+1].month){
                 return true;
             }else{
-                this.state.removeIndex.push(i);
+                removeIndex.push(i);
             }
         }
         return false;
     };
     pushTimeTitle = (lists,key) =>{
         let removeFix = 0;
-        let removeIndex = this.state.removeIndex;
         for(let i = 0; i < removeIndex.length;i++){
-            this.state.history.splice(i-removeFix,1);
+            history.splice(i-removeFix,1);
             removeFix++;
         }
-        this.state.removeIndex = [];
-        let title = this.state.history[0].letter;
+        removeIndex = [];
+        let title = history[0].letter;
         //push title
         lists.push(<FormSeperateLayerfrom key={key} title={title}/>);
-        this.state.history.splice(0,1);
+        history.splice(0,1);
     };
     returnListByTime = () =>{
         let lists = [];
@@ -200,7 +198,7 @@ class Reconcile extends React.Component {
             lists.push(<ReconcileItem key={i} value={items[i]}/>);
         }
         //restore history
-        [ ...this.state.history] = this.state.historyBackUp;
+        [ ...history] = historyBackUp;
         return lists;
     };
     returnListByDateRange = () =>{

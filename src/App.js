@@ -11,6 +11,8 @@ import upload from './view/mainPage/upload/upload';
 import receipt from './view/mainPage/result/receipt/receipt';
 import detail from './view/mainPage/detail/detail';
 import chart from './view/components/content/chart';
+import notFoundPage from './view/notFoundPage';
+
 class App extends Component {
     render() {
         return (
@@ -28,6 +30,7 @@ class App extends Component {
                         <Route path="/receipt/:id" component={receipt} />
                         <Route path="/rangeDatePicker" component={rangeDatePicker} />
                         <Route path="/singleDatePicker" component={singleDatePicker} />
+                        <Route path="*" component={notFoundPage} />
                     </Switch>
                 </div>
             </BrowserRouter>

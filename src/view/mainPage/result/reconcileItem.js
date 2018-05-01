@@ -35,7 +35,7 @@ class ReconcileItem extends React.Component {
         }
     }
     progressAnimation = (status)=>{
-        let percent = parseInt(status);
+        let percent = Number(status);
         if(percent >= 80){
             this.setState({
                 progressClass: "reconcile-progress-bar bgGreen"
