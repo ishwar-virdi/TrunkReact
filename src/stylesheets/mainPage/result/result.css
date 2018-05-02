@@ -3,6 +3,19 @@
     width: 100%;
 }
 
+.result-search-dataPicker{
+    margin-top: 15px;
+    height: 55px;
+    width: 350px;
+    float: left;
+}
+
+.result-search-bar{
+    height: 100%;
+    width: calc(100% - 400px);
+    float: right;
+}
+
 .result-view{
     height: auto;
     min-height: calc(100vh - 230px);
