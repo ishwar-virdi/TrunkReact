@@ -4,6 +4,7 @@ import { Link} from 'react-router-dom';
 import "../../../../stylesheets/mainPage/result/receipt/receiptContent.css";
 import React from "react";
 
+
 class ReceiptContent extends Component{
 
     constructor(props) {

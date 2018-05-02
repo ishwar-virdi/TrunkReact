@@ -7,6 +7,8 @@ class SearchBar extends React.Component {
 
         this.state={
             searchInput:"",
+            deleteIcon: "icon transition iconFontNonClickColor",
+            isDelete:false,
         };
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
@@ -20,6 +22,12 @@ class SearchBar extends React.Component {
                 warningPlaceHolder: "Please input text",
             });
             return;
+        }
+
+        if(this.state.isDelete){
+            this.setState({
+                searchInput: "",
+            });
         }
         let items = [
             {
@@ -44,8 +52,17 @@ class SearchBar extends React.Component {
     }
 
     handleClearClick(e){
+        if(this.state.isDelete){
+            this.setState({
+                deleteIcon: "icon transition iconFontNonClickColor",
+            });
+        }else{
+            this.setState({
+                deleteIcon: "icon transition iconFontClickColor",
+            });
+        }
         this.setState({
-            searchInput: "",
+            isDelete: !this.state.isDelete,
         });
     }
     handleTextClick(e){
@@ -67,7 +84,6 @@ class SearchBar extends React.Component {
         return (
             <div className="search-container">
                 <div className="searchBar-rest">
-
                 </div>
                 <div className="searchBar-container">
                     <div className="searchBar-box">
@@ -83,7 +99,7 @@ class SearchBar extends React.Component {
                         {/*</svg>*/}
                     </div>
                     <div className="searchBar-delete-icon">
-                        <svg onClick={this.handleClearClick} className="icon" aria-hidden="true">
+                        <svg onClick={this.handleClearClick} className={this.state.deleteIcon} aria-hidden="true">
                             <use xlinkHref="#icon-delete"></use>
                         </svg>
                     </div>

@@ -1,0 +1,53 @@
+.notFound-container{
+    position: relative;
+    height: auto;
+    width: 800px;
+    margin: 0 auto;
+    background-color: transparent;
+}
+
+.notFound-Title-handle{
+    width: 100%;
+    margin-top: 100px;
+    padding: 20px 0 20px 0;
+    height: 60px;
+    text-align: left;
+    color:#2bbcb5;
+    font-size: 20px;
+}
+
+.notFound-Context-handle{
+    height: auto;
+    width: 100%;
+}
+
+.notFound-Context-title{
+    margin: 20px 0 20px 0;
+    color: #483291;
+    font-size: 26px;
+}
+
+.notFound-context-text{
+    color: #818181;
+    font-size: 19px;
+}
+
+.notFound-context-Back{
+    margin: 50px auto;
+    text-align: center;
+    height:40px;
+    width: 190px;
+}
+
+.notFound-context-Back a{
+    line-height: 40px;
+    display: block;
+    height:100%;
+    width: 100%;
+    background-color: #483291;
+    color: white;
+}
+
+.notFound-context-Back a:hover{
+    background-color: #66CCFF;
+}

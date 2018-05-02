@@ -1,19 +1,70 @@
 import React,{Component} from "react";
 
 import "../../../stylesheets/mainPage/home/dashboard.css";
-import Indicator from "./indicator";
-
 import {Bar} from 'react-chartjs-2';
 
-class Dashboard extends Component{
+
+
+// let _chartSmall = null;
+// let _chartMid = null;
+// let _chartLarge = null;
+// let chartSmall =() =>{
+//     let data = {
+//         labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
+//         datasets: [
+//             {
+//                 label: "Team points",
+//                 data: [503, 385, 270, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             },
+//             {
+//                 label: "Team points",
+//                 data: [503, 385, 270, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             },
+//             {
+//                 label: "Team points",
+//                 data: [503, 385, 270, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             },
+//             {
+//                 label: "Team points",
+//                 data: [503, 385, 270, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             }
+//         ]
+//     };
+//     return _chartSmall;
+// }
+// let chartMid = () => {
+//     let data1 = {
+//         labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
+//         datasets: [
+//             {
+//                 label: "Team points 1",
+//                 data: [503, 385, 21, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             },
+//             {
+//                 label: "Team points 1",
+//                 data: [503, 385, 270, 133, 65],
+//                 backgroundColor: ["#4DB6AC", "#E57373", "#7986CB", "#F06292", "#E0E0E0"]
+//             }
+//         ]
+//     };
+//     return _chartMid;
+//
+// };
+// let chartLarge = () =>{
+//     return _chartLarge;
+// };
+class DashboardTest extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
             updated: false,
-            chartMinIndex:96,
             chartIndex:100,
-            chartMaxIndex:104,
             chartData:null,
             option:{
                 responsive: true,
@@ -99,7 +150,7 @@ class Dashboard extends Component{
                 {
                     label: "Team points 2",
                     data: [303, 185, 470, 313, 65],
-                    backgroundColor: "#7986CB"
+                    backgroundColor: ["#7986CB", "#7986CB", "#7986CB", "#7986CB", "#7986CB"]
                 }
             ]
         };
@@ -141,7 +192,7 @@ class Dashboard extends Component{
             throw new Error("action is wrong");
         }
 
-        if(nextIndex < this.state.chartMinIndex || nextIndex > this.state.chartMaxIndex){
+        if(nextIndex < 96 || nextIndex > 104){
             return
         }
 
@@ -158,13 +209,13 @@ class Dashboard extends Component{
         let index = this.state.chartIndex;
 
         let chartData;
-        if(index === this.state.chartMinIndex){
+        if(index === 96){
             chartData = this.chartSmall;
             this.setState({chartData, updated: !this.state.updated});
         }else if(index === 100){
             chartData = this.chartMid;
             this.setState({chartData, updated: !this.state.updated});
-        }else if(index === this.state.chartMaxIndex){
+        }else if(index === 104){
             chartData = this.chartLarge;
             this.setState({chartData, updated: !this.state.updated});
         }else{
@@ -174,16 +225,14 @@ class Dashboard extends Component{
     render(){
         const {chartData} = this.state;
         return (
-
             <div className="dashboard">
                 {
                     chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
                         : null
                 }
-                <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
             </div>
         )
     }
-};
+}
 
-export default Dashboard;
+export default DashboardTest;

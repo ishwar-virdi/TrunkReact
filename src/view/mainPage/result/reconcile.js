@@ -15,17 +15,7 @@ let history = [
     {month:36,letter:"Three year ago"},
     {month:48,letter:"Older..."}
 ];
-const historyBackUp = [
-    {month:0,letter:"Recently"},
-    {month:1,letter:"One month ago"},
-    {month:2,letter:"Two month ago"},
-    {month:4,letter:"Four month ago"},
-    {month:8,letter:"Eight month ago"},
-    {month:12,letter:"One year ago"},
-    {month:24,letter:"Two year ago"},
-    {month:36,letter:"Three year ago"},
-    {month:48,letter:"Older..."}
-    ];
+let historyBackUp;
 let removeIndex = [];
 class Reconcile extends React.Component {
     constructor(props) {
@@ -38,7 +28,8 @@ class Reconcile extends React.Component {
                 status: "Status"
             },
             items: []
-        }
+        };
+        [ ...historyBackUp] = history;
     }
 
     componentDidMount() {
