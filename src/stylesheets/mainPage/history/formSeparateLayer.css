@@ -1,3 +1,6 @@
+/**
+ * deprecated
+
 .formSeparateLayer{
     height: var(--formHeight);
     line-height: var(--formHeight);
@@ -10,3 +13,5 @@
     text-align: left;
     opacity: 0.8;
 }
+
+*/

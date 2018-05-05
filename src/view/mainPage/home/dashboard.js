@@ -22,9 +22,12 @@ class Dashboard extends Component{
                 onClick: function(event, array) {
                     let element = this.getElementAtEvent(event);
                     if (element.length > 0) {
-                        let series= element[0]._model.datasetLabel;
-                        let label = element[0]._model.label;
+                        let series= element[0]._datasetIndex;
+                        let label = element[0]._index;
+                        var labels = this.data.datasets[element[0]._index];
                         let value = this.data.datasets[series].data[label];
+
+
                         console.log(value);
                         window.open('http://localhost:3000/detail/'+value);
                     }

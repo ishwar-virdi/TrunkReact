@@ -1,3 +1,5 @@
+/**
+ * deprecated
 
 .reconcile-content{
     height: 100%;
@@ -34,7 +36,7 @@
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
 }
-/* Status */
+
 .reconcile-status{
     padding-left: 2px;
     height: 100%;
@@ -56,7 +58,7 @@
 }
 
 
-/* reconcile btn*/
+
 .reconcile-btn{
     padding-left: 2px;
     height: 100%;
@@ -91,3 +93,4 @@
     line-height: 16px;
     right: -5px;
 }
+*/
