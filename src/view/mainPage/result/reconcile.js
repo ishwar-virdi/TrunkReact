@@ -1,8 +1,22 @@
 import React from "react";
 import FormSeperateLayerfrom from "./formSeperateLayer";
-import { Link } from 'react-router-dom';
+
 import "../../../stylesheets/mainPage/result/reconcile.css";
+import ReconcileItem from './reconcileItem';
 import moment from "moment";
+let history = [
+    {month:0,letter:"Recently"},
+    {month:1,letter:"One month ago"},
+    {month:2,letter:"Two month ago"},
+    {month:4,letter:"Four month ago"},
+    {month:8,letter:"Eight month ago"},
+    {month:12,letter:"One year ago"},
+    {month:24,letter:"Two year ago"},
+    {month:36,letter:"Three year ago"},
+    {month:48,letter:"Older..."}
+];
+let historyBackUp;
+let removeIndex = [];
 class Reconcile extends React.Component {
     constructor(props) {
         super(props);
@@ -13,31 +27,9 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
-            items: [],
-            historyBackUp:[
-                {month:0,letter:"Recently"},
-                {month:1,letter:"One month ago"},
-                {month:2,letter:"Two month ago"},
-                {month:4,letter:"Four month ago"},
-                {month:8,letter:"Eight month ago"},
-                {month:12,letter:"One year ago"},
-                {month:24,letter:"Two year ago"},
-                {month:36,letter:"Three year ago"},
-                {month:48,letter:"Older..."}
-            ],
-            history:[
-                {month:0,letter:"Recently"},
-                {month:1,letter:"One month ago"},
-                {month:2,letter:"Two month ago"},
-                {month:4,letter:"Four month ago"},
-                {month:8,letter:"Eight month ago"},
-                {month:12,letter:"One year ago"},
-                {month:24,letter:"Two year ago"},
-                {month:36,letter:"Three year ago"},
-                {month:48,letter:"Older..."}
-            ],
-            removeIndex:[],
-        }
+            items: []
+        };
+        [ ...historyBackUp] = history;
     }
 
     componentDidMount() {
@@ -142,19 +134,20 @@ class Reconcile extends React.Component {
                 time = 1;
                 break;
             case "months":
-                time = parseInt(num);
+                time = Number(num);
                 break;
             case "year":
                 time = 12;
                 break;
             case "years":
-                time = parseInt(num) * 12;
+                time = Number(num) * 12;
                 break;
+            default:
+                throw new Error("time is wrong");
         }
         return time;
     };
     isTimeTitle = (totalTime)=>{
-        let history = this.state.history;
         if(history.length === 1 && totalTime >= history[0].month){
             return true;
         }
@@ -165,23 +158,22 @@ class Reconcile extends React.Component {
             }else if(totalTime >= history[i].month && totalTime < history[i+1].month){
                 return true;
             }else{
-                this.state.removeIndex.push(i);
+                removeIndex.push(i);
             }
         }
         return false;
     };
     pushTimeTitle = (lists,key) =>{
         let removeFix = 0;
-        let removeIndex = this.state.removeIndex;
         for(let i = 0; i < removeIndex.length;i++){
-            this.state.history.splice(i-removeFix,1);
+            history.splice(i-removeFix,1);
             removeFix++;
         }
-        this.state.removeIndex = [];
-        let title = this.state.history[0].letter;
+        removeIndex = [];
+        let title = history[0].letter;
         //push title
         lists.push(<FormSeperateLayerfrom key={key} title={title}/>);
-        this.state.history.splice(0,1);
+        history.splice(0,1);
     };
     returnListByTime = () =>{
         let lists = [];
@@ -197,7 +189,7 @@ class Reconcile extends React.Component {
             lists.push(<ReconcileItem key={i} value={items[i]}/>);
         }
         //restore history
-        [ ...this.state.history] = this.state.historyBackUp;
+        [ ...history] = historyBackUp;
         return lists;
     };
     returnListByDateRange = () =>{
@@ -269,6 +261,8 @@ class Reconcile extends React.Component {
             case "search":
                 lists = this.returnSearchList();
                 break;
+            default:
+                break;
         }
 
         return (
@@ -279,122 +273,6 @@ class Reconcile extends React.Component {
         );
     }
 }
-
-class ReconcileItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            btnClass:"reconcileItem ren-Item-hover",
-            statusClass:"reconcile-status fl",
-            btn:"detail",
-            recordIsTitle:false,
-        };
-        this.handleTimeClick = this.handleTimeClick.bind(this);
-        this.handleStatusClick = this.handleStatusClick.bind(this);
-        this.handleMethodClick = this.handleMethodClick.bind(this);
-    }
-
-    componentDidMount() {
-        this.isTitle(this.props.value);
-        this.isSuccess(this.props.value);
-    }
-
-    componentDidUpdate(previousProps){
-
-        if(
-            previousProps.value.status !== this.props.value.status
-            || previousProps.value.method !== this.props.value.method
-        ){
-            if(this.props.value.status === "Not Success"){
-                this.setState({
-                    statusClass:"reconcile-status reconcile-noSuccess fl",
-                });
-            }else{
-                this.setState({
-                    statusClass:"reconcile-status fl",
-                });
-            }
-            //console.log(this.state.values.status&&this.state.values.status !== "Status");
-            //this.isSuccess();
-        }
-    }
-
-    isTitle = (value) =>{
-        if(value.isTitle === true || ""){
-            this.setState({
-                btnClass:"reconcileItem gl-title",
-                btn:"",
-                recordIsTitle:true
-            });
-        }
-    };
-    isSuccess = (value) =>{
-        if(
-            value.status !== "Success"
-            &&value.status !== "Status"
-        ){
-            this.setState({
-                statusClass:"reconcile-status reconcile-noSuccess fl",
-            });
-            //console.log("reconcile-status reconcile-noSuccess fl");
-        }else{
-            this.setState({
-                statusClass:"reconcile-status fl",
-            });
-            //console.log("reconcile-status fl");
-        }
-    };
-
-    handleTimeClick(e){
-        this.props.setSort("time");
-    }
-    handleStatusClick(e){
-        this.props.setSort("status");
-    }
-    handleMethodClick(e){
-        this.props.setSort("method");
-    }
-    render() {
-        const value = this.props.value;
-        const {recordIsTitle} = this.state;
-
-        const time = recordIsTitle ? (
-            <p className="title-hover" onClick={this.handleTimeClick}>{value.time}</p>
-        ) : (
-            <p>{value.time}</p>
-        );
-        const showBtn = (
-            <Link to={this.state.btn}>{this.state.btn}</Link>
-        );
-        const status = recordIsTitle ? (
-            <p className="title-hover" onClick={this.handleStatusClick}>{value.status}</p>
-        ) : (
-            <p>{value.status}</p>
-        );
-        const method = recordIsTitle ? (
-            <p className="title-hover" onClick={this.handleMethodClick}>{value.method}</p>
-        ) : (
-            <p>{value.method}</p>
-        );
-        return (
-            <div className={this.state.btnClass}>
-                <div className="reconcile-date fl">
-                    {time}
-                </div>
-                <div className="reconcile-btn fl">
-                    {showBtn}
-                </div>
-                <div className={this.state.statusClass}>
-                    {status}
-                </div>
-                <div className="reconcile-method fl ">
-                    {method}
-                </div>
-            </div>
-        );
-    }
-}
-
 
 
 export default Reconcile;

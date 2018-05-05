@@ -37,6 +37,6 @@ class detail extends Component{
             </div>
         )
     }
-};
+}
 
 export default detail;

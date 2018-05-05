@@ -1,0 +1,35 @@
+.receipt-detail-table{
+    height: auto;
+    width: 100%;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.receipt-detail-table th{
+    font-size: 14px;
+    text-align: left;
+    height: 55px;
+    width: 48%;
+    padding-left: 1%;
+    padding-right: 1%;
+    line-height: 55px;
+    border: 2px solid #f7f7f7;
+}
+
+.receipt-detail-table td{
+    font-size: 14px;
+    text-align: left;
+    height: 55px;
+    width: 48%;
+    padding-left: 1%;
+    padding-right: 1%;
+    line-height: 55px;
+    border: 2px solid #f7f7f7;
+}
+.fontRed{
+    color: #d9534f;
+}
+
+.fontGreen{
+    color: #2eb82e;
+}

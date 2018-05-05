@@ -17,7 +17,7 @@ p,a,span{
     font-family: Raleway,sans-serif;
 }
 p{
-    word-break:break-all;
+    word-break:break-word;
     word-wrap:break-word ;
     cursor: default;
 }
@@ -77,13 +77,32 @@ table { border-collapse: collapse; border-spacing: 0; }
     color: white;
 }
 
+body{
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f7f7f7;
+}
+
+#root{
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.App {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
 .container{
     background: #f7f7f7;
     position: relative;
     width: 100%;
-    height: auto;
-    min-height: 800px;
-    min-width: 900px;
+    height: 100%;
+    min-height: 750px;
+    min-width: 950px;
 }
 
 .fl{
@@ -119,7 +138,7 @@ table { border-collapse: collapse; border-spacing: 0; }
 }
 
 .boxShadow{
-    box-shadow: 0px 0px 10px #aaa;
+    box-shadow: 0 0 10px #aaa;
 }
 
 .fontBold{
@@ -142,4 +161,10 @@ table { border-collapse: collapse; border-spacing: 0; }
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;
+}
+
+.transition{
+    webkit-transition: all 0.8s ease;
+    -o-transition: all 0.8s ease;
+    transition: all 0.8s ease;
 }

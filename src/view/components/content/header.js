@@ -1,6 +1,6 @@
 import React from 'react';
 import "../../../stylesheets/content/header.css";
-import { Link,Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
     constructor(props) {

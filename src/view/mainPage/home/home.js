@@ -1,26 +1,21 @@
 import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
-import "../../../stylesheets/mainPage/admin/admin.css";
+import Dashboard from "../../mainPage/home/dashboard";
 import Footer from "../../components/content/footer";
-class admin extends Component{
+import "../../../stylesheets/mainPage/home/home.css";
 
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
+class home extends Component{
 
     render(){
         return (
             <div className="container">
-                <Header clickedClass="Admin"/>
+                <Header clickedClass="Home"/>
                 <div className="body">
-                    <Title title="ADMINISTRATOR"/>
-                    <div className="admin-view">
-
-                    </div>
+                    <Title title="REPORTS"/>
+                </div>
+                <div className="home-view">
+                    <Dashboard/>
                 </div>
                 <Footer/>
             </div>
@@ -28,4 +23,4 @@ class admin extends Component{
     }
 };
 
-export default admin;
+export default home;

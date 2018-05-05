@@ -3,7 +3,7 @@ import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
-class rangeDatePicker extends React.Component {
+class RangeDatePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,7 +11,7 @@ class rangeDatePicker extends React.Component {
             endDate:null,
             startDateId: "startDateId",
             endDateId: "endDateId",
-            focusedInput:"START_DATE"
+            focusedInput:"startDate"
         }
     }
 
@@ -33,4 +33,4 @@ class rangeDatePicker extends React.Component {
     };
 }
 
-export default rangeDatePicker;
+export default RangeDatePicker;
