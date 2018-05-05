@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch,Route } from 'react-router-dom'
 import login from './view/login';
-import form from './view/test/form';
 import rangeDatePicker from "./view/components/datePicker/rangeDatePicker";
 import singleDatePicker from "./view/components/datePicker/singleDatePicker";
 import home from './view/mainPage/home/home';
@@ -22,7 +21,6 @@ class App extends Component {
                         <Route exact path="/" component={login} />
                         <Route exact path="/login" component={login} />
                         <Route path="/home" component={home} />
-                        <Route path="/form" component={form} />
                         <Route path="/chart" component={chart} />
                         <Route path="/result" component={history} />
                         <Route path="/upload" component={upload} />
