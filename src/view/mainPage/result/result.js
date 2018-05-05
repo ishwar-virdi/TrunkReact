@@ -65,18 +65,18 @@ class result extends Component{
                         </div>
 
                         <div className="result-search-bar">
-                            <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
-                                       setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
-                                       page = "result" // PropTypes.string.isRequired,
+                            <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired, line 102 in searchBar.js
+                                       setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired, line 101 in searchBar.js
+                                       page = "result" // PropTypes.string.isRequired, pageName line 29 in searchBar.js
                                        startDate = {this.state.startDate}
                                        endDate = {this.state.endDate}
                             />
                         </div>
                     </div>
                     <div className="result-view">
-                        <Reconcile  sort={this.state.sort}
+                        <Reconcile  sort={this.state.sort}  // PropTypes.string.isRequired
                                     searchResult={this.state.searchResult}  // PropTypes.func.isRequired,
-                                    setSort={(sort) => this.setSort(sort)}
+                                    setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                         />
                     </div>
                 </div>
