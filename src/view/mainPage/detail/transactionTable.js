@@ -18,7 +18,7 @@ class TransactionTable extends React.Component {
                 {
                     uniqueId: "0",
                     isChecked: false,
-                    dateTime: "07/04/2018 15:18",
+                    dateTime: "07/04/2018 15:20",
                     description: "",
                     amount: "533",
                     accountNumber: "12345678",
