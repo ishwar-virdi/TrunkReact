@@ -26,9 +26,7 @@ class Dashboard extends Component{
                         let label = element[0]._index;
                         var labels = this.data.datasets[element[0]._index];
                         let value = this.data.datasets[series].data[label];
-
-                        console.log(value);
-                        window.open('http://localhost:3000/detail/'+value);
+                        window.open('http://localhost:3000/reconciledetails/'+value);
                     }
                 },
                 // title: {

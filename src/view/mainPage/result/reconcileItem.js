@@ -114,7 +114,7 @@ class ReconcileItem extends React.Component {
         );
         const showBtn = (
             <div className="reconcile-btn fl">
-                <Link to={{pathname:"/detail/" + value.id}} target="_blank">{this.state.btn}</Link>
+                <Link to={{pathname:"/reconciledetails/" + value.id}} target="_blank">{this.state.btn}</Link>
             </div>
         );
         const method = recordIsTitle ? (

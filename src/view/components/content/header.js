@@ -1,7 +1,6 @@
 import React from 'react';
 import "../../../stylesheets/content/header.css";
 import {Link, Redirect } from 'react-router-dom';
-
 import {apiurl} from "../../../config/constants"
 import axios from "axios/index";
 class Header extends React.Component {
@@ -13,7 +12,13 @@ class Header extends React.Component {
             items:["Home","Result","Upload"],
             logoutUrl: apiurl + "/api/v1/userLogout",
             isLogin:null,
-        };
+            url:{
+                "Home":"home",
+                "Result":"reconcileresults",
+                "Upload":"upload",
+            },
+        }
+        ;
         this.handleLogOut = this.handleLogOut.bind(this);
     }
 
@@ -81,16 +86,24 @@ class Header extends React.Component {
         }
     }
 
-
+    returnHeader =()=>{
+        let list = [];
+        let items = this.state.items;
+        for(let i = 0; i < items.length;i++){
+            let value = items[i];
+            let url = this.state.url[value].toLowerCase();
+            if(this.state.clicked === items[i]){
+                list.push(<li key={i}><Link to={{pathname:"/"+url}} onClick={this.handleClick.bind(this,{value})} className="header-item clicked">{value}</Link></li>);
+            }else{
+                list.push(<li key={i}><Link to={{pathname:"/"+url}} onClick={this.handleClick.bind(this,{value})} className="header-item" >{value}</Link></li>);
+            }
+        }
+        return list;
+    };
     render() {
-        const {items,isLogin} = this.state;
-        let item = items.map((value,i)=>(
-            this.state.clicked === value ? (
-                <li key={i}><Link to={{pathname:"/"+value.toLowerCase()}} onClick={this.handleClick.bind(this,{value})} className="header-item clicked">{value}</Link></li>
-            ) : (
-                <li key={i}><Link to={{pathname:"/"+value.toLowerCase()}} onClick={this.handleClick.bind(this,{value})} className="header-item" >{value}</Link></li>
-            )
-        ));
+        const {isLogin} = this.state;
+        let list = this.returnHeader();
+        this.returnHeader();
         return (
             <header>
                 {
@@ -101,7 +114,7 @@ class Header extends React.Component {
                 <div className="headerLayer">
                     <div className="header-item-panel">
                         <ul className="header-content">
-                            {item}
+                            {list}
                         </ul>
                     </div>
                     <div className="logout">
