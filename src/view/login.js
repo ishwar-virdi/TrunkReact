@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../stylesheets/login.css';
 import {apiurl} from '../config/constants';
 import { Redirect } from 'react-router-dom';
+
 import axios from 'axios';
 
 let validation = (email,password)=>{
@@ -39,16 +40,22 @@ class Login extends Component{
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
     }
 
     componentDidMount() {
+
         this.loadToken();
     }
 
     loadToken(){
-        axios.get(apiurl + "/api/token")
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/token",
+        })
             .then(
                 (response) => {
                     this.setState({
@@ -79,24 +86,31 @@ class Login extends Component{
         });
     }
 
-
+    handleReset(event) {
+        this.setState({
+            email:"",
+            password:"",
+        });
+    }
     handleSubmit(event) {
         event.preventDefault();
         if(this.state.warning === ""
-            || this.state.warning === "Website expired. Please login again"){
+            || this.state.warning === "Website expired. Please try again"){
             let token = this.state.token;
             let email = this.state.email.toLowerCase();
             let password = this.state.password;
-
             axios({
+                withCredentials: true,
                 method: 'POST',
-                url: apiurl + "/api/login",
+                url: apiurl + "/api/v1/login",
                 data: JSON.stringify({
                     token: token,
                     username: email,
                     password: password,
                 }),
-                headers: {'Content-Type' : 'application/json; charset=utf-8'}
+                headers: {
+                    'Content-Type' : 'application/json; charset=utf-8'
+                }
             })
             .then(
                     (response) => {
@@ -104,7 +118,7 @@ class Login extends Component{
                         if(res==="expired"){
                             this.loadToken();
                             this.setState({
-                                warning: "Website expired. Please login again",
+                                warning: "Website expired. Please try again",
                             });
                         }else if(res==="fail"){
                             this.loadToken();
@@ -136,7 +150,6 @@ class Login extends Component{
 
     render(){
         const {redirect,warning} = this.state;
-
         const warnLabel = warning !== "none" ? (
             <p className={this.state.warnClass}>{this.state.warning}</p>
         ) : (
@@ -145,7 +158,6 @@ class Login extends Component{
         return (
             <div className="container">
                     {
-                       // console.log(redirect);
                         redirect === "success" || "" ? (<Redirect to={{pathname:'/home'}}/>)
                                 : null
                         }
@@ -162,7 +174,7 @@ class Login extends Component{
                             <input value= {this.state.email} onChange={this.handleEmailChange} className="inputBox" type="text" placeholder="Email"/>
                             <input value= {this.state.password} onChange={this.handlePasswordChange} className="inputBox" type="password" placeholder="Password"/>
                             <div className="submit">
-                                <input className="submit-btn submit-btn-left" type="reset"/>
+                                <input className="submit-btn submit-btn-left"onClick={this.handleReset} type="reset"/>
                                 <input onClick={this.handleSubmit} className="submit-btn submit-btn-right" value="Login" type="submit"/>
                             </div>
                             <div className="forget">

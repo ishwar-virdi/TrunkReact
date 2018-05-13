@@ -266,10 +266,10 @@ class Reconcile extends React.Component {
         }
 
         return (
-            <div className="reconcile-content">
+            <ul className="reconcile-content">
                 <ReconcileItem value={this.state.title} setSort={sort => this.props.setSort(sort)}/>
                 {lists}
-            </div>
+            </ul>
         );
     }
 }

@@ -133,12 +133,12 @@ class ReconcileItem extends React.Component {
 
         );
         return (
-            <div className={this.state.btnClass}>
+            <li className={this.state.btnClass}>
                 {time}
                 {status}
                 {showBtn}
                 {method}
-            </div>
+            </li>
         );
     }
 }
