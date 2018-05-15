@@ -27,7 +27,6 @@ let validation = (email,password)=>{
 
 class Login extends Component{
 
-
     constructor(props) {
         super(props);
         this.state={
@@ -43,7 +42,6 @@ class Login extends Component{
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
     }
 
     componentDidMount() {
@@ -118,6 +116,7 @@ class Login extends Component{
             })
             .then(
                     (response) => {
+                        console.log(response.data.result);
                         this.hiddenLoading();
                         let res = response.data.result;
                         if(res==="expired"){
@@ -131,6 +130,7 @@ class Login extends Component{
                                 warning: "Email or password is wrong",
                             });
                         }else{
+                            sessionStorage.setItem('login', "true");
                             this.setState({
                                 redirect: res,
                             });
@@ -189,7 +189,7 @@ class Login extends Component{
                             <input value= {this.state.email} onChange={this.handleEmailChange} className="inputBox" type="text" placeholder="Email"/>
                             <input value= {this.state.password} onChange={this.handlePasswordChange} className="inputBox" type="password" placeholder="Password"/>
                             <div className="submit">
-                                <input className="submit-btn submit-btn-left"onClick={this.handleReset} type="reset"/>
+                                <input className="submit-btn submit-btn-left" onClick={this.handleReset} type="reset"/>
                                 <input onClick={this.handleSubmit} className="submit-btn submit-btn-right" value="Login" type="submit"/>
                             </div>
                             <div className="forget">

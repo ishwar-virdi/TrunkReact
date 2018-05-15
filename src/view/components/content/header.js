@@ -11,14 +11,12 @@ class Header extends React.Component {
             redirect:null,
             items:["Home","Result","Upload"],
             logoutUrl: apiurl + "/api/v1/userLogout",
-            isLogin:null,
             url:{
                 "Home":"home",
                 "Result":"reconcileresults",
                 "Upload":"upload",
             },
-        }
-        ;
+        };
         this.handleLogOut = this.handleLogOut.bind(this);
     }
 
@@ -37,13 +35,10 @@ class Header extends React.Component {
                 (response) => {
                     let data = response.data.result;
                     if(data === true){
-                        this.setState({
-                            isLogin:true,
-                        });
+                        sessionStorage.setItem('login', "true");
                     }else{
-                        this.setState({
-                            isLogin:false,
-                        });
+                        sessionStorage.clear();
+
                     }
                 },
                 (error) => {
@@ -65,10 +60,12 @@ class Header extends React.Component {
         })
             .then(
                 (response) => {
+                    console.log(response);
                     let data = response.data.result;
                     if(data === true){
+                        sessionStorage.clear();
                         this.setState({
-                           isLogin:false
+                           isLogin:"false",
                         });
                     }
                 },
@@ -101,14 +98,14 @@ class Header extends React.Component {
         return list;
     };
     render() {
-        const {isLogin} = this.state;
+        const isLogin = sessionStorage.getItem('login');
         let list = this.returnHeader();
         this.returnHeader();
         return (
             <header>
                 {
                     // console.log(redirect);
-                    isLogin === false || "" ? (<Redirect to={{pathname:'/login'}}/>)
+                    isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }
                 <div className="headerLayer">
