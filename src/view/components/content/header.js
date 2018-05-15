@@ -35,9 +35,9 @@ class Header extends React.Component {
                 (response) => {
                     let data = response.data.result;
                     if(data === true){
-                        sessionStorage.setItem('login', "true");
+                        localStorage.setItem('login', "true");
                     }else{
-                        sessionStorage.clear();
+                        localStorage.clear();
 
                     }
                 },
@@ -63,9 +63,8 @@ class Header extends React.Component {
                     console.log(response);
                     let data = response.data.result;
                     if(data === true){
-                        sessionStorage.clear();
+                        localStorage.clear();
                         this.setState({
-                           isLogin:"false",
                         });
                     }
                 },
@@ -98,7 +97,7 @@ class Header extends React.Component {
         return list;
     };
     render() {
-        const isLogin = sessionStorage.getItem('login');
+        const isLogin = localStorage.getItem('login');
         let list = this.returnHeader();
         this.returnHeader();
         return (

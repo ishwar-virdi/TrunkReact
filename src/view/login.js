@@ -130,7 +130,7 @@ class Login extends Component{
                                 warning: "Email or password is wrong",
                             });
                         }else{
-                            sessionStorage.setItem('login', "true");
+                            localStorage.setItem('login', "true");
                             this.setState({
                                 redirect: res,
                             });
