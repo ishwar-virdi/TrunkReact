@@ -12,7 +12,6 @@ class receipt extends Component{
             id:props.match.params.id,
             title: "RECEIPT NUMBER: " + props.match.params.id,
         };
-
     }
 
     componentDidMount() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../stylesheets/login.css';
 import {apiurl} from '../config/constants';
 import { Redirect } from 'react-router-dom';
-
+import Loading from './components/content/loading';
 import axios from 'axios';
 
 let validation = (email,password)=>{
@@ -37,6 +37,7 @@ class Login extends Component{
             warning:"none",
             redirect: null,
             warnClass: null,
+            loading:false,
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -46,7 +47,6 @@ class Login extends Component{
     }
 
     componentDidMount() {
-
         this.loadToken();
     }
 
@@ -99,6 +99,10 @@ class Login extends Component{
             let token = this.state.token;
             let email = this.state.email.toLowerCase();
             let password = this.state.password;
+            //this.visibleLoading();
+            this.setState({
+                loading:true,
+            });
             axios({
                 withCredentials: true,
                 method: 'POST',
@@ -114,6 +118,7 @@ class Login extends Component{
             })
             .then(
                     (response) => {
+                        this.hiddenLoading();
                         let res = response.data.result;
                         if(res==="expired"){
                             this.loadToken();
@@ -130,9 +135,9 @@ class Login extends Component{
                                 redirect: res,
                             });
                         }
-
                     },
                     (error) => {
+                        this.hiddenLoading();
                         console.log(error);
                     }
                 );
@@ -148,6 +153,16 @@ class Login extends Component{
         }
     }
 
+    hiddenLoading = ()=>{
+        this.setState({
+            loading:false,
+        });
+    };
+    visibleLoading = ()=>{
+        this.setState({
+            loading:true,
+        });
+    };
     render(){
         const {redirect,warning} = this.state;
         const warnLabel = warning !== "none" ? (
@@ -183,6 +198,7 @@ class Login extends Component{
                         </form>
                     </div>
                 </div>
+                <Loading visible={this.state.loading}/>
             </div>
         )
     }

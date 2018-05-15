@@ -5,6 +5,7 @@ import "../../../stylesheets/mainPage/detail/detail.css";
 import SearchBar from "../../components/content/searchBar";
 import Footer from "../../components/content/footer";
 import TransactionTable from "../detail/transactionTable"
+import Loading from "../../components/content/loading";
 
 class detail extends Component{
 
@@ -12,7 +13,8 @@ class detail extends Component{
         super(props);
 
         this.state = {
-            id : props.match.params.id
+            id : props.match.params.id,
+            loading:false,
         };
 
     }
@@ -20,10 +22,22 @@ class detail extends Component{
     componentDidMount() {
     }
 
+    hiddenLoading = ()=>{
+        this.setState({
+            loading:false,
+        });
+    };
+    visibleLoading = ()=>{
+        this.setState({
+            loading:true,
+        });
+    };
+
     render(){
         return (
             <div className="container">
-                <Header clickedClass="History"/>
+                <Loading visible={this.state.loading}/>
+                <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="SHOW RESULTS - TIME"/>
                     <div className="result-search">

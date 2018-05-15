@@ -7,6 +7,7 @@ import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import DateRangePicker from "react-dates/esm/components/DateRangePicker";
+import Loading from "../../components/content/loading";
 
 class result extends Component{
 
@@ -16,12 +17,15 @@ class result extends Component{
             sort:"time",
             searchResult:[],
 
+            //loading
+            loading:false,
+
             //datePicker
             startDate:null,
             endDate:null,
             startDateId: "startDateId",
             endDateId: "endDateId",
-            focusedInput:null
+            focusedInput:null,
         });
     }
 
@@ -44,9 +48,21 @@ class result extends Component{
         });
     }
 
+    hiddenLoading = ()=>{
+        this.setState({
+            loading:false,
+        });
+    };
+    visibleLoading = ()=>{
+        this.setState({
+            loading:true,
+        });
+    };
+
     render(){
         return (
             <div className="container">
+                <Loading visible={this.state.loading}/>
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="RECONCILIATION PROGRESS"/>
@@ -63,13 +79,15 @@ class result extends Component{
                                 isOutsideRange={() => false}
                             />
                         </div>
-
                         <div className="result-search-bar">
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
                                        page = "result" // PropTypes.string.isRequired,
+                                       hiddenLoading = {()=>this.hiddenLoading()} // PropTypes.string.isRequired,
+                                       visibleLoading = {()=>this.visibleLoading()} // PropTypes.string.isRequired,
                                        startDate = {this.state.startDate}
                                        endDate = {this.state.endDate}
+
                             />
                         </div>
                     </div>
@@ -77,10 +95,13 @@ class result extends Component{
                         <Reconcile  sort={this.state.sort}
                                     searchResult={this.state.searchResult}  // PropTypes.func.isRequired,
                                     setSort={(sort) => this.setSort(sort)}
+                                    hiddenLoading = {()=>this.hiddenLoading()}
+                                    visibleLoading = {()=>this.visibleLoading()}
                         />
                     </div>
                 </div>
                 <Footer/>
+
             </div>
         )
     }
