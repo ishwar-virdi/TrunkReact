@@ -6,6 +6,7 @@ import ReconcileItem from './reconcileItem';
 import moment from "moment";
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
+import {Link} from "react-router-dom";
 
 let parseToDate = (string) =>{
     return string.slice(4,6) + "/" + string.slice(6,8)  + "/" + string.slice(0,4);
@@ -34,34 +35,15 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
+            pageIndex:0,
             items: [],
+            isEnd: false,
         };
+        this.handleNextPage = this.handleNextPage.bind(this);
     }
 
     componentDidMount() {
-        this.props.visibleLoading("true");
-        axios({
-            withCredentials: true,
-            method: 'GET',
-            url: apiurl + "/api/v1/results",
-        })
-            .then(
-                (response) => {
-                    this.props.visibleLoading("false");
-                    let items = [];
-                    let data = response.data;
-                    for(let i = 0; i < data.length;i++){
-                        let result = this.jsonToResult(data[i]);
-                        items.push(result);
-                    }
-                    this.setState({
-                        items:items
-                    });
-                },
-                (error) => {
-                    this.props.visibleLoading("false");
-                }
-            );
+        this.requestResult(0);
     }
     componentDidUpdate(previousProps){
         if(
@@ -74,6 +56,35 @@ class Reconcile extends React.Component {
             sortItems = list;
         }
     }
+    requestResult(pageIndex){
+        this.props.visibleLoading("true");
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/results?page=" + pageIndex,
+        })
+            .then(
+                (response) => {
+                    this.props.visibleLoading("false");
+                    let data = response.data;
+                    for(let i = 0; i < data.length;i++){
+                        let result = this.jsonToResult(data[i]);
+                        this.setState(prevState => ({
+                            items: [...prevState.items, result]
+                        }))
+                    }
+                    if(data.length < 13){
+                        this.setState({
+                            isEnd:true
+                        })
+                    }
+                },
+                (error) => {
+                    this.props.visibleLoading("false");
+                }
+            );
+    }
+
     jsonToResult =(json) =>{
         let result = {};
         let reconcileDate;
@@ -156,6 +167,16 @@ class Reconcile extends React.Component {
         history.splice(0,1);
     };
 
+    handleNextPage = () =>{
+        if(this.state.isEnd === false
+        && this.props.sort === "time"){
+            let index = this.state.pageIndex + 1;
+            this.setState({
+                pageIndex: index,
+            });
+            this.requestResult(index);
+        }
+    };
     returnListByTime = () =>{
         //restore history
         [ ...history] = historyBackUp;
@@ -247,12 +268,13 @@ class Reconcile extends React.Component {
         }
 
         return (
-            <ul className="reconcile-content">
+            <ul className="reconcile-content" ref={ (divElement) => this.divElement = divElement}>
                 <ReconcileItem value={this.state.title}
                                setSort={sort => this.props.setSort(sort)}
                                setNotFoundVisible = {(visible)=>this.props.setNotFoundVisible(visible)}
                 />
                 {lists}
+                <p onClick={this.handleNextPage} className="transition result-nextPage">Next Page</p>
             </ul>
         );
     }

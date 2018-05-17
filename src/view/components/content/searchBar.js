@@ -80,6 +80,8 @@ class SearchBar extends React.Component {
                     this.props.setNotFoundVisible("false");
                     if(data.result === "fail" || data.length === 0){
                         this.props.setNotFoundVisible("true");
+                    }else if(data.result === "expired"){
+                        localStorage.clear();
                     }
                 },
                 (error) => {
