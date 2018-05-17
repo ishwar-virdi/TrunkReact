@@ -23,7 +23,7 @@ class Loading extends React.Component {
     }
 
     setVisible = () =>{
-        if(this.props.visible === false){
+        if(this.props.visible === "false"){
             this.setState({
                 loadingClass:"loading loading-hidden"
             });

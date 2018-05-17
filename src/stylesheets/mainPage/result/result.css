@@ -17,6 +17,7 @@
 }
 
 .result-view{
+    position: relative;
     height: auto;
     min-height: calc(100vh - 230px);
     overflow-y: auto;

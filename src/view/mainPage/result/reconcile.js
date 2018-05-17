@@ -23,6 +23,7 @@ let historyBackUp = [
     {month:48,letter:"Older..."}
 ];
 let removeIndex = [];
+let sortItems = [];
 class Reconcile extends React.Component {
     constructor(props) {
         super(props);
@@ -33,14 +34,12 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
-
             items: [],
-            sortItems:[],
         };
     }
 
     componentDidMount() {
-        this.props.visibleLoading();
+        this.props.visibleLoading("true");
         axios({
             withCredentials: true,
             method: 'GET',
@@ -48,7 +47,7 @@ class Reconcile extends React.Component {
         })
             .then(
                 (response) => {
-                    this.props.hiddenLoading();
+                    this.props.visibleLoading("false");
                     let items = [];
                     let data = response.data;
                     for(let i = 0; i < data.length;i++){
@@ -56,27 +55,23 @@ class Reconcile extends React.Component {
                         items.push(result);
                     }
                     this.setState({
-                        sortItems:items,
                         items:items
                     });
                 },
                 (error) => {
-                    this.props.hiddenLoading();
+                    this.props.visibleLoading("false");
                 }
             );
     }
     componentDidUpdate(previousProps){
         if(
-            (previousProps.searchResult !== this.props.searchResult)
-
+            previousProps.searchResult !== this.props.searchResult
         ){
             let list = [];
             for(let i = 0; i < this.props.searchResult.length;i++){
                 list.push(this.jsonToResult(this.props.searchResult[i]));
             }
-            this.setState({
-                sortItems:list,
-            });
+            sortItems = list;
         }
     }
     jsonToResult =(json) =>{
@@ -84,15 +79,12 @@ class Reconcile extends React.Component {
         let reconcileDate;
         let dateRange;
         reconcileDate = json['reconcileDate'].toString();
-        reconcileDate = parseToDate(reconcileDate) + " "
-            + json['reconcileTime'];
         //dateRange
         dateRange = parseToDate(json['startDate'].toString()) + " - " + parseToDate(json['endDate'].toString());
         result.id = json['startDate'].toString() + json['endDate'].toString();
         result.time = reconcileDate;
         result.dateRange = dateRange;
         result.status = json['percentage'];
-
         return result;
     };
     calculateTime = (timeArray) => {
@@ -100,6 +92,18 @@ class Reconcile extends React.Component {
         let num = timeArray[0];
         let unit = timeArray[1];
         switch(unit){
+            case "minute":
+                time = 0;
+                break;
+            case "minutes":
+                time = 0;
+                break;
+            case "hour":
+                time = 0;
+                break;
+            case "hours":
+                time = 0;
+                break;
             case "day":
                 time = 0;
                 break;
@@ -155,8 +159,11 @@ class Reconcile extends React.Component {
     returnListByTime = () =>{
         //restore history
         [ ...history] = historyBackUp;
+        sortItems = this.state.items;
+
         let lists = [];
         const items = this.state.items;
+
         let timeFromNow = [];
         let totalTime;
         for (let i=0; i<items.length; i++) {
@@ -178,8 +185,6 @@ class Reconcile extends React.Component {
         };
         let lists = [];
         let value;
-        const sortItems = this.state.sortItems;
-
         let order = Object.keys(sortItems).sort(
             (a,b)=>{
                 let aTimeFromNow = this.calculateTime(getTime(sortItems[a]));
@@ -196,7 +201,6 @@ class Reconcile extends React.Component {
     returnListByStatus = () =>{
         let lists = [];
         let value;
-        const sortItems = this.state.sortItems;
         let order = Object.keys(sortItems).sort(
             function(a,b){
                 return sortItems[a].status - sortItems[b].status;
@@ -212,9 +216,8 @@ class Reconcile extends React.Component {
         let lists = [];
         if(this.props.searchResult.result === "fail"){
         }else{
-            let result = this.state.sortItems;
-            for(let i = 0; i < result.length;i++){
-                let value = result[i];
+            for(let i = 0; i < sortItems.length;i++){
+                let value = sortItems[i];
                 lists.push(<ReconcileItem key={i} value={value}/>);
             }
         }
@@ -245,7 +248,10 @@ class Reconcile extends React.Component {
 
         return (
             <ul className="reconcile-content">
-                <ReconcileItem value={this.state.title} setSort={sort => this.props.setSort(sort)}/>
+                <ReconcileItem value={this.state.title}
+                               setSort={sort => this.props.setSort(sort)}
+                               setNotFoundVisible = {(visible)=>this.props.setNotFoundVisible(visible)}
+                />
                 {lists}
             </ul>
         );

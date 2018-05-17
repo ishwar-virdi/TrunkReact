@@ -8,6 +8,7 @@ import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import DateRangePicker from "react-dates/esm/components/DateRangePicker";
 import Loading from "../../components/content/loading";
+import SearchNotFound from "./searchNotFound";
 
 class result extends Component{
 
@@ -18,7 +19,7 @@ class result extends Component{
             searchResult:[],
 
             //loading
-            loading:false,
+            loading:"false",
 
             //datePicker
             startDate:null,
@@ -26,15 +27,25 @@ class result extends Component{
             startDateId: "startDateId",
             endDateId: "endDateId",
             focusedInput:null,
+
+            //search not found
+            searchResultVisible:"false",
         });
     }
 
     componentDidMount() {
     }
 
+
     setSearchResult(result) {
         this.setState({
             searchResult: result
+        });
+    }
+
+    setNotFoundVisible(result) {
+        this.setState({
+            searchResultVisible: result,
         });
     }
 
@@ -48,21 +59,15 @@ class result extends Component{
         });
     }
 
-    hiddenLoading = ()=>{
+    visibleLoading = (visible)=>{
         this.setState({
-            loading:false,
-        });
-    };
-    visibleLoading = ()=>{
-        this.setState({
-            loading:true,
+            loading:visible,
         });
     };
 
     render(){
         return (
             <div className="container">
-                <Loading visible={this.state.loading}/>
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="RECONCILIATION PROGRESS"/>
@@ -83,11 +88,10 @@ class result extends Component{
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
                                        page = "result" // PropTypes.string.isRequired,
-                                       hiddenLoading = {()=>this.hiddenLoading()} // PropTypes.string.isRequired,
-                                       visibleLoading = {()=>this.visibleLoading()} // PropTypes.string.isRequired,
+                                       visibleLoading = {(visible)=>this.visibleLoading(visible)} // PropTypes.string.isRequired,
                                        startDate = {this.state.startDate}
                                        endDate = {this.state.endDate}
-
+                                       setNotFoundVisible = {(visible)=>this.setNotFoundVisible(visible)}
                             />
                         </div>
                     </div>
@@ -95,13 +99,14 @@ class result extends Component{
                         <Reconcile  sort={this.state.sort}
                                     searchResult={this.state.searchResult}  // PropTypes.func.isRequired,
                                     setSort={(sort) => this.setSort(sort)}
-                                    hiddenLoading = {()=>this.hiddenLoading()}
-                                    visibleLoading = {()=>this.visibleLoading()}
+                                    visibleLoading = {(visible)=>this.visibleLoading(visible)}
+                                    setNotFoundVisible={(visible) => this.setNotFoundVisible(visible)}
                         />
+                        <SearchNotFound visible={this.state.searchResultVisible}/>
                     </div>
                 </div>
+                <Loading visible={this.state.loading}/>
                 <Footer/>
-
             </div>
         )
     }

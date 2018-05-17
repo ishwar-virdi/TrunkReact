@@ -14,7 +14,6 @@ class detail extends Component{
 
         this.state = {
             id : props.match.params.id,
-            loading:false,
         };
 
     }
@@ -22,21 +21,12 @@ class detail extends Component{
     componentDidMount() {
     }
 
-    hiddenLoading = ()=>{
-        this.setState({
-            loading:false,
-        });
-    };
-    visibleLoading = ()=>{
-        this.setState({
-            loading:true,
-        });
-    };
+
+
 
     render(){
         return (
             <div className="container">
-                <Loading visible={this.state.loading}/>
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="SHOW RESULTS - TIME"/>

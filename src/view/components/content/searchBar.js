@@ -32,8 +32,8 @@ class SearchBar extends React.Component {
         let startDate;
         let endDate;
         if(dateAllow){
-            startDate = this.props.startDate.format('YYYYMMDD');
-            endDate = this.props.endDate.format('YYYYMMDD');
+            startDate = this.props.startDate.format('MM/DD/YYYY');
+            endDate = this.props.endDate.format('MM/DD/YYYY');
         }
         if(!textAllow && !dateAllow) {
             this.setState({
@@ -41,63 +41,49 @@ class SearchBar extends React.Component {
             });
         }
         else{
-            let url = apiurl + "/api/v1/search?page=" + this.props.page + "&value=";
+            let url = apiurl + "/api/v1/search";
+            let data = {
+                page:this.props.page,
+                value:"",
+            };
             if(textAllow){
-                let searchInput = this.state.searchInput;
-                if(
-                    this.state.searchInput.indexOf("-") === 11
-                    && searchInput.indexOf("/")===2
-                    && !isNaN(Number(searchInput.slice(6,10)))
-                    && !isNaN(Number(searchInput.slice(0,2)))
-                    && !isNaN(Number(searchInput.slice(3,5)))
-                ){
-                    let search = this.state.searchInput;
-                    let startDate;
-                    let endDate;
-                    search = search.split("-");
-                    startDate = this.dateToString(search[0].replace(" ",""));
-                    endDate = this.dateToString(search[1].replace(" ",""));
-                    url += startDate;
-                    url += endDate;
-                }
-                else if(
-                    searchInput.indexOf("/")===2
-                    && !isNaN(Number(searchInput.slice(6,10)))
-                    && !isNaN(Number(searchInput.slice(0,2)))
-                    && !isNaN(Number(searchInput.slice(3,5)))
-                ){
-                    url += this.dateToString(this.state.searchInput);
-                }else{
-                    url += this.state.searchInput;
-                }
+                data.value += this.state.searchInput;
             }else{
-                url += startDate;
-                url += endDate;
+                data.value += startDate;
+                data.value += "-";
+                data.value += endDate;
             }
-            this.requestSearchResult(url);
+            this.requestSearchResult(url,data);
         }
     };
 
-    dateToString(date){
-        return date.slice(6,10) +date.slice(0,2) + date.slice(3,5);
-    }
-    requestSearchResult = (url) =>{
-        this.props.visibleLoading();
+    requestSearchResult = (url,data) =>{
+        this.props.visibleLoading("true");
+        console.log(url);
+        console.log(data);
         axios({
             withCredentials: true,
-            method: 'GET',
+            method: 'POST',
             url: url,
+            data: JSON.stringify(data),
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
         })
             .then(
                 (response) => {
-                    this.props.hiddenLoading();
+                    this.props.visibleLoading("false");
                     let data = response.data;
                     this.props.setSearchResult(data);
                     this.props.setSort("search");
                     this.clearInputText();
+                    this.props.setNotFoundVisible("false");
+                    if(data.result === "fail" || data.length === 0){
+                        this.props.setNotFoundVisible("true");
+                    }
                 },
                 (error) => {
-                    this.props.hiddenLoading();
+                    this.props.visibleLoading("false");
                     console.log(error);
                 }
             )

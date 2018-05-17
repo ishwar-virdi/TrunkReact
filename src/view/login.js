@@ -36,7 +36,7 @@ class Login extends Component{
             warning:"none",
             redirect: null,
             warnClass: null,
-            loading:false,
+            loading:"false",
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -97,10 +97,7 @@ class Login extends Component{
             let token = this.state.token;
             let email = this.state.email.toLowerCase();
             let password = this.state.password;
-            //this.visibleLoading();
-            this.setState({
-                loading:true,
-            });
+            this.visibleLoading("true");
             axios({
                 withCredentials: true,
                 method: 'POST',
@@ -116,8 +113,7 @@ class Login extends Component{
             })
             .then(
                     (response) => {
-                        console.log(response.data.result);
-                        this.hiddenLoading();
+                        this.visibleLoading("false");
                         let res = response.data.result;
                         if(res==="expired"){
                             this.loadToken();
@@ -137,7 +133,7 @@ class Login extends Component{
                         }
                     },
                     (error) => {
-                        this.hiddenLoading();
+                        this.visibleLoading("false");
                         console.log(error);
                     }
                 );
@@ -153,14 +149,9 @@ class Login extends Component{
         }
     }
 
-    hiddenLoading = ()=>{
+    visibleLoading = (visible)=>{
         this.setState({
-            loading:false,
-        });
-    };
-    visibleLoading = ()=>{
-        this.setState({
-            loading:true,
+            loading:visible,
         });
     };
     render(){

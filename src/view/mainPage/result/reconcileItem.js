@@ -39,6 +39,7 @@ class ReconcileItem extends React.Component {
             this.progressAnimation(this.props.value.status);
         }
     }
+
     progressSetColor = (status) =>{
         let percent = Number(status);
         if(percent >= 80){
@@ -94,6 +95,7 @@ class ReconcileItem extends React.Component {
 
     handleTimeClick(e){
         this.props.setSort("time");
+        this.props.setNotFoundVisible("false");
     }
     handleRangeClick(e){
         this.props.setSort("dateRange");
