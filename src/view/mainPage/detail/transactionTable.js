@@ -1,6 +1,8 @@
 import React from "react";
 import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
+import ReactTable from "react-table";
+import moment from "moment/moment";
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -10,6 +12,7 @@ class TransactionTable extends React.Component {
             items: [],
             isAllChecked: false
         }
+        this.sortColumns = this.sortColumns.bind(this)
     }
 
     componentDidMount() {
@@ -136,6 +139,69 @@ class TransactionTable extends React.Component {
         return list;
     };
 
+
+  /*  returnListByTime = () =>{
+        let lists = [];
+        const items = this.state.items;
+        let timeFromNow = [];
+        let totalTime;
+        for (let i=0; i<items.length; i++) {
+            timeFromNow = moment(items[i].time,"DD/MM/YYYY HH:mm").fromNow().split(" ");
+            totalTime = this.calculateTime(timeFromNow);
+            if(this.isTimeTitle(totalTime)){
+                this.pushTimeTitle(lists,"time"+i);
+            }
+            lists.push(<ReconcileItem key={i} value={items[i]}/>);
+        }
+        //restore history
+        [ ...history] = historyBackUp;
+        return lists;
+    };
+*/
+
+    returnListByAmount = () =>{
+        let lists = [];
+        let value;
+        const items = this.state.items;
+
+        let order = Object.keys(items).sort(
+            function(a,b){
+                return items[a].amount - items[b].amount;
+            }
+        );
+
+        for (var i = 0; i < items.length; i++) {
+
+            console.log(items)
+            console.log(order)
+
+        }
+
+        for(let key in order){
+            value = items[order[key]];
+            lists.push(<TransactionRow key={key} value={items[key]} isHeader={false} selectChanged={this.selectOne} index={key}/>);
+        }
+        return lists;
+    };
+
+
+
+    sortColumns = (sortColumnName) => {
+
+        let lists;
+        switch(sortColumnName) {
+            case "Amount":
+                console.log("This is from amount switch...")
+                lists = this.returnListByAmount();
+                break;
+            default:
+                lists = this.returnList();
+        }
+
+        return lists;
+    };
+
+
     selectAll = () => {
         var items = this.state.items;
         var changeTo = true;
@@ -153,8 +219,28 @@ class TransactionTable extends React.Component {
         });
     };
 
+    onRowClick = (state, rowInfo, column, instance) => {
+        return {
+            onClick: e => {
+                console.log('A Td Element was clicked!')
+                console.log('it produced this event:', e)
+                console.log('It was in this column:', column)
+                console.log('It was in this row:', rowInfo)
+                console.log('It was in this table instance:', instance)
+            }
+        }
+    }
+
     render () {
-        var list = this.returnList();
+
+        // table structure
+        const { items } = this.state;
+
+        var list = this.sortColumns();
+
+        console.log("This is from render : ")
+
+
         var isAllChecked = true;
 
         for (var i = 0; i < this.state.items.length; i++) {
@@ -173,11 +259,75 @@ class TransactionTable extends React.Component {
                         reconciled: "Reconciled",
                         rule: "Rule"};
 
+
         return (
+
+            <div>
+                <ReactTable
+                    data={items}
+                    columns={[
+                        {
+                            Header: "Date / Time",
+                            accessor: "dateTime"
+                        },
+                        {
+                            Header: "description",
+                            accessor: "description"
+                        },
+                        {
+                            Header: "Amount",
+                            accessor: "amount"
+                        },
+                        {
+                            Header: "Account Number",
+                            accessor: "accountNumber"
+                        },
+                        {
+                            Header: "Transaction Type",
+                            accessor: "transactionType"
+                        },
+                        {
+                            Header: "Reconciled ",
+                            accessor: "reconciled"
+                        },
+                        {
+                            Header: "Rule",
+                            accessor: "rule"
+                        }
+                    ]
+                    }
+                    defaultPageSize={10}
+                    getTdProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                // console.log("A Td Element was clicked!");
+                                // console.log("it produced this event:", e);
+                                // console.log("It was in this column:", column);
+                                console.log("It was in this row:", rowInfo);
+                                // console.log("It was in this table instance:", instance);
+
+                                // IMPORTANT! React-Table uses onClick internally to trigger
+                                // events like expanding SubComponents and pivots.
+                                // By default a custom 'onClick' handler will override this functionality.
+                                // If you want to fire the original onClick handler, call the
+                                // 'handleOriginal' function.
+                                if (handleOriginal) {
+                                    handleOriginal();
+                                }
+                            }
+                        };
+                    }}
+                    />
+                <br />
+                <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
+                <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
+            </div>
+
+/*
             <div>
                 <table className="transaction-table">
                     <thead>
-                        <TransactionRow value={title} isHeader={true} selectChanged={this.selectAll}/>
+                        <TransactionHeadings sortCallBack={this.sortColumns} value={title} isHeader={true} selectChanged={this.selectAll}/>
                     </thead>
                     <tbody>
                         {list}
@@ -187,6 +337,56 @@ class TransactionTable extends React.Component {
                 <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
                 <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
             </div>
+
+ */
+
+        );
+    }
+}
+
+
+// added another component as a table header
+class TransactionHeadings extends React.Component {
+    constructor(props) {
+        super(props);
+        this.sortByColumn = this.sortByColumn.bind(this)
+    }
+
+    sortByColumn = (columnName) => {
+        console.log(columnName)
+
+        this.props.sortCallBack(columnName);
+
+    };
+
+    render() {
+        const value = this.props.value;
+        // let className = this.props.isHeader ? "table-header" : "table-row";
+        var amount = value.amount;
+        var reconciled = "Successful";
+        
+
+        if (!value.reconciled)
+            reconciled = "Failed";
+
+        const isChecked = value.isChecked;
+        const dateTime = value.dateTime;
+        const description = value.description;
+        const accountNumber = value.accountNumber;
+        const transactionType = value.transactionType;
+        const rule = value.rule;
+
+        return (
+            <tr className="table-header" >
+                <th><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></th>
+                <th onClick={() => this.sortByColumn(dateTime)}>{dateTime}</th>
+                <th >{description}</th>
+                <th onClick={() => this.sortByColumn(amount)}>{amount}</th>
+                <th>{accountNumber}</th>
+                <th>{transactionType}</th>
+                <th>{reconciled}</th>
+                <th>{rule}</th>
+            </tr>
         );
     }
 }
@@ -234,6 +434,7 @@ class TransactionRow extends React.Component {
         );
     }
 }
+
 
 class InputCheckbox extends React.Component {
     constructor(props) {
