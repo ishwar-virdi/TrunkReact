@@ -13,7 +13,7 @@ class Header extends React.Component {
             logoutUrl: apiurl + "/api/v1/userLogout",
             url:{
                 "Home":"home",
-                "Result":"reconcileresults",
+                "Result":"reconciledresults",
                 "Upload":"upload",
             },
         };
@@ -23,10 +23,8 @@ class Header extends React.Component {
     componentDidMount() {
         axios({
             withCredentials: true,
-            method: 'POST',
+            method: 'GET',
             url: apiurl + "/api/v1/userLogin",
-            data: JSON.stringify({
-            }),
             headers: {
                 'Content-Type' : 'application/json; charset=utf-8'
             }

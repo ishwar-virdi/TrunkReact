@@ -14,15 +14,18 @@ class detail extends Component{
 
         this.state = {
             id : props.match.params.id,
+            //loading
+            loading:"false",
         };
-
     }
-
     componentDidMount() {
     }
 
-
-
+    visibleLoading = (visible)=>{
+        this.setState({
+            loading:visible,
+        });
+    };
 
     render(){
         return (
@@ -34,9 +37,11 @@ class detail extends Component{
                         <SearchBar/>
                     </div>
                     <div className="detail-view">
-                        <TransactionTable/>
+                        <TransactionTable dateRange={this.state.id}
+                                          visibleLoading = {(visible)=>this.visibleLoading(visible)}/>
                     </div>
                 </div>
+                <Loading visible={this.state.loading}/>
                 <Footer />
             </div>
         )

@@ -18,10 +18,10 @@ class App extends Component {
                         <Route exact path="/" component={login} />
                         <Route exact path="/login" component={login} />
                         <Route path="/home" component={home} />
-                        <Route path="/reconcileresults" component={history} />
+                        <Route path="/reconciledresults" component={history} />
                         <Route path="/upload" component={upload} />
-                        <Route path="/reconciledetails/:id" component={detail} />
-                        <Route path="/reconcilereceipt/:id" component={receipt} />
+                        <Route path="/reconciledresult/details/:id" component={detail} />
+                        <Route path="/transactiondetails/:id" component={receipt} />
                         <Route path="/loading" component={Loading} />
                         <Route path="*" component={notFoundPage} />
                     </Switch>

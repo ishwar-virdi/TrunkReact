@@ -103,24 +103,6 @@ class Reconcile extends React.Component {
         let num = timeArray[0];
         let unit = timeArray[1];
         switch(unit){
-            case "minute":
-                time = 0;
-                break;
-            case "minutes":
-                time = 0;
-                break;
-            case "hour":
-                time = 0;
-                break;
-            case "hours":
-                time = 0;
-                break;
-            case "day":
-                time = 0;
-                break;
-            case "days":
-                time = 0;
-                break;
             case "month":
                 time = 1;
                 break;
@@ -134,7 +116,7 @@ class Reconcile extends React.Component {
                 time = Number(num) * 12;
                 break;
             default:
-                throw new Error("time is wrong");
+                time = 0;
         }
         return time;
     };

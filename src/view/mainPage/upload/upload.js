@@ -15,7 +15,7 @@ class upload extends Component{
         super(props);
         this.state = {
             docType: "Bank",
-            files: [] }
+            files: [] };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
         this.uploadDocs = this.uploadDocs.bind(this);
@@ -34,7 +34,7 @@ class upload extends Component{
     };
 
     uploadDocs() {
-        var data = new FormData();
+        let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
         });
