@@ -15,7 +15,9 @@ class upload extends Component{
         super(props);
         this.state = {
             docType: "Bank",
-            files: [] }
+            files: [] ,
+            status: ""
+        }
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
         this.uploadDocs = this.uploadDocs.bind(this);
@@ -38,17 +40,21 @@ class upload extends Component{
         this.state.files.forEach(file => {
             data.append("file",file);
         });
-        var self = this;
         axios
             .post(
                 apiurl + "/" + this.state.docType.toString() + "/upload",
                 data
             )
-            .then(function(res){
-                self.render();
-            })
-            .catch(function(err){
-                console.log("Error in Upload JS");
+            .then(
+                (response) => {
+                    this.setState({
+                        result : response.data.reason
+                    });
+                })
+            .catch(() => {
+                this.setState({
+                    result : "Error in calling Upload API"
+                });
             })
     };
 
@@ -74,6 +80,7 @@ class upload extends Component{
                             <option value="Settlement">Settlement file</option>
                         </select>
                         <button className="button" position = "top center" onClick={this.uploadDocs}>Upload</button>
+                        <h1>{this.state.status}</h1>
                     </div>
                 </div>
                 <Footer/>
