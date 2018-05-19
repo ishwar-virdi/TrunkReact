@@ -63,7 +63,6 @@ class result extends Component{
                                 isOutsideRange={() => false}
                             />
                         </div>
-
                         <div className="result-search-bar">
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,

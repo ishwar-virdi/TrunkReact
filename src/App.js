@@ -9,7 +9,6 @@ import history from './view/mainPage/result/result';
 import upload from './view/mainPage/upload/upload';
 import receipt from './view/mainPage/result/receipt/receipt';
 import detail from './view/mainPage/detail/detail';
-import chart from './view/components/content/chart';
 import notFoundPage from './view/notFoundPage';
 
 class App extends Component {
@@ -21,11 +20,10 @@ class App extends Component {
                         <Route exact path="/" component={login} />
                         <Route exact path="/login" component={login} />
                         <Route path="/home" component={home} />
-                        <Route path="/chart" component={chart} />
-                        <Route path="/result" component={history} />
+                        <Route path="/reconcileresults" component={history} />
                         <Route path="/upload" component={upload} />
-                        <Route path="/detail/:id" component={detail} />
-                        <Route path="/receipt/:id" component={receipt} />
+                        <Route path="/reconciledetails/:id" component={detail} />
+                        <Route path="/reconcilereceipt/:id" component={receipt} />
                         <Route path="/rangeDatePicker" component={rangeDatePicker} />
                         <Route path="/singleDatePicker" component={singleDatePicker} />
                         <Route path="*" component={notFoundPage} />
