@@ -4,6 +4,12 @@ import FormSeperateLayerfrom from "./formSeperateLayer";
 import "../../../stylesheets/mainPage/result/reconcile.css";
 import ReconcileItem from './reconcileItem';
 import moment from "moment";
+import {apiurl} from "../../../config/constants";
+import axios from "axios/index";
+
+let spliteToDate = (string) =>{
+    return string.slice(6,8) + "/" + string.slice(4,6) + "/" + string.slice(0,4);
+};
 let history = [
     {month:0,letter:"Recently"},
     {month:1,letter:"One month ago"},
@@ -27,96 +33,51 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
-            items: []
+            items: [],
+            test:[],
         };
         [ ...historyBackUp] = history;
     }
 
     componentDidMount() {
-        this.setState({
-            items: [
-                {
-                    id:1,
-                    time: "10/4/2018 17:10",
-                    dateRange: "10/3/2018 - 10/4/2018",
-                    status: "80"
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/results",
+        })
+            .then(
+                (response) => {
+                    let items = [];
+                    let data = response.data;
+                    for(let i = 0; i < data.length;i++){
+                        let result = {};
+                        let reconcileDate;
+                        let dateRange;
+                        let startDate;
+                        let endDate;
+                        reconcileDate = data[i]['reconcileDate'].toString();
+                        reconcileDate = spliteToDate(reconcileDate) + " "
+                            + data[i]['reconcileTime'];
+                        //dateRange
+                        startDate = data[i]['dateRange'].slice(0,8);
+                        endDate = data[i]['dateRange'].slice(8,16);
+                        dateRange = spliteToDate(startDate) + " - " + spliteToDate(endDate);
+                        result.id = data[i]['dateRange'];
+                        result.time = reconcileDate;
+                        result.dateRange = dateRange;
+                        result.status = data[i]['percentage'];
+                        items.push(result);
+                    }
+                    this.setState({
+                        items:items
+                    })
                 },
-                {
-                    id:2,
-                    time: "10/3/2018 17:20",
-                    dateRange: "10/2/2018 - 10/3/2018",
-                    status: "100"
-                },
-                {
-                    id:3,
-                    time: "10/2/2018 17:10",
-                    dateRange: "10/1/2018 - 10/2/2018",
-                    status: "70"
-                },
-                {
-                    id:4,
-                    time: "10/2/2018 17:20",
-                    dateRange: "5/1/2018 - 10/2/2018",
-                    status: "100"
-                },
-                {
-                    id:5,
-                    time: "8/2/2018 17:20",
-                    dateRange: "4/1/2018 - 10/2/2018",
-                    status: "60"
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                    });
                 }
-                ,
-                {
-                    id:6,
-                    time: "10/1/2018 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "55"
-                }
-                ,
-                {
-                    id:7,
-                    time: "1/1/2018 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "67"
-                },
-                {
-                    id:8,
-                    time: "16/04/2017 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "20"
-                },
-                {
-                    id:9,
-                    time: "16/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "50"
-                },
-                {
-                    id:10,
-                    time: "15/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "30"
-                },
-                {
-                    id:11,
-                    time: "14/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "60"
-                },
-                {
-                    id:12,
-                    time: "16/02/2015 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "76"
-                },
-                {
-                    id:13,
-                    time: "16/02/2014 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "100"
-                },
-            ],
-        });
+            );
     }
 
     calculateTime = (timeArray) => {
@@ -176,6 +137,9 @@ class Reconcile extends React.Component {
         history.splice(0,1);
     };
     returnListByTime = () =>{
+
+        //restore history
+        [ ...history] = historyBackUp;
         let lists = [];
         const items = this.state.items;
         let timeFromNow = [];
@@ -188,8 +152,6 @@ class Reconcile extends React.Component {
             }
             lists.push(<ReconcileItem key={i} value={items[i]}/>);
         }
-        //restore history
-        [ ...history] = historyBackUp;
         return lists;
     };
     returnListByDateRange = () =>{
@@ -266,10 +228,10 @@ class Reconcile extends React.Component {
         }
 
         return (
-            <div className="reconcile-content">
+            <ul className="reconcile-content">
                 <ReconcileItem value={this.state.title} setSort={sort => this.props.setSort(sort)}/>
                 {lists}
-            </div>
+            </ul>
         );
     }
 }

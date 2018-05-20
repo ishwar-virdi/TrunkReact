@@ -2,7 +2,6 @@ import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import SearchBar from "../../components/content/searchBar";
-import RangeDatePicker from "../../components/datePicker/rangeDatePicker";
 import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
@@ -63,7 +62,6 @@ class result extends Component{
                                 isOutsideRange={() => false}
                             />
                         </div>
-
                         <div className="result-search-bar">
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
