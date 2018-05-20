@@ -262,5 +262,4 @@ class Reconcile extends React.Component {
     }
 }
 
-
 export default Reconcile;
