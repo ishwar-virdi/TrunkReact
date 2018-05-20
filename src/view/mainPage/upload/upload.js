@@ -47,12 +47,12 @@ class upload extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        result : response.data.reason
+                        status : response.data.reason
                     });
                 })
             .catch(() => {
                 this.setState({
-                    result : "Error in calling Upload API"
+                    status : "Error in calling Upload API"
                 });
             })
     };
