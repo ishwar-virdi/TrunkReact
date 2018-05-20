@@ -37,8 +37,10 @@ class ReceiptContent extends Component{
                 surcharge:["Surcharge",""],
                 currency:["Currency",""],
             },
-        }
+        };
+        this.markAsReconcile = this.markAsReconcile.bind(this);
     };
+
     componentDidMount() {
         axios.get(apiurl + "/receipt/" + this.state.receipt)
             .then(
@@ -79,12 +81,90 @@ class ReceiptContent extends Component{
                     }
                 })
             .catch(() => {
-                this.setState({
-                    result : "Error in connect to Receipt API"
-                });
+                    this.setState({
+                        result : "Error in connect to Receipt API"
+                    });
                 }
             )
     }
+
+    markAsReconcile(){
+
+        axios.put(apiurl + "/manualReconcile/" + this.state.receipt)
+            .then(
+                (response) => {
+                    if(response.data.result === "fail"){
+                        this.setState({
+                            result : response.data.reason,
+                            transaction: {
+                                header: ["Transaction", ""],
+                                date: ["Transaction Date", this.state.transaction.date],
+                                time: ["Transaction Time", this.state.transaction.time],
+                                customerName: ["Customer Name", this.state.transaction.customerName],
+                                MID: ["Merchant ID", this.state.transaction.MID],
+                                bankReference: ["Bank Reference", this.state.transaction.bankReference],
+                            },
+                            status: {
+                                header: ["Status", this.state.status.header],
+                                date: ["Settlement Date", this.state.status.date],
+                                reconcileStatus: ["Reconcile Status", this.state.status.reconcileStatus],
+                                reconcileDate: ["Reconciled Date", this.state.status.reconcileDate]
+                            },
+                            card: {
+                                header: ["Card", ""],
+                                pan: ["Card PAN", this.state.card.pan],
+                                scheme: ["Card Scheme", this.state.card.scheme],
+                                expiry: ["Card Expiry", this.state.card.expiry],
+                            },
+                            amount: {
+                                header: ["Amount", ""],
+                                amount: ["Principle Amount", this.state.amount.amount],
+                                surcharge: ["Surcharge", this.state.amount.surcharge],
+                                currency: ["Currency", this.state.amount.currency],
+                            },
+                        });
+                    } else {
+                        this.setState({
+                            result : response.data.reason,
+                            transaction: {
+                                header: ["Transaction", ""],
+                                date: ["Transaction Date", this.state.transaction.date],
+                                time: ["Transaction Time", this.state.transaction.time],
+                                customerName: ["Customer Name", this.state.transaction.customerName],
+                                MID: ["Merchant ID", this.state.transaction.MID],
+                                bankReference: ["Bank Reference", this.state.transaction.bankReference],
+                            },
+                            status: {
+                                header: ["Status", this.state.status.header],
+                                date: ["Settlement Date", this.state.status.date],
+                                reconcileStatus: ["Reconcile Status", response.data.ReconcileStatus],
+                                reconcileDate: ["Reconciled Date", response.data.ReconciledDate]
+                            },
+                            card: {
+                                header: ["Card", ""],
+                                pan: ["Card PAN", this.state.card.pan],
+                                scheme: ["Card Scheme", this.state.card.scheme],
+                                expiry: ["Card Expiry", this.state.card.expiry],
+                            },
+                            amount: {
+                                header: ["Amount", ""],
+                                amount: ["Principle Amount", this.state.amount.amount],
+                                surcharge: ["Surcharge", this.state.amount.surcharge],
+                                currency: ["Currency", this.state.amount.currency],
+                            },
+                        });
+                    }
+                })
+            .catch(() => {
+                    this.setState({
+                        result : "Error in connect to Reconcile API"
+                    });
+                }
+            )
+
+
+    }
+
     render(){
         return (
             <div className="receipt-content">
@@ -99,7 +179,7 @@ class ReceiptContent extends Component{
                         </div>
                         <div>
                             <div className="receipt-table-reconciled">
-                                <Link className="transition" to={{pathname:"/aaa/"}}>Mark as Reconciled</Link>
+                                <button onClick={this.uploadDocs}>Mark as Reconciled</button>
                             </div>
                         </div>
                     </div>
