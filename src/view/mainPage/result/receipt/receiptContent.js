@@ -179,7 +179,7 @@ class ReceiptContent extends Component{
                         </div>
                         <div>
                             <div className="receipt-table-reconciled">
-                                <button onClick={this.uploadDocs}>Mark as Reconciled</button>
+                                <button onClick={this.markAsReconcile}>Mark as Reconciled</button>
                             </div>
                         </div>
                     </div>
