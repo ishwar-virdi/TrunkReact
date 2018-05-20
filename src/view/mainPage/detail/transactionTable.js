@@ -15,33 +15,102 @@ class TransactionTable extends React.Component {
     }
 
     componentDidMount() {
-        this.props.visibleLoading("true");
-        axios({
-            withCredentials: true,
-            method: 'GET',
-            url: apiurl + "/api/v1/details?id=" + this.props.dateRange,
-            headers: {
-                'Content-Type' : 'application/json; charset=utf-8'
-            }
-        })
-            .then(
-            (response) => {
-                this.props.visibleLoading("false");
-                let data = response.data;
-                let details = [];
-                for(let i = 0; i < data.length;i++){
-                    details.push(this.jsonToResult(data[i]));
+        // this.props.visibleLoading("true");
+        // axios({
+        //     withCredentials: true,
+        //     method: 'GET',
+        //     url: apiurl + "/api/v1/details?id=" + this.props.dateRange,
+        //     headers: {
+        //         'Content-Type' : 'application/json; charset=utf-8'
+        //     }
+        // })
+        //     .then(
+        //     (response) => {
+        //         this.props.visibleLoading("false");
+        //         let data = response.data;
+        //         let details = [];
+        //         for(let i = 0; i < data.length;i++){
+        //             details.push(this.jsonToResult(data[i]));
+        //         }
+        //         this.setState({
+        //             items: details,
+        //         });
+        //     },
+        //     (error) => {
+        //         this.props.visibleLoading("false");
+        //         console.log(error);
+        //     }
+        // );
+        this.setState({
+            items: [
+                {
+                    uniqueId: "0",
+                    isChecked: false,
+                    dateTime: "07/04/2018 15:18",
+                    description: "",
+                    amount: "533",
+                    accountNumber: "12345678",
+                    transactionType: "Direct Debit",
+                    reconciled: true,
+                    rule: "1"
+                },
+                {
+                    uniqueId: "1",
+                    isChecked: false,
+                    dateTime: "09/04/2018 10:05",
+                    description: "",
+                    amount: "158",
+                    accountNumber: "12345678",
+                    transactionType: "Visa",
+                    reconciled: true,
+                    rule: "1"
+                },
+                {
+                    uniqueId: "2",
+                    isChecked: false,
+                    dateTime: "09/04/2018 10:20",
+                    description: "",
+                    amount: "697",
+                    accountNumber: "12345678",
+                    transactionType: "Direct Debit",
+                    reconciled: false,
+                    rule: "4"
+                },
+                {
+                    uniqueId: "3",
+                    isChecked: false,
+                    dateTime: "09/04/2018 12:30",
+                    description: "",
+                    amount: "451",
+                    accountNumber: "12345678",
+                    transactionType: "Mastercard",
+                    reconciled: false,
+                    rule: "5"
+                },
+                {
+                    uniqueId: "4",
+                    isChecked: false,
+                    dateTime: "09/04/2018 16:14",
+                    description: "",
+                    amount: "20",
+                    accountNumber: "12345678",
+                    transactionType: "Visa",
+                    reconciled: true,
+                    rule: "1"
+                },
+                {
+                    uniqueId: "5",
+                    isChecked: false,
+                    dateTime: "07/04/2018 15:18",
+                    description: "",
+                    amount: "1460",
+                    accountNumber: "12345678",
+                    transactionType: "Visa",
+                    reconciled: true,
+                    rule: "1"
                 }
-                this.setState({
-                    items: details,
-                });
-            },
-            (error) => {
-                this.visibleLoading("false");
-                console.log(error);
-            }
-        );
-
+            ]
+        });
     }
 
     jsonToResult =(json) =>{
