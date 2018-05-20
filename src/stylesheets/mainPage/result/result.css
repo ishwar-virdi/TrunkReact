@@ -17,9 +17,28 @@
 }
 
 .result-view{
+    position: relative;
     height: auto;
     min-height: calc(100vh - 230px);
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
+}
+
+.result-nextPage{
+    position: fixed;
+    bottom: 5px;
+    right: 20px;
+    height: 25px;
+    width: 70px;
+    line-height: 25px;
+    background-color: #483291;
+    border-radius: 5px;
+    color: white;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.result-nextPage:hover{
+    background-color: #66CCFF;
 }

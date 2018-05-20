@@ -23,7 +23,12 @@ class ReconcileItem extends React.Component {
 
     componentDidMount() {
         this.isTitle(this.props.value);
-        this.progressAnimation(this.props.value.status,false);
+        this.progressSetColor(this.props.value.status);
+        this.setState({
+            progressStyle:{
+                width:this.props.value.status +"%",
+            },
+        });
     }
 
     componentDidUpdate(previousProps){
@@ -34,17 +39,18 @@ class ReconcileItem extends React.Component {
             this.progressAnimation(this.props.value.status);
         }
     }
-    progressAnimation = (status)=>{
+
+    progressSetColor = (status) =>{
         let percent = Number(status);
         if(percent >= 80){
             this.setState({
                 progressClass: "reconcile-progress-bar bgGreen"
             });
-        }else if( percent > 60 && percent < 80){
+        }else if( percent >= 60 && percent < 80){
             this.setState({
                 progressClass: "reconcile-progress-bar bgBlue"
             });
-        }else if( percent > 40 && percent <= 60){
+        }else if( percent > 40 && percent < 60){
             this.setState({
                 progressClass:  "reconcile-progress-bar bgYellow"
             });
@@ -53,6 +59,10 @@ class ReconcileItem extends React.Component {
                 progressClass: "reconcile-progress-bar bgRed"
             });
         }
+    };
+    progressAnimation = (status)=>{
+        let percent = Number(status);
+        this.progressSetColor(percent);
         let i = 0;
         let interval = setInterval(()=>{
             this.setState({
@@ -71,6 +81,8 @@ class ReconcileItem extends React.Component {
             i = i + 5;
         },5);
     };
+
+
     isTitle = (value) =>{
         if(value.isTitle === true || ""){
             this.setState({
@@ -83,6 +95,7 @@ class ReconcileItem extends React.Component {
 
     handleTimeClick(e){
         this.props.setSort("time");
+        this.props.setNotFoundVisible("false");
     }
     handleRangeClick(e){
         this.props.setSort("dateRange");
@@ -114,7 +127,7 @@ class ReconcileItem extends React.Component {
         );
         const showBtn = (
             <div className="reconcile-btn fl">
-                <Link to={{pathname:"/reconciledetails/" + value.id}} target="_blank">{this.state.btn}</Link>
+                <Link to={{pathname:"/reconciledresult/details/" + value.id}} target="_blank">{this.state.btn}</Link>
             </div>
         );
         const method = recordIsTitle ? (
@@ -130,7 +143,6 @@ class ReconcileItem extends React.Component {
                     <p>{value.status}</p>
                 </div>
             </div>
-
         );
         return (
             <li className={this.state.btnClass}>

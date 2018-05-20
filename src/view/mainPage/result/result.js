@@ -2,10 +2,13 @@ import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import SearchBar from "../../components/content/searchBar";
+import RangeDatePicker from "../../components/datePicker/rangeDatePicker";
 import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import DateRangePicker from "react-dates/esm/components/DateRangePicker";
+import Loading from "../../components/content/loading";
+import SearchNotFound from "./searchNotFound";
 
 class result extends Component{
 
@@ -15,21 +18,34 @@ class result extends Component{
             sort:"time",
             searchResult:[],
 
+            //loading
+            loading:"false",
+
             //datePicker
             startDate:null,
             endDate:null,
             startDateId: "startDateId",
             endDateId: "endDateId",
-            focusedInput:null
+            focusedInput:null,
+
+            //search not found
+            searchResultVisible:"false",
         });
     }
 
     componentDidMount() {
     }
 
+
     setSearchResult(result) {
         this.setState({
             searchResult: result
+        });
+    }
+
+    setNotFoundVisible(result) {
+        this.setState({
+            searchResultVisible: result,
         });
     }
 
@@ -42,6 +58,12 @@ class result extends Component{
             sort: displaySort
         });
     }
+
+    visibleLoading = (visible)=>{
+        this.setState({
+            loading:visible,
+        });
+    };
 
     render(){
         return (
@@ -66,8 +88,10 @@ class result extends Component{
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
                                        page = "result" // PropTypes.string.isRequired,
+                                       visibleLoading = {(visible)=>this.visibleLoading(visible)} // PropTypes.string.isRequired,
                                        startDate = {this.state.startDate}
                                        endDate = {this.state.endDate}
+                                       setNotFoundVisible = {(visible)=>this.setNotFoundVisible(visible)}
                             />
                         </div>
                     </div>
@@ -75,9 +99,13 @@ class result extends Component{
                         <Reconcile  sort={this.state.sort}
                                     searchResult={this.state.searchResult}  // PropTypes.func.isRequired,
                                     setSort={(sort) => this.setSort(sort)}
+                                    visibleLoading = {(visible)=>this.visibleLoading(visible)}
+                                    setNotFoundVisible={(visible) => this.setNotFoundVisible(visible)}
                         />
+                        <SearchNotFound visible={this.state.searchResultVisible}/>
                     </div>
                 </div>
+                <Loading visible={this.state.loading}/>
                 <Footer/>
             </div>
         )
