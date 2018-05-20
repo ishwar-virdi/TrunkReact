@@ -4,7 +4,15 @@ import FormSeperateLayerfrom from "./formSeperateLayer";
 import "../../../stylesheets/mainPage/result/reconcile.css";
 import ReconcileItem from './reconcileItem';
 import moment from "moment";
-let history = [
+import {apiurl} from "../../../config/constants";
+import axios from "axios/index";
+import {Link} from "react-router-dom";
+
+let parseToDate = (string) =>{
+    return string.slice(4,6) + "/" + string.slice(6,8)  + "/" + string.slice(0,4);
+};
+let history;
+let historyBackUp = [
     {month:0,letter:"Recently"},
     {month:1,letter:"One month ago"},
     {month:2,letter:"Two month ago"},
@@ -15,8 +23,8 @@ let history = [
     {month:36,letter:"Three year ago"},
     {month:48,letter:"Older..."}
 ];
-let historyBackUp;
 let removeIndex = [];
+let sortItems = [];
 class Reconcile extends React.Component {
     constructor(props) {
         super(props);
@@ -27,109 +35,74 @@ class Reconcile extends React.Component {
                 dateRange: "DateRange",
                 status: "Status"
             },
-            items: []
+            pageIndex:0,
+            items: [],
+            isEnd: false,
         };
-        [ ...historyBackUp] = history;
+        this.handleNextPage = this.handleNextPage.bind(this);
     }
 
     componentDidMount() {
-        this.setState({
-            items: [
-                {
-                    id:1,
-                    time: "10/4/2018 17:10",
-                    dateRange: "10/3/2018 - 10/4/2018",
-                    status: "80"
+        this.requestResult(0);
+    }
+    componentDidUpdate(previousProps){
+        if(
+            previousProps.searchResult !== this.props.searchResult
+        ){
+            let list = [];
+            for(let i = 0; i < this.props.searchResult.length;i++){
+                list.push(this.jsonToResult(this.props.searchResult[i]));
+            }
+            sortItems = list;
+        }
+    }
+    requestResult(pageIndex){
+        this.props.visibleLoading("true");
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/results?page=" + pageIndex,
+        })
+            .then(
+                (response) => {
+                    this.props.visibleLoading("false");
+                    let data = response.data;
+                    for(let i = 0; i < data.length;i++){
+                        let result = this.jsonToResult(data[i]);
+                        this.setState(prevState => ({
+                            items: [...prevState.items, result]
+                        }))
+                    }
+                    if(data.length < 13){
+                        this.setState({
+                            isEnd:true
+                        })
+                    }
                 },
-                {
-                    id:2,
-                    time: "10/3/2018 17:20",
-                    dateRange: "10/2/2018 - 10/3/2018",
-                    status: "100"
-                },
-                {
-                    id:3,
-                    time: "10/2/2018 17:10",
-                    dateRange: "10/1/2018 - 10/2/2018",
-                    status: "70"
-                },
-                {
-                    id:4,
-                    time: "10/2/2018 17:20",
-                    dateRange: "5/1/2018 - 10/2/2018",
-                    status: "100"
-                },
-                {
-                    id:5,
-                    time: "8/2/2018 17:20",
-                    dateRange: "4/1/2018 - 10/2/2018",
-                    status: "60"
+                (error) => {
+                    this.props.visibleLoading("false");
                 }
-                ,
-                {
-                    id:6,
-                    time: "10/1/2018 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "55"
-                }
-                ,
-                {
-                    id:7,
-                    time: "1/1/2018 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "67"
-                },
-                {
-                    id:8,
-                    time: "16/04/2017 17:20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "20"
-                },
-                {
-                    id:9,
-                    time: "16/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "50"
-                },
-                {
-                    id:10,
-                    time: "15/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "30"
-                },
-                {
-                    id:11,
-                    time: "14/02/2016 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "60"
-                },
-                {
-                    id:12,
-                    time: "16/02/2015 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "76"
-                },
-                {
-                    id:13,
-                    time: "16/02/2014 17.20",
-                    dateRange: "5/11/2017 - 10/12/2017",
-                    status: "100"
-                },
-            ],
-        });
+            );
     }
 
+    jsonToResult =(json) =>{
+        let result = {};
+        let reconcileDate;
+        let dateRange;
+        reconcileDate = json['reconcileDate'].toString();
+        //dateRange
+        dateRange = parseToDate(json['startDate'].toString()) + " - " + parseToDate(json['endDate'].toString());
+        result.id = json['startDate'].toString() + json['endDate'].toString();
+        result.time = reconcileDate;
+        result.dateRange = dateRange;
+        result.status = json['percentage'];
+        return result;
+    };
     calculateTime = (timeArray) => {
         let time;
         let num = timeArray[0];
         let unit = timeArray[1];
         switch(unit){
-            case "day":
-                time = 0;
-                break;
-            case "days":
-                time = 0;
-                break;
             case "month":
                 time = 1;
                 break;
@@ -143,7 +116,7 @@ class Reconcile extends React.Component {
                 time = Number(num) * 12;
                 break;
             default:
-                throw new Error("time is wrong");
+                time = 0;
         }
         return time;
     };
@@ -175,72 +148,83 @@ class Reconcile extends React.Component {
         lists.push(<FormSeperateLayerfrom key={key} title={title}/>);
         history.splice(0,1);
     };
+
+    handleNextPage = () =>{
+        if(this.state.isEnd === false
+        && this.props.sort === "time"){
+            let index = this.state.pageIndex + 1;
+            this.setState({
+                pageIndex: index,
+            });
+            this.requestResult(index);
+        }
+    };
     returnListByTime = () =>{
+        //restore history
+        [ ...history] = historyBackUp;
+        sortItems = this.state.items;
+
         let lists = [];
         const items = this.state.items;
+
         let timeFromNow = [];
         let totalTime;
         for (let i=0; i<items.length; i++) {
-            timeFromNow = moment(items[i].time,"DD/MM/YYYY HH:mm").fromNow().split(" ");
+            timeFromNow = moment(items[i].time,"MM/DD/YYYY HH:mm").fromNow().split(" ");
             totalTime = this.calculateTime(timeFromNow);
             if(this.isTimeTitle(totalTime)){
                 this.pushTimeTitle(lists,"time"+i);
             }
             lists.push(<ReconcileItem key={i} value={items[i]}/>);
         }
-        //restore history
-        [ ...history] = historyBackUp;
         return lists;
     };
     returnListByDateRange = () =>{
         let getTime = (item) =>{
             let tempTime = item.dateRange.split("-");
             let endTime = tempTime[1];
-            let timeFromNow = moment(endTime,"DD/MM/YYYY").fromNow().split(" ");
+            let timeFromNow = moment(endTime,"MM/DD/YYYY").fromNow().split(" ");
             return timeFromNow
         };
         let lists = [];
         let value;
-        const items = this.state.items;
-
-        let order = Object.keys(items).sort(
+        let order = Object.keys(sortItems).sort(
             (a,b)=>{
-                let aTimeFromNow = this.calculateTime(getTime(items[a]));
-                let bTimeFromNow = this.calculateTime(getTime(items[b]));
+                let aTimeFromNow = this.calculateTime(getTime(sortItems[a]));
+                let bTimeFromNow = this.calculateTime(getTime(sortItems[b]));
                 return aTimeFromNow - bTimeFromNow;
             }
         );
         for(let key in order){
-            value = items[order[key]];
+            value = sortItems[order[key]];
             lists.push(<ReconcileItem key={key} value={value}/>);
         }
-
         return lists;
     };
     returnListByStatus = () =>{
         let lists = [];
         let value;
-        const items = this.state.items;
-
-        let order = Object.keys(items).sort(
+        let order = Object.keys(sortItems).sort(
             function(a,b){
-                return items[a].status - items[b].status;
+                return sortItems[a].status - sortItems[b].status;
                 }
             );
         for(let key in order){
-            value = items[order[key]];
+            value = sortItems[order[key]];
             lists.push(<ReconcileItem key={key} value={value}/>);
         }
         return lists;
     };
     returnSearchList = ()=>{
         let lists = [];
-        let result = this.props.searchResult;
-        let value;
-        for(let i = 0; i < result.length;i++){
-            value = result[i];
-            lists.push(<ReconcileItem key={i} value={value}/>);
+        if(this.props.searchResult.result === "fail"){
+        }else{
+            for(let i = 0; i < sortItems.length;i++){
+                let value = sortItems[i];
+                lists.push(<ReconcileItem key={i} value={value}/>);
+            }
         }
+
         return lists;
     };
     render() {
@@ -266,13 +250,16 @@ class Reconcile extends React.Component {
         }
 
         return (
-            <div className="reconcile-content">
-                <ReconcileItem value={this.state.title} setSort={sort => this.props.setSort(sort)}/>
+            <ul className="reconcile-content" ref={ (divElement) => this.divElement = divElement}>
+                <ReconcileItem value={this.state.title}
+                               setSort={sort => this.props.setSort(sort)}
+                               setNotFoundVisible = {(visible)=>this.props.setNotFoundVisible(visible)}
+                />
                 {lists}
-            </div>
+                <p onClick={this.handleNextPage} className="transition result-nextPage">Next Page</p>
+            </ul>
         );
     }
 }
-
 
 export default Reconcile;

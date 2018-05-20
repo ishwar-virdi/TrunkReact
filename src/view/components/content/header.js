@@ -1,7 +1,8 @@
 import React from 'react';
 import "../../../stylesheets/content/header.css";
-import { Link } from 'react-router-dom';
-
+import {Link, Redirect } from 'react-router-dom';
+import {apiurl} from "../../../config/constants"
+import axios from "axios/index";
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -9,11 +10,67 @@ class Header extends React.Component {
             clicked:props.clickedClass,
             redirect:null,
             items:["Home","Result","Upload"],
+            logoutUrl: apiurl + "/api/v1/userLogout",
+            url:{
+                "Home":"home",
+                "Result":"reconciledresults",
+                "Upload":"upload",
+            },
         };
-
+        this.handleLogOut = this.handleLogOut.bind(this);
     }
 
+    componentDidMount() {
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/userLogin",
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+                (response) => {
+                    let data = response.data.result;
+                    if(data === true){
+                        localStorage.setItem('login', "true");
+                    }else{
+                        localStorage.clear();
 
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+    }
+
+    handleLogOut(e){
+        axios({
+            withCredentials: true,
+            method: 'POST',
+            url: apiurl + "/api/v1/userLogout",
+            data: JSON.stringify({
+            }),
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+                (response) => {
+                    console.log(response);
+                    let data = response.data.result;
+                    if(data === true){
+                        localStorage.clear();
+                        this.setState({
+                        });
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+    }
     handleClick(params,e){
         if(params.value !== this.state.clicked){
             this.setState({
@@ -23,26 +80,39 @@ class Header extends React.Component {
         }
     }
 
-
+    returnHeader =()=>{
+        let list = [];
+        let items = this.state.items;
+        for(let i = 0; i < items.length;i++){
+            let value = items[i];
+            let url = this.state.url[value].toLowerCase();
+            if(this.state.clicked === items[i]){
+                list.push(<li key={i}><Link to={{pathname:"/"+url}} onClick={this.handleClick.bind(this,{value})} className="header-item clicked">{value}</Link></li>);
+            }else{
+                list.push(<li key={i}><Link to={{pathname:"/"+url}} onClick={this.handleClick.bind(this,{value})} className="header-item" >{value}</Link></li>);
+            }
+        }
+        return list;
+    };
     render() {
-        const {items} = this.state;
-        let item = items.map((value,i)=>(
-            this.state.clicked === value ? (
-                <li key={i}><Link to={{pathname:"/"+value.toLowerCase()}} onClick={this.handleClick.bind(this,{value})} className="header-item clicked">{value}</Link></li>
-            ) : (
-                <li key={i}><Link to={{pathname:"/"+value.toLowerCase()}} onClick={this.handleClick.bind(this,{value})} className="header-item" >{value}</Link></li>
-            )
-        ));
+        const isLogin = localStorage.getItem('login');
+        let list = this.returnHeader();
+        this.returnHeader();
         return (
             <header>
+                {
+                    // console.log(redirect);
+                    isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
+                        : null
+                }
                 <div className="headerLayer">
                     <div className="header-item-panel">
                         <ul className="header-content">
-                            {item}
+                            {list}
                         </ul>
                     </div>
                     <div className="logout">
-                        <a className="gstBtn">LogOut</a>
+                        <a onClick={this.handleLogOut} className="gstBtn">LogOut</a>
                     </div>
                 </div>
             </header>

@@ -36,7 +36,7 @@ class upload extends Component{
     };
 
     uploadDocs() {
-        var data = new FormData();
+        let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
         });

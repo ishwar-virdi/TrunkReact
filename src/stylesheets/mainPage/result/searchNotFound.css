@@ -1,0 +1,23 @@
+.searchNotFound-Container{
+    position: absolute;
+    top:35px;
+    height: calc(100% - 35px);
+    width: 100%;
+    display: none;
+}
+
+.searchNotFound-Container p{
+    display: block;
+    margin-top: 130px;
+    font-size: 20px;
+    font-weight: bolder;
+    color: #777;
+}
+
+.searchNotFound-visible{
+    display: block;
+}
+
+.searchNotFound-hidden{
+    display: none;
+}

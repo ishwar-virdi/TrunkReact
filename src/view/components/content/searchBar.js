@@ -1,6 +1,8 @@
 import React from 'react';
 import "../../../stylesheets/content/searchBar.css";
 import moment from "moment";
+import {apiurl} from "../../../config/constants";
+import axios from "axios/index";
 
 class SearchBar extends React.Component {
     constructor(props) {
@@ -21,20 +23,74 @@ class SearchBar extends React.Component {
         if(this.props.page === undefined){
             throw new Error("props.page is required");
         }
-        //search
-        switch (this.props.page){
-            case "result":
-                this.resultPageSearch();
-                break;
-            case "detail": //props.page
-                this.detailPageSearch();
-                break;
-            case "update": //props.page
-                this.updatePageSearch();
-                break;
-            default:
+        this.returnSearchResult();
+    };
+
+    returnSearchResult = ()=>{
+        let dateAllow = this.props.startDate !== null && this.props.endDate !== null;
+        let textAllow = this.state.searchInput !== "";
+        let startDate;
+        let endDate;
+        if(dateAllow){
+            startDate = this.props.startDate.format('MM/DD/YYYY');
+            endDate = this.props.endDate.format('MM/DD/YYYY');
+        }
+        if(!textAllow && !dateAllow) {
+            this.setState({
+                warningPlaceHolder: "Please input text",
+            });
+        }
+        else{
+            let url = apiurl + "/api/v1/search";
+            let data = {
+                page:this.props.page,
+                value:"",
+            };
+            if(textAllow){
+                data.value += this.state.searchInput;
+            }else{
+                data.value += startDate;
+                data.value += "-";
+                data.value += endDate;
+            }
+            this.requestSearchResult(url,data);
         }
     };
+
+    requestSearchResult = (url,data) =>{
+        this.props.visibleLoading("true");
+        console.log(url);
+        console.log(data);
+        axios({
+            withCredentials: true,
+            method: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+                (response) => {
+                    this.props.visibleLoading("false");
+                    let data = response.data;
+                    this.props.setSearchResult(data);
+                    this.props.setSort("search");
+                    this.clearInputText();
+                    this.props.setNotFoundVisible("false");
+                    if(data.result === "fail" || data.length === 0){
+                        this.props.setNotFoundVisible("true");
+                    }else if(data.result === "expired"){
+                        localStorage.clear();
+                    }
+                },
+                (error) => {
+                    this.props.visibleLoading("false");
+                    console.log(error);
+                }
+            )
+    };
+
     //delete Button
     clearInputText = () =>{
         if(this.state.isDelete){
@@ -43,92 +99,6 @@ class SearchBar extends React.Component {
             });
         }
     };
-
-    resultPageSearch = () =>{
-        let items = [
-            {
-                id:1,
-                time: "10/4/2018 17:10",
-                dateRange: "10/3/2018 - 10/4/2018",
-                status: "80"
-            },
-            {
-                id:2,
-                time: "10/3/2018 17:20",
-                dateRange: "10/2/2018 - 10/3/2018",
-                status: "100"
-            }];
-
-        let dateAllow = this.props.startDate !== null && this.props.endDate !== null;
-        let textAllow = this.state.searchInput !== "";
-
-        if(textAllow){
-            this.clearInputText();
-            this.props.setSearchResult(items);
-            this.props.setSort("search");
-            return;
-        }else{
-            if(!dateAllow){
-                this.setState({
-                    warningPlaceHolder: "Please input text",
-                });
-            }
-        }
-
-        if(dateAllow){
-            let startDate = this.props.startDate.format('DD/MM/YYYY');
-            let endDate = this.props.endDate.format('DD/MM/YYYY');
-            console.log(startDate);
-            console.log(endDate);
-        }
-    };
-    detailPageSearch = () =>{
-        if(this.state.searchInput === ""){
-            this.setState({
-                warningPlaceHolder: "Please input text",
-            });
-            return;
-        }
-        this.clearInputText();
-        let items = [];
-
-        /**
-         * call api here
-         */
-
-        throw new Error("should fill this function");
-        try{
-            this.props.setSearchResult(items);
-            this.props.setSort("search");
-        }catch (e) {
-            throw new Error("function setSearchResult(), setSort() is required as prop");
-        }
-    };
-    updatePageSearch = () =>{
-        if(this.state.searchInput === ""){
-            this.setState({
-                warningPlaceHolder: "Please input text",
-            });
-            return;
-        }
-        this.clearInputText();
-        let items = [];
-
-
-        /**
-         * call api here
-         */
-
-
-        throw new Error("should fill this function");
-        try{
-            this.props.setSearchResult(items);
-            this.props.setSort("search");
-        }catch (e) {
-            throw new Error("function setSearchResult(), setSort() is required as prop");
-        }
-    };
-
     handleTextChange(e){
         this.setState({
             searchInput: e.target.value
@@ -141,6 +111,7 @@ class SearchBar extends React.Component {
             });
         }else{
             this.setState({
+                searchInput: "",
                 deleteIcon: "icon transition iconFontClickColor",
             });
         }
