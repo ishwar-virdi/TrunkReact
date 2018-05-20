@@ -131,7 +131,7 @@ class TransactionTable extends React.Component {
         var isAllChecked = true;
 
         for (var i = 0; i < this.state.items.length; i++) {
-            if (this.state.items[i].isChecked == false) {
+            if (this.state.items[i].isChecked === false) {
                 isAllChecked = false;
                 break;
             }
@@ -165,9 +165,6 @@ class TransactionTable extends React.Component {
 }
 
 class TransactionRow extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     rowClicked = () => {
         console.log("Row " + this.props.index + " was clicked!");
@@ -209,9 +206,6 @@ class TransactionRow extends React.Component {
 }
 
 class InputCheckbox extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleOnChange = () => {
         //If it is the "Select All" checkbox, then don't try and parse the props

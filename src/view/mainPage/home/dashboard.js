@@ -24,7 +24,6 @@ class Dashboard extends Component{
                     if (element.length > 0) {
                         let series= element[0]._datasetIndex;
                         let label = element[0]._index;
-                        var labels = this.data.datasets[element[0]._index];
                         let value = this.data.datasets[series].data[label];
                         window.open('http://localhost:3000/reconciledresult/details/'+value);
                     }
