@@ -16,10 +16,11 @@ class TransactionTable extends React.Component {
 
     componentDidMount() {
         this.props.visibleLoading("true");
+        console.log(this.props.id);
         axios({
             withCredentials: true,
             method: 'GET',
-            url: apiurl + "/api/v1/details?id=" + this.props.dateRange,
+            url: apiurl + "/api/resultDetails/" + this.props.id,
             headers: {
                 'Content-Type' : 'application/json; charset=utf-8'
             }
@@ -46,15 +47,15 @@ class TransactionTable extends React.Component {
 
     jsonToResult =(json) =>{
         let result = {};
+        console.log(json);
         result.uniqueId = json.id;
         result.isChecked = false;
-        console.log(json.date);
-        result.dateTime = json.date.slice(6,8) + "/" + json.date.slice(4,6)  + "/" + json.date.slice(0,4);
+        result.dateTime = json.date.slice(0, -12);
         result.description = json.description;
         result.amount = json.amount;
-        result.accountNumber = json.reciptNumber;
+        result.accountNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        result.reconciled = json.successful;
+        result.reconciled = json.status;
         result.rule = json.rule;
         return result;
     };

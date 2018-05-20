@@ -91,7 +91,7 @@ class Reconcile extends React.Component {
         reconcileDate = json['reconcileDate'].toString();
         //dateRange
         dateRange = parseToDate(json['startDate'].toString()) + " - " + parseToDate(json['endDate'].toString());
-        result.id = json['startDate'].toString() + json['endDate'].toString();
+        result.id = json['reconcileResultId'].toString();
         result.time = reconcileDate;
         result.dateRange = dateRange;
         result.status = json['percentage'];
