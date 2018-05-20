@@ -37,7 +37,7 @@ class detail extends Component{
                         <SearchBar/>
                     </div>
                     <div className="detail-view">
-                        <TransactionTable dateRange={this.state.id}
+                        <TransactionTable id={this.state.id}
                                           visibleLoading = {(visible)=>this.visibleLoading(visible)}/>
                     </div>
                 </div>

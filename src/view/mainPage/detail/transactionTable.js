@@ -3,6 +3,7 @@ import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
+import { withRouter } from 'react-router-dom'
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -19,7 +20,7 @@ class TransactionTable extends React.Component {
         axios({
             withCredentials: true,
             method: 'GET',
-            url: apiurl + "/api/v1/details?id=" + this.props.dateRange,
+            url: apiurl + "/api/resultDetails/" + this.props.id,
             headers: {
                 'Content-Type' : 'application/json; charset=utf-8'
             }
@@ -48,13 +49,12 @@ class TransactionTable extends React.Component {
         let result = {};
         result.uniqueId = json.id;
         result.isChecked = false;
-        console.log(json.date);
-        result.dateTime = json.date.slice(6,8) + "/" + json.date.slice(4,6)  + "/" + json.date.slice(0,4);
+        result.dateTime = json.date.slice(0, -12);
         result.description = json.description;
         result.amount = json.amount;
-        result.accountNumber = json.reciptNumber;
+        result.accountNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        result.reconciled = json.successful;
+        result.reconciled = json.status;
         result.rule = json.rule;
         return result;
     };
@@ -138,13 +138,13 @@ class TransactionTable extends React.Component {
         }
 
         const title  = {isChecked: isAllChecked,
-                        dateTime: "Date/Time",
-                        description: "Description",
+                        dateTime: "Date",
+                        description: "Customer",
                         amount: "Amount",
-                        accountNumber: "Account Number",
+                        accountNumber: "Receipt Number",
                         transactionType: "Transaction Type",
-                        reconciled: "Reconciled",
-                        rule: "Rule"};
+                        reconciled: "Reconciled?",
+                        rule: "Reconciled Method"};
 
         return (
             <div>
@@ -166,8 +166,10 @@ class TransactionTable extends React.Component {
 
 class TransactionRow extends React.Component {
 
-    rowClicked = () => {
-        console.log("Row " + this.props.index + " was clicked!");
+    rowClicked = (accountNumber) => {
+        //window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/receipt/" + this.props.index,"_self");
+        console.log(accountNumber);
+        window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
     };
 
     render() {
@@ -180,7 +182,7 @@ class TransactionRow extends React.Component {
         if (!this.props.isHeader)
             amount = <NumberFormat value={amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
 
-        if (!value.reconciled)
+        if (!value.reconciled && !this.props.isHeader)
             reconciled = "Failed";
 
         const isChecked = value.isChecked;
@@ -191,7 +193,7 @@ class TransactionRow extends React.Component {
         const rule = value.rule;
 
         return (
-            <tr className={className} onClick={this.rowClicked}>
+            <tr className={className} onClick={() => { this.rowClicked(accountNumber); }}>
                 <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
                 <td>{dateTime}</td>
                 <td>{description}</td>
