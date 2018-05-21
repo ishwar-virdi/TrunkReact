@@ -2,7 +2,6 @@ import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import "../../../stylesheets/mainPage/upload/upload.css";
-import SearchBar from "../../components/content/searchBar";
 import Footer from "../../components/content/footer";
 import Dropzone from 'react-dropzone';
 import {apiurl} from "../../../config/constants";
@@ -48,12 +47,12 @@ class upload extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        result : response.data.reason
+                        status : response.data.reason
                     });
                 })
             .catch(() => {
                 this.setState({
-                    result : "Error in calling Upload API"
+                    status : "Error in calling Upload API"
                 });
             })
     };

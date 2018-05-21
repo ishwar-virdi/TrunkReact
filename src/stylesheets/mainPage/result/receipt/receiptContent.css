@@ -34,7 +34,7 @@
     margin-left: calc(50% - 90px);
 }
 
-.receipt-table-reconciled a{
+.receipt-table-reconciled button{
     display: block;
     line-height: 48px;
     border: 2px solid black;
@@ -45,7 +45,7 @@
     font-size: 16px;
 }
 
-.receipt-table-reconciled a:hover{
+.receipt-table-reconciled button:hover{
     background-color: #66CCFF;
 }
 

@@ -6,7 +6,6 @@ import ReconcileItem from './reconcileItem';
 import moment from "moment";
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
-import {Link} from "react-router-dom";
 
 let parseToDate = (string) =>{
     return string.slice(4,6) + "/" + string.slice(6,8)  + "/" + string.slice(0,4);
@@ -95,7 +94,7 @@ class Reconcile extends React.Component {
         reconcileDate = json['reconcileDate'].toString();
         //dateRange
         dateRange = parseToDate(json['startDate'].toString()) + " - " + parseToDate(json['endDate'].toString());
-        result.id = json['startDate'].toString() + json['endDate'].toString();
+        result.id = json['reconcileResultId'].toString();
         result.time = reconcileDate;
         result.dateRange = dateRange;
         result.status = json['percentage'];

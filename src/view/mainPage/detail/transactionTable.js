@@ -3,6 +3,7 @@ import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
+import { withRouter } from 'react-router-dom'
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -15,99 +16,23 @@ class TransactionTable extends React.Component {
     }
 
     componentDidMount() {
-        // this.props.visibleLoading("true");
-        // axios({
-        //     withCredentials: true,
-        //     method: 'GET',
-        //     url: apiurl + "/api/v1/details?id=" + this.props.dateRange,
-        //     headers: {
-        //         'Content-Type' : 'application/json; charset=utf-8'
-        //     }
-        // })
-        //     .then(
-        //     (response) => {
-        //         this.props.visibleLoading("false");
-        //         let data = response.data;
-        //         let details = [];
-        //         for(let i = 0; i < data.length;i++){
-        //             details.push(this.jsonToResult(data[i]));
-        //         }
-        //         this.setState({
-        //             items: details,
-        //         });
-        //     },
-        //     (error) => {
-        //         this.props.visibleLoading("false");
-        //         console.log(error);
-        //     }
-        // );
-        this.setState({
-            items: [
-                {
-                    uniqueId: "0",
-                    isChecked: false,
-                    dateTime: "07/04/2018 15:18",
-                    description: "",
-                    amount: "533",
-                    accountNumber: "12345678",
-                    transactionType: "Direct Debit",
-                    reconciled: true,
-                    rule: "1"
-                },
-                {
-                    uniqueId: "1",
-                    isChecked: false,
-                    dateTime: "09/04/2018 10:05",
-                    description: "",
-                    amount: "158",
-                    accountNumber: "12345678",
-                    transactionType: "Visa",
-                    reconciled: true,
-                    rule: "1"
-                },
-                {
-                    uniqueId: "2",
-                    isChecked: false,
-                    dateTime: "09/04/2018 10:20",
-                    description: "",
-                    amount: "697",
-                    accountNumber: "12345678",
-                    transactionType: "Direct Debit",
-                    reconciled: false,
-                    rule: "4"
-                },
-                {
-                    uniqueId: "3",
-                    isChecked: false,
-                    dateTime: "09/04/2018 12:30",
-                    description: "",
-                    amount: "451",
-                    accountNumber: "12345678",
-                    transactionType: "Mastercard",
-                    reconciled: false,
-                    rule: "5"
-                },
-                {
-                    uniqueId: "4",
-                    isChecked: false,
-                    dateTime: "09/04/2018 16:14",
-                    description: "",
-                    amount: "20",
-                    accountNumber: "12345678",
-                    transactionType: "Visa",
-                    reconciled: true,
-                    rule: "1"
-                },
-                {
-                    uniqueId: "5",
-                    isChecked: false,
-                    dateTime: "07/04/2018 15:18",
-                    description: "",
-                    amount: "1460",
-                    accountNumber: "12345678",
-                    transactionType: "Visa",
-                    reconciled: true,
-                    rule: "1"
+        this.props.visibleLoading("true");
+        console.log(this.props.id);
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/resultDetails/" + this.props.id,
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+            (response) => {
+                this.props.visibleLoading("false");
+                let data = response.data;
+                let details = [];
+                for(let i = 0; i < data.length;i++){
+                    details.push(this.jsonToResult(data[i]));
                 }
             ]
         });
@@ -115,15 +40,15 @@ class TransactionTable extends React.Component {
 
     jsonToResult =(json) =>{
         let result = {};
+        console.log(json);
         result.uniqueId = json.id;
         result.isChecked = false;
-        console.log(json.date);
-        result.dateTime = json.date.slice(6,8) + "/" + json.date.slice(4,6)  + "/" + json.date.slice(0,4);
+        result.dateTime = json.date.slice(0, -12);
         result.description = json.description;
         result.amount = json.amount;
-        result.accountNumber = json.reciptNumber;
+        result.accountNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        result.reconciled = json.successful;
+        result.reconciled = json.status;
         result.rule = json.rule;
         return result;
     };
@@ -200,20 +125,20 @@ class TransactionTable extends React.Component {
         var isAllChecked = true;
 
         for (var i = 0; i < this.state.items.length; i++) {
-            if (this.state.items[i].isChecked == false) {
+            if (this.state.items[i].isChecked === false) {
                 isAllChecked = false;
                 break;
             }
         }
 
         const title  = {isChecked: isAllChecked,
-                        dateTime: "Date/Time",
-                        description: "Description",
+                        dateTime: "Date",
+                        description: "Customer",
                         amount: "Amount",
-                        accountNumber: "Account Number",
+                        accountNumber: "Receipt Number",
                         transactionType: "Transaction Type",
-                        reconciled: "Reconciled",
-                        rule: "Rule"};
+                        reconciled: "Reconciled?",
+                        rule: "Reconciled Method"};
 
         return (
             <div>
@@ -234,12 +159,11 @@ class TransactionTable extends React.Component {
 }
 
 class TransactionRow extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
-    rowClicked = () => {
-        console.log("Row " + this.props.index + " was clicked!");
+    rowClicked = (accountNumber) => {
+        window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/" + accountNumber,"_self");
+        console.log(accountNumber);
+        //window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
     };
 
     render() {
@@ -252,7 +176,7 @@ class TransactionRow extends React.Component {
         if (!this.props.isHeader)
             amount = <NumberFormat value={amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
 
-        if (!value.reconciled)
+        if (!value.reconciled && !this.props.isHeader)
             reconciled = "Failed";
 
         const isChecked = value.isChecked;
@@ -263,7 +187,7 @@ class TransactionRow extends React.Component {
         const rule = value.rule;
 
         return (
-            <tr className={className} onClick={this.rowClicked}>
+            <tr className={className} onClick={() => { this.rowClicked(accountNumber); }}>
                 <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
                 <td>{dateTime}</td>
                 <td>{description}</td>
@@ -278,9 +202,6 @@ class TransactionRow extends React.Component {
 }
 
 class InputCheckbox extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleOnChange = () => {
         //If it is the "Select All" checkbox, then don't try and parse the props
