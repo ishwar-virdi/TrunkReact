@@ -170,7 +170,7 @@ class TransactionRow extends React.Component {
 
     rowClicked = (accountNumber) => {
         window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/" + accountNumber,"_self");
-        console.log(accountNumber);
+        //console.log(accountNumber);
         //window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
     };
 
