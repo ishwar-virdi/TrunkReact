@@ -34,16 +34,8 @@ class TransactionTable extends React.Component {
                 for(let i = 0; i < data.length;i++){
                     details.push(this.jsonToResult(data[i]));
                 }
-                this.setState({
-                    items: details,
-                });
-            },
-            (error) => {
-                this.visibleLoading("false");
-                console.log(error);
-            }
-        );
-
+            ]
+        });
     }
 
     jsonToResult =(json) =>{

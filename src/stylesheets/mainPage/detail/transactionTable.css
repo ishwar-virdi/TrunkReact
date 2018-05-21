@@ -10,7 +10,7 @@
     background: #d3d3d3;
 }
 
-tbody tr:hover {
+.transaction-table tbody tr:hover {
     cursor: pointer;
 }
 
@@ -26,13 +26,13 @@ input:hover {
     padding-bottom: 8px;
 }
 
-thead td:first-child {
+.transaction-table thead td:first-child {
     -webkit-border-radius: 8px 0 0 0;
     -moz-border-radius: 8px 0 0 0;
     border-radius: 8px 0 0 0;
 }
 
-thead td:last-child {
+.transaction-table thead td:last-child {
     -webkit-border-radius: 0 8px 0 0;
     -moz-border-radius: 0 8px 0 0;
     border-radius: 0 8px 0 0;
@@ -44,13 +44,13 @@ thead td:last-child {
     padding-bottom: 5px;
 }
 
-tbody tr:last-child td:first-child {
+.transaction-table tbody tr:last-child td:first-child {
     border-radius: 0 0 0 8px;
     -webkit-border-radius: 0 0 0 8px;
     -moz-border-radius: 0 0 0 8px;
 }
 
-tbody tr:last-child td:last-child {
+.transaction-table tbody tr:last-child td:last-child {
     border-radius: 0 0 8px 0;
     -webkit-border-radius: 0 0 8px 0;
     -moz-border-radius: 0 0 8px 0;
