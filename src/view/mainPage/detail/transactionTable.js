@@ -17,6 +17,7 @@ class TransactionTable extends React.Component {
 
     componentDidMount() {
         this.props.visibleLoading("true");
+        console.log(this.props.id);
         axios({
             withCredentials: true,
             method: 'GET',
@@ -47,6 +48,7 @@ class TransactionTable extends React.Component {
 
     jsonToResult =(json) =>{
         let result = {};
+        console.log(json);
         result.uniqueId = json.id;
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
