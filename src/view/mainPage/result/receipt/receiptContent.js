@@ -194,7 +194,8 @@ class ReceiptContent extends Component{
                 </div>
                 <div className="receipt-content-back">
                     <div className="receipt-back-btn">
-                        <Link className="transition" to={{pathname:"/detail/1"}}>Back</Link>
+
+                        <Link className="transition" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link>
                     </div>
                 </div>
             </div>

@@ -5,13 +5,14 @@ import NumberFormat from 'react-number-format';
 
 class TransactionRow extends React.Component {
 
-    rowClicked = (accountNumber) => {
-        window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/" + accountNumber,"_self");
+    rowClicked = (accountNumber,backTo) => {
+        window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/"+ backTo +"/" + accountNumber,"_self");
         console.log(accountNumber);
         //window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
     };
 
     render() {
+        const backTo = this.props.backTo;
         const value = this.props.value;
         let className = this.props.isHeader ? "table-header" : "table-row";
         var amount = value.amount;
@@ -32,7 +33,7 @@ class TransactionRow extends React.Component {
         const rule = value.rule;
 
         return (
-            <tr className={className} onClick={() => { this.rowClicked(accountNumber); }}>
+            <tr className={className} onClick={() => { this.rowClicked(accountNumber,backTo); }}>
                 <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
                 <td>{dateTime}</td>
                 <td>{description}</td>

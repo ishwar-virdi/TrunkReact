@@ -103,7 +103,7 @@ class TransactionTable extends React.Component {
         var list = [];
 
         for (var i = 0; i < items.length; i++) {
-            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i}/>);
+            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i} backTo={this.props.id}/>);
         }
 
         return list;

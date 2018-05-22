@@ -21,7 +21,7 @@ class App extends Component {
                         <Route path="/reconciledresults" component={history} />
                         <Route path="/upload" component={upload} />
                         <Route path="/reconciledresult/details/:id" component={detail} />
-                        <Route path="/transactiondetails/:id" component={receipt} />
+                        <Route path="/transactiondetails/:backTo/:id" component={receipt} />
                         <Route path="/loading" component={Loading} />
                         <Route path="*" component={notFoundPage} />
                     </Switch>

@@ -11,6 +11,7 @@ class receipt extends Component{
         this.state={
             id:props.match.params.id,
             title: "RECEIPT NUMBER: " + props.match.params.id,
+            backTo:props.match.param.backTo,
         };
 
     }
@@ -25,7 +26,7 @@ class receipt extends Component{
                 <div className="body">
                     <Title title={this.state.title}/>
                     <div className="recipe-view">
-                        <ReceiptContent receipt={this.state.id}/>
+                        <ReceiptContent receipt={this.state.id} backTo={this.state.backTo}/>
                     </div>
                 </div>
                 <Footer/>
