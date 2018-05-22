@@ -11,7 +11,7 @@ class receipt extends Component{
         this.state={
             id:props.match.params.id,
             title: "RECEIPT NUMBER: " + props.match.params.id,
-            backTo:props.match.param.backTo,
+            backTo:props.match.params.backTo,
         };
 
     }

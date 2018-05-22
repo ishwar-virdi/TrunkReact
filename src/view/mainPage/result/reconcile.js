@@ -57,7 +57,6 @@ class Reconcile extends React.Component {
     }
     requestResult(pageIndex){
         this.props.visibleLoading("true");
-        console.log(apiurl + "/api/v1/results?page=" + pageIndex);
         axios({
             withCredentials: true,
             method: 'GET',

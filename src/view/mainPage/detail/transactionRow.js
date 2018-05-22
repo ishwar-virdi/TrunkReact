@@ -1,47 +1,64 @@
 import React from "react";
 import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
+import {selfurl} from "../../../config/constants";
 
 
 class TransactionRow extends React.Component {
 
-    rowClicked = (accountNumber,backTo) => {
-        window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/"+ backTo +"/" + accountNumber,"_self");
-        console.log(accountNumber);
-        //window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
+    constructor(props) {
+        super(props);
+
+        let className = this.props.isHeader ? "table-header" : "table-row";
+
+        this.state = {
+            backTo: this.props.backTo,
+            isHeader: this.props.isHeader,
+            className : className,
+            isChecked : this.props.value.isChecked,
+            dateTime : this.props.value.dateTime,
+            description : this.props.value.description,
+            accountNumber : this.props.value.accountNumber,
+            transactionType : this.props.value.transactionType,
+            rule : this.props.value.rule,
+        };
+
+        this.rowClicked = this.rowClicked.bind(this);
+
+    }
+
+    rowClicked = (link) => {
+        window.open(link,"_self");
     };
 
     render() {
-        const backTo = this.props.backTo;
         const value = this.props.value;
-        let className = this.props.isHeader ? "table-header" : "table-row";
+
         var amount = value.amount;
         var reconciled = "Successful";
 
         //Formats the amount if it is not the header
-        if (!this.props.isHeader)
+        if (!this.state.isHeader)
             amount = <NumberFormat value={amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
 
         if (!value.reconciled && !this.props.isHeader)
             reconciled = "Failed";
 
-        const isChecked = value.isChecked;
-        const dateTime = value.dateTime;
-        const description = value.description;
-        const accountNumber = value.accountNumber;
-        const transactionType = value.transactionType;
-        const rule = value.rule;
 
         return (
-            <tr className={className} onClick={() => { this.rowClicked(accountNumber,backTo); }}>
-                <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
-                <td>{dateTime}</td>
-                <td>{description}</td>
+            <tr className={this.state.className} onClick={() => {
+                if(!this.props.isHeader){
+                    this.rowClicked(selfurl + "/transactiondetails/" + this.state.backTo + "/" + this.state.accountNumber);
+                }
+                }}>
+                <td><InputCheckbox value={this.state.isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
+                <td>{this.state.dateTime}</td>
+                <td>{this.state.description}</td>
                 <td>{amount}</td>
-                <td>{accountNumber}</td>
-                <td>{transactionType}</td>
+                <td>{this.state.accountNumber}</td>
+                <td>{this.state.transactionType}</td>
                 <td>{reconciled}</td>
-                <td>{rule}</td>
+                <td>{this.state.rule}</td>
             </tr>
         );
     }

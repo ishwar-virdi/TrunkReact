@@ -45,7 +45,6 @@ class TransactionTable extends React.Component {
 
     jsonToResult = (json) =>{
         let result = {};
-        console.log(json);
         result.uniqueId = json.id;
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
@@ -144,7 +143,8 @@ class TransactionTable extends React.Component {
                         accountNumber: "Receipt Number",
                         transactionType: "Transaction Type",
                         reconciled: "Reconciled?",
-                        rule: "Reconciled Method"};
+                        rule: "Reconciled Method"
+        };
 
         return (
             <div>
