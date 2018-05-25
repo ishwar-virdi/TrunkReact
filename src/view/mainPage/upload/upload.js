@@ -39,7 +39,8 @@ class upload extends Component{
 
     uploadDocs() {
         this.setState({
-            loading : "true"
+            loading : "true",
+            status : ""
         });
 
         let data = new FormData();
