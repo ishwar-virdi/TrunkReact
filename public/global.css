@@ -149,12 +149,7 @@ body{
     background-color: #f7f7f7;
 }
 
-.gl-title{
-    color: #fff;
-    font-weight: bold;
-    background-color: var(--subjectColor);
-    opacity: 0.8;
-}
+
 
 .icon {
     width: 1em; height: 1em;

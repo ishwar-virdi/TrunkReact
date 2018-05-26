@@ -23,6 +23,7 @@ class App extends Component {
                         <Route path="/reconciledresult/details/:id" component={detail} />
                         <Route path="/transactiondetails/:backTo/:id" component={receipt} />
                         <Route path="/loading" component={Loading} />
+
                         <Route path="*" component={notFoundPage} />
                     </Switch>
                 </div>
