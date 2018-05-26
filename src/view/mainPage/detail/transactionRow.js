@@ -35,7 +35,7 @@ class TransactionRow extends React.Component {
         const value = this.props.value;
 
         var amount = value.amount;
-        var reconciled = "Successful";
+        var reconciled = value.reconciled;
 
         //Formats the amount if it is not the header
         if (!this.state.isHeader)
@@ -43,7 +43,8 @@ class TransactionRow extends React.Component {
 
         if (!value.reconciled && !this.props.isHeader)
             reconciled = "Failed";
-
+        else if (value.reconciled && !this.props.isHeader)
+            reconciled = "Successful";
 
         return (
             <tr className={this.state.className} onClick={() => {

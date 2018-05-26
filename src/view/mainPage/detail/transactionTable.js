@@ -11,7 +11,7 @@ class TransactionTable extends React.Component {
         this.state = {
             items: [],
             isAllChecked: false
-        }
+        };
 
         this.jsonToResult = this.jsonToResult.bind(this);
 
@@ -19,7 +19,6 @@ class TransactionTable extends React.Component {
 
     componentDidMount() {
         this.props.visibleLoading("true");
-        console.log(this.props.id);
         axios({
             withCredentials: true,
             method: 'GET',
@@ -137,7 +136,7 @@ class TransactionTable extends React.Component {
         }
 
         const title  = {isChecked: isAllChecked,
-                        dateTime: "Date",
+                        dateTime: "Transaction Date",
                         description: "Customer",
                         amount: "Amount",
                         accountNumber: "Receipt Number",
