@@ -1,9 +1,8 @@
 import React from "react";
 import "../../../stylesheets/mainPage/detail/transactionTable.css";
-import NumberFormat from 'react-number-format';
+import TransactionRow from './transactionRow';
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
-import { withRouter } from 'react-router-dom'
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -13,6 +12,9 @@ class TransactionTable extends React.Component {
             items: [],
             isAllChecked: false
         }
+
+        this.jsonToResult = this.jsonToResult.bind(this);
+
     }
 
     componentDidMount() {
@@ -34,13 +36,15 @@ class TransactionTable extends React.Component {
                 for(let i = 0; i < data.length;i++){
                     details.push(this.jsonToResult(data[i]));
                 }
-        
+                this.setState({
+                    items: details,
+                    isAllChecked: false
+                });
         });
     }
 
-    jsonToResult =(json) =>{
+    jsonToResult = (json) =>{
         let result = {};
-        console.log(json);
         result.uniqueId = json.id;
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
@@ -52,6 +56,7 @@ class TransactionTable extends React.Component {
         result.rule = json.rule;
         return result;
     };
+
     selectOne = (isChecked, index) => {
         var items = this.state.items;
 
@@ -97,7 +102,7 @@ class TransactionTable extends React.Component {
         var list = [];
 
         for (var i = 0; i < items.length; i++) {
-            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i}/>);
+            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i} backTo={this.props.id}/>);
         }
 
         return list;
@@ -138,7 +143,8 @@ class TransactionTable extends React.Component {
                         accountNumber: "Receipt Number",
                         transactionType: "Transaction Type",
                         reconciled: "Reconciled?",
-                        rule: "Reconciled Method"};
+                        rule: "Reconciled Method"
+        };
 
         return (
             <div>
@@ -155,66 +161,6 @@ class TransactionTable extends React.Component {
                 <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
             </div>
         );
-    }
-}
-
-class TransactionRow extends React.Component {
-
-    rowClicked = (accountNumber) => {
-        window.open("https://trunksmartreconcilereact.herokuapp.com/transactiondetails/" + accountNumber,"_self");
-        console.log(accountNumber);
-        //window.open("http://localhost:3000/transactiondetails/" + accountNumber,"_self");
-    };
-
-    render() {
-        const value = this.props.value;
-        let className = this.props.isHeader ? "table-header" : "table-row";
-        var amount = value.amount;
-        var reconciled = "Successful";
-
-        //Formats the amount if it is not the header
-        if (!this.props.isHeader)
-            amount = <NumberFormat value={amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
-
-        if (!value.reconciled && !this.props.isHeader)
-            reconciled = "Failed";
-
-        const isChecked = value.isChecked;
-        const dateTime = value.dateTime;
-        const description = value.description;
-        const accountNumber = value.accountNumber;
-        const transactionType = value.transactionType;
-        const rule = value.rule;
-
-        return (
-            <tr className={className} onClick={() => { this.rowClicked(accountNumber); }}>
-                <td><InputCheckbox value={isChecked} onChange={this.props.selectChanged} index={this.props.index}/></td>
-                <td>{dateTime}</td>
-                <td>{description}</td>
-                <td>{amount}</td>
-                <td>{accountNumber}</td>
-                <td>{transactionType}</td>
-                <td>{reconciled}</td>
-                <td>{rule}</td>
-            </tr>
-        );
-    }
-}
-
-class InputCheckbox extends React.Component {
-
-    handleOnChange = () => {
-        //If it is the "Select All" checkbox, then don't try and parse the props
-        if (this.props.index != null)
-            this.props.onChange(this.props.value, this.props.index);
-        else
-            this.props.onChange()
-    };
-
-    render() {
-        return (
-            <input checked={this.props.value} type='checkbox' onChange={this.handleOnChange}/>
-        )
     }
 }
 
