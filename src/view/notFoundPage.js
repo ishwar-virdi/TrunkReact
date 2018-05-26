@@ -4,11 +4,6 @@ import React from "react";
 import '../stylesheets/notFoundPage.css';
 class notFoundPage extends Component {
 
-
-    constructor(props) {
-        super(props);
-    }
-
     render(){
 
         return (

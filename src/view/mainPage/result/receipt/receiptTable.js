@@ -8,6 +8,7 @@ class ReceiptTable extends Component {
         this.state={
 
         };
+
     }
 
     componentDidMount() {
@@ -42,6 +43,7 @@ class ReceiptTable extends Component {
     returnBody = () =>{
         let list = [];
         let data = this.props.data;
+        console.log(data);
         let keys = Object.keys(data);
         for(let i = 1 ; i < keys.length;i++){
             let value = data[keys[i]];

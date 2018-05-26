@@ -1,6 +1,5 @@
 import React from 'react';
 import "../../../stylesheets/content/searchBar.css";
-import moment from "moment";
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
 

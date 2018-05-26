@@ -2,11 +2,12 @@ import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import "../../../stylesheets/mainPage/upload/upload.css";
-import SearchBar from "../../components/content/searchBar";
 import Footer from "../../components/content/footer";
 import Dropzone from 'react-dropzone';
 import {apiurl} from "../../../config/constants";
 import axios from "axios";
+import Loading from "../../components/content/loading";
+
 
 
 class upload extends Component{
@@ -16,7 +17,8 @@ class upload extends Component{
         this.state = {
             docType: "Bank",
             files: [] ,
-            status: ""
+            status: "",
+            loading: "false",
         }
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
@@ -36,6 +38,11 @@ class upload extends Component{
     };
 
     uploadDocs() {
+        this.setState({
+            loading : "true",
+            status : ""
+        });
+
         let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
@@ -48,12 +55,13 @@ class upload extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        result : response.data.reason
+                        loading: "false",
+                        status : response.data.reason
                     });
                 })
             .catch(() => {
                 this.setState({
-                    result : "Error in calling Upload API"
+                    status : "Error in calling Upload API"
                 });
             })
     };
@@ -62,6 +70,7 @@ class upload extends Component{
         return (
             <div className="container">
                 <Header clickedClass="Upload"/>
+                <Loading visible={this.state.loading}/>
                 <div className="body">
                     <Title title="RECONCILE"/>
                     <div className="upload-view">
