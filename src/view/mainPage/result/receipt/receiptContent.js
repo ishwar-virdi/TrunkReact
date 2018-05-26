@@ -124,33 +124,17 @@ class ReceiptContent extends Component{
                             },
                         });
                     } else {
+                        console.log(response.data);
+                        console.log(this.state);
+
+
                         this.setState({
                             result : response.data.reason,
-                            transaction: {
-                                header: ["Transaction", ""],
-                                date: ["Transaction Date", this.state.transaction.date],
-                                time: ["Transaction Time", this.state.transaction.time],
-                                customerName: ["Customer Name", this.state.transaction.customerName],
-                                MID: ["Merchant ID", this.state.transaction.MID],
-                                bankReference: ["Bank Reference", this.state.transaction.bankReference],
-                            },
                             status: {
-                                header: ["Status", this.state.status.header],
-                                date: ["Settlement Date", this.state.status.date],
+                                header: ["Status", this.state.status.header[1]],
+                                date: ["Settlement Date", this.state.status.date[1]],
                                 reconcileStatus: ["Reconcile Status", response.data.ReconcileStatus],
                                 reconcileDate: ["Reconciled Date", response.data.ReconciledDate]
-                            },
-                            card: {
-                                header: ["Card", ""],
-                                pan: ["Card PAN", this.state.card.pan],
-                                scheme: ["Card Scheme", this.state.card.scheme],
-                                expiry: ["Card Expiry", this.state.card.expiry],
-                            },
-                            amount: {
-                                header: ["Amount", ""],
-                                amount: ["Principle Amount", this.state.amount.amount],
-                                surcharge: ["Surcharge", this.state.amount.surcharge],
-                                currency: ["Currency", this.state.amount.currency],
                             },
                         });
                     }
@@ -194,7 +178,8 @@ class ReceiptContent extends Component{
                 </div>
                 <div className="receipt-content-back">
                     <div className="receipt-back-btn">
-                        <Link className="transition" to={{pathname:"/detail/1"}}>Back</Link>
+
+                        <Link className="transition" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link>
                     </div>
                 </div>
             </div>
