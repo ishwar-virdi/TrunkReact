@@ -1,9 +1,11 @@
 import React,{Component} from "react";
 
 import "../../../stylesheets/mainPage/home/dashboard.css";
-import Indicator from "./indicator";
+//import Indicator from "./indicator";
 
 import {Bar} from 'react-chartjs-2';
+import axios from "axios/index";
+import {apiurl} from "../../../config/constants";
 
 class Dashboard extends Component{
 
@@ -19,7 +21,7 @@ class Dashboard extends Component{
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: { display: true},
-                onClick: function(event, array) {
+/*                onClick: function(event, array) {
                     let element = this.getElementAtEvent(event);
                     if (element.length > 0) {
                         let series= element[0]._datasetIndex;
@@ -27,7 +29,7 @@ class Dashboard extends Component{
                         let value = this.data.datasets[series].data[label];
                         window.open('http://localhost:3000/reconciledresult/details/'+value);
                     }
-                },
+                },*/
                 // title: {
                 //     display: true,
                 //     text: 'Title'
@@ -48,11 +50,61 @@ class Dashboard extends Component{
             },
         };
 
-        this.handleScroll = this.handleScroll.bind(this);
+        //this.handleScroll = this.handleScroll.bind(this);
     }
 
     componentDidMount() {
-        this._chartSmall = {
+        this._chartMid = {
+            labels: [],
+            datasets: [
+                {
+                    label: "Reconciled",
+                    data: [0],
+                    backgroundColor: "#E57373",
+                },
+                {
+                    label: "Not Reconciled",
+                    data: [0],
+                    backgroundColor:  "#7986CB",
+                }
+            ]
+        };
+
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/getChartData/",
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+        .then(
+            (response) => {
+                let data = response.data;
+                let reconciled = data.reconciled;
+                let notReconciled = data.notReconciled;
+
+                this._chartMid ={
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: reconciled.label,
+                            data: reconciled.data,
+                            backgroundColor: "#E57373",
+                        },
+                        {
+                            label: notReconciled.label,
+                            data: notReconciled.data,
+                            backgroundColor:  "#7986CB",
+                        }
+                    ]
+                }
+
+                this.setState({
+                    chartData:this._chartMid,
+                });
+            });
+/*        this._chartSmall = {
             labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
             datasets: [
                 {
@@ -76,23 +128,8 @@ class Dashboard extends Component{
                     backgroundColor: "#4DB6AC"
                 }
             ]
-        };
-        this._chartMid = {
-            labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
-            datasets: [
-                {
-                    label: "Team points 11",
-                    data: [203, 385, 21, 123, 105],
-                    backgroundColor: "#E57373",
-                },
-                {
-                    label: "Team points 12",
-                    data: [207, 335, 70, 33, 165],
-                    backgroundColor:  "#7986CB",
-                }
-            ]
-        };
-        this._chartLarge = {
+        };*/
+        /*this._chartLarge = {
             labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
             datasets: [
                 {
@@ -101,15 +138,15 @@ class Dashboard extends Component{
                     backgroundColor: "#7986CB"
                 }
             ]
-        };
+        };*/
         this.setState({
             chartData:this._chartMid,
         });
-        window.addEventListener('wheel', this.handleScroll, { passive: true })
+        //window.addEventListener('wheel', this.handleScroll, { passive: true })
     }
 
 
-    chartSmall =() =>{
+/*    chartSmall =() =>{
         return this._chartSmall;
     };
     chartMid = () => {
@@ -117,18 +154,18 @@ class Dashboard extends Component{
     };
     chartLarge = () =>{
         return this._chartLarge;
-    };
+    };*/
 
-    handleScroll(event) {
+/*    handleScroll(event) {
         if(this.isScrollUp(event)){
             this.setChartIndex("up");
         }else{
             this.setChartIndex("down");
         }
         this.chartUpdate();
-    }
+    }*/
 
-    isScrollUp(event){
+/*    isScrollUp(event){
         return event.wheelDeltaY > 0;
     }
     setChartIndex(action){
@@ -169,7 +206,7 @@ class Dashboard extends Component{
             this.setState({chartData, updated: !this.state.updated});
         }else{
         }
-    }
+    }*/
 
     render(){
         const {chartData} = this.state;
@@ -180,7 +217,7 @@ class Dashboard extends Component{
                     chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
                         : null
                 }
-                <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
+                {/*<Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>*/}
             </div>
         )
     }

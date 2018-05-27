@@ -6,7 +6,7 @@ import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import 'react-dates/initialize';
-import DateRangePicker from "react-dates/esm/components/DateRangePicker";
+//import DateRangePicker from "react-dates/esm/components/DateRangePicker";
 import Loading from "../../components/content/loading";
 import SearchNotFound from "./searchNotFound";
 
@@ -73,7 +73,7 @@ class result extends Component{
                     <Title title="RECONCILIATION PROGRESS"/>
                     <div className="result-search">
                         <div className="result-search-dataPicker">
-                            <DateRangePicker
+{/*                            <DateRangePicker
                                 startDate={this.state.startDate} // momentPropTypes.momentObj or null,
                                 startDateId={this.state.startDateId} // PropTypes.string.isRequired,
                                 endDate={this.state.endDate} // momentPropTypes.momentObj or null,
@@ -82,7 +82,7 @@ class result extends Component{
                                 focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
                                 onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
                                 isOutsideRange={() => false}
-                            />
+                            />*/}
                         </div>
                         <div className="result-search-bar">
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
