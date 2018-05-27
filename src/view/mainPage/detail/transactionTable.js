@@ -165,11 +165,12 @@ class TransactionTable extends React.Component {
                         {
                             id: "checkbox",
                             accessor: "",
-                            Cell: ({ item }) => {
+                            Cell: ({ original }) => {
+                                console.log(original);
                                 return (
                                     <input type="checkbox" className="checkbox"
-                                           checked={this.state.selected[item.receiptNumber] === true}
-                                           onChange={() => this.toggleRow(item.receiptNumber)}
+                                           checked={this.state.selected[original.receiptNumber] === true}
+                                           onChange={() => this.toggleRow(original.receiptNumber)}
                                     />
                                 );
                             },
