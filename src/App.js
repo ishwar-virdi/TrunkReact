@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { BrowserRouter, Switch,Route } from 'react-router-dom'
 import login from './view/login';
 import home from './view/mainPage/home/home';
@@ -23,7 +22,6 @@ class App extends Component {
                         <Route path="/reconciledresult/details/:id" component={detail} />
                         <Route path="/transactiondetails/:backTo/:id" component={receipt} />
                         <Route path="/loading" component={Loading} />
-
                         <Route path="*" component={notFoundPage} />
                     </Switch>
                 </div>

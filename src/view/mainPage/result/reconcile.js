@@ -64,7 +64,6 @@ class Reconcile extends React.Component {
         })
             .then(
                 (response) => {
-                    console.log(response);
                     this.props.visibleLoading("false");
                     let data = response.data;
                     for(let i = 0; i < data.length;i++){
@@ -80,7 +79,6 @@ class Reconcile extends React.Component {
                     }
                 },
                 (error) => {
-                    console.log(error);
                     this.props.visibleLoading("false");
                 }
             );

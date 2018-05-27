@@ -15,7 +15,7 @@
 }
 
 .ren-Item-hover:hover{
-    background-color: #e3e6eb;
+    background-color: #fff;
     webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;

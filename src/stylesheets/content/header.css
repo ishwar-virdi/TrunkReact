@@ -65,6 +65,7 @@ header{
 
 .body{
     position: relative;
+    height: calc(100% - 50px - 30px);
     width: 98%;
     margin: 0 auto;
     padding-top: 50px;

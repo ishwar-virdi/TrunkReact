@@ -4,7 +4,7 @@
     width: 98%;
     padding-left: 2%;
     font-weight: bold;
-    font-size: var(--formTtileFontSize);
+    font-size: calc(var(--formTtileFontSize) - 1px);
     color: var(--subjectColor);
     border-bottom: 2px solid var(--subjectColor);
     text-align: left;
