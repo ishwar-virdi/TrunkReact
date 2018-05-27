@@ -40,7 +40,7 @@
     border-radius: 5px;
     background-color: var(--warningColor);
     color: white;
-    font-size: 13px;
+
 }
 
 .animation{
@@ -83,16 +83,39 @@
     background: var(--subjectColor);
     border: 0;
     height: 50px;
-    width: 100%;
-    float: left;
+    width: 75%;
+    /*float: left;*/
     color: white;
     font-size:16px;
     font-weight: bold;
-    border-radius: 5px;
 }
 
+.submit-btn-left{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.submit-btn-right{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
 
 .submit-btn:hover{
     opacity: 0.6;
     cursor: pointer;
+}
+
+.forget{
+    margin-top: 10px;
+    float: right;
+}
+
+.forget > a{
+    color: var(--subjectColor);
+    font-size: 14px;
+}
+
+.forget > a:hover{
+    transition: all 0.2s ease;
+    color: var(--hoverColor);
 }
