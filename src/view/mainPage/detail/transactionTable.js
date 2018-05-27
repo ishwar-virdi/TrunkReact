@@ -1,8 +1,9 @@
 import React from "react";
 import "../../../stylesheets/mainPage/detail/transactionTable.css";
-import TransactionRow from './transactionRow';
-import {apiurl} from "../../../config/constants";
+import NumberFormat from 'react-number-format';
+import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
+import ReactTable from "react-table";
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -10,7 +11,8 @@ class TransactionTable extends React.Component {
 
         this.state = {
             items: [],
-            isAllChecked: false
+            selected: {},
+            selectAll: 0
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
@@ -37,37 +39,47 @@ class TransactionTable extends React.Component {
                 }
                 this.setState({
                     items: details,
-                    isAllChecked: false
+                    selectAll: 0
                 });
         });
-    }
+    };
 
     jsonToResult = (json) =>{
         let result = {};
-        result.uniqueId = json.id;
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
         result.description = json.description;
-        result.amount = json.amount;
-        result.accountNumber = json.accountNumber;
+        result.amount = <NumberFormat value={json.amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
+        result.receiptNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        result.reconciled = json.status;
+        if (json.status)
+            result.reconciled = "Success";
+        else
+            result.reconciled = "Failed";
         result.rule = json.rule;
         return result;
     };
 
-    selectOne = (isChecked, index) => {
-        var items = this.state.items;
-
-        items[index].isChecked = !isChecked;
-
-        this.setState({
-            items: items
-        });
-    };
-
     markAsReconciled = () => {
-        var items = this.state.items;
+        console.log(this.state.selected);
+
+        axios({
+            withCredentials: true,
+            method: 'POST',
+            url: apiurl + "/api/markReconcile",
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            },
+            data: {
+                markAsReconcile: true,
+                items: this.state.selected
+            }
+        })
+            .then(
+                (response) => {
+
+                });
+        /*var items = this.state.items;
 
         for (var i = 0; i < items.length; i++) {
             if (items[i].isChecked) {
@@ -77,12 +89,31 @@ class TransactionTable extends React.Component {
         }
 
         this.setState({
-           items: items
-        });
+            items: items
+        });*/
     };
 
     markAsNotReconciled = () => {
-        var items = this.state.items;
+        console.log(this.state.selected);
+
+        axios({
+            withCredentials: false,
+            method: 'POST',
+            url: apiurl + "/api/markReconcile",
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            },
+            data: {
+                markAsReconcile: true,
+                items: this.state.selected
+            }
+        })
+            .then(
+                (response) => {
+
+                });
+
+/*        var items = this.state.items;
 
         for (var i = 0; i < items.length; i++) {
             if (items[i].isChecked) {
@@ -93,72 +124,130 @@ class TransactionTable extends React.Component {
 
         this.setState({
             items: items
+        });*/
+    };
+
+    toggleRow(receiptNumber) {
+        const newSelected = Object.assign({}, this.state.selected);
+        newSelected[receiptNumber] = !this.state.selected[receiptNumber];
+
+        this.setState({
+            selected: newSelected,
+            selectAll: 2
         });
-    };
+    }
 
-    returnList = () => {
-        const items = this.state.items;
-        var list = [];
+    toggleSelectAll = () => {
+        let newSelected = {};
 
-        for (var i = 0; i < items.length; i++) {
-            list.push(<TransactionRow key={i} value={items[i]} isHeader={false} selectChanged={this.selectOne} index={i} backTo={this.props.id}/>);
-        }
-
-        return list;
-    };
-
-    selectAll = () => {
-        var items = this.state.items;
-        var changeTo = true;
-
-        if (this.state.isAllChecked)
-            changeTo = false;
-
-        for (var i = 0; i < items.length; i++) {
-            items[i].isChecked = changeTo;
+        if (this.state.selectAll === 0) {
+            this.state.items.forEach(item => {
+                newSelected[item.receiptNumber] = true;
+            });
         }
 
         this.setState({
-            items: items,
-            isAllChecked: changeTo
+            selected: newSelected,
+            selectAll: this.state.selectAll === 0 ? 1 : 0
         });
     };
 
     render () {
-        var list = this.returnList();
-        var isAllChecked = true;
-
-        for (var i = 0; i < this.state.items.length; i++) {
-            if (this.state.items[i].isChecked === false) {
-                isAllChecked = false;
-                break;
-            }
-        }
-
-        const title  = {isChecked: isAllChecked,
-                        dateTime: "Transaction Date",
-                        description: "Customer",
-                        amount: "Amount",
-                        accountNumber: "Receipt Number",
-                        transactionType: "Transaction Type",
-                        reconciled: "Reconciled?",
-                        rule: "Reconciled Method"
-        };
+        // Table structure
+        const { items } = this.state;
 
         return (
+            // Defining table structure
             <div>
-                <table className="transaction-table">
-                    <thead>
-                        <TransactionRow value={title} isHeader={true} selectChanged={this.selectAll}/>
-                    </thead>
-                    <tbody>
-                        {list}
-                    </tbody>
-                </table>
+                <ReactTable
+                    data={items}
+                    columns={[
+                        {
+                            id: "checkbox",
+                            accessor: "",
+                            Cell: ({ item }) => {
+                                return (
+                                    <input type="checkbox" className="checkbox"
+                                           checked={this.state.selected[item.receiptNumber] === true}
+                                           onChange={() => this.toggleRow(item.receiptNumber)}
+                                    />
+                                );
+                            },
+                            Header: x => {
+                                return (
+                                    <input type="checkbox" className="checkbox"
+                                        checked={this.state.selectAll === 1}
+                                        ref={input => {
+                                            if (input) {
+                                                input.indeterminate = this.state.selectAll === 2;
+                                            }
+                                        }}
+                                        onChange={() => this.toggleSelectAll()}
+                                    />
+                                );
+                            },
+                            sortable:false,
+                            width: 45
+                        },
+                        {
+                            Header: "Transaction Date",
+                            accessor: "dateTime"
+                        },
+                        {
+                            Header: "Customer Name",
+                            accessor: "description"
+                        },
+                        {
+                            Header: "Amount",
+                            accessor: "amount"
+                        },
+                        {
+                            Header: "Receipt Number",
+                            accessor: "receiptNumber"
+                        },
+                        {
+                            Header: "Transaction Type",
+                            accessor: "transactionType"
+                        },
+                        {
+                            Header: "Reconciled ",
+                            accessor: "reconciled"
+                        },
+                        {
+                            Header: "Rule",
+                            accessor: "rule"
+                        }
+                    ]
+                    }
+                    // Default page size
+                    defaultPageSize={20}
+
+
+                    getTdProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                if (column.id === "checkbox")
+                                    return;
+
+                                if(rowInfo) {
+                                    let account = rowInfo['original']['receiptNumber'];
+
+                                    let link = selfurl + "/transactiondetails/" + this.props.id + "/" + account
+
+                                    window.open(link,"_self");
+                                }
+                                if (handleOriginal) {
+                                    handleOriginal();
+                                }
+                            }
+                        };
+                    }}
+                />
                 <br />
                 <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
                 <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
             </div>
+
         );
     }
 }
