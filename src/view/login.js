@@ -106,8 +106,7 @@ class Login extends Component{
     }
     handlePasswordChange(e){
         this.setState({
-            password:e.target.value,
-            warning:validation(this.state.email,e.target.value)
+            password:e.target.value
         });
     }
 
@@ -142,10 +141,11 @@ class Login extends Component{
                     (response) => {
                         this.visibleLoading("false");
                         let res = response.data.result;
+
                         if(res==="expired"){
                             this.loadToken();
                             this.setState({
-                                warning: "Oops. Something went wrong. Please retry again.",
+                                warning: "Website has expired.",
                             });
                         }else if(res==="fail"){
                             this.loadToken();
@@ -205,7 +205,7 @@ class Login extends Component{
                         </div>
                         <form>
                             <input value= {this.state.email} onChange={this.handleEmailChange} className="inputBox" type="text" placeholder="Email"/>
-                            <input /*value= {this.state.password} onChange={this.handlePasswordChange}*/ className="inputBox" type="password" placeholder="Password"/>
+                            <input value= {this.state.password} onChange={this.handlePasswordChange} className="inputBox" type="password" placeholder="Password"/>
                             <div className="submit">
                                 {/*<input className="submit-btn submit-btn-left" onClick={this.handleReset} type="reset"/>*/}
                                 <input onClick={this.handleSubmit} className="submit-btn" value="Login" type="submit"/>
