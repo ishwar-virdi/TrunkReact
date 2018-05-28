@@ -61,8 +61,7 @@ class TransactionTable extends React.Component {
     };
 
     markAsReconciled = () => {
-        console.log(this.state.selected);
-
+        this.props.visibleLoading("true");
         axios({
             withCredentials: true,
             method: 'POST',
@@ -72,30 +71,41 @@ class TransactionTable extends React.Component {
             },
             data: {
                 markAsReconcile: true,
-                items: this.state.selected
+                items: Object.keys(this.state.selected)
             }
         })
             .then(
                 (response) => {
+                    this.props.visibleLoading("false");
+                    if(response.data.result === "success"){
+                        let details = [];
 
-                });
-        /*var items = this.state.items;
+                        for(let i = 0; i < this.state.items.length;i++){
+                            let currentRow = this.state.items[i];
+                            if(typeof this.state.selected[currentRow.receiptNumber] !== 'undefined'){
+                                currentRow.reconciled = "Success";
+                                currentRow.rule = "Manually Reconciled";
+                            }
+                            details.push(currentRow);
+                        };
 
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].isChecked) {
-                items[i].reconciled = true;
-                items[i].rule = "Manually Marked"
-            }
-        }
+                        this.setState({
+                            items: details,
+                            selected: {},
+                            selectAll: 0
+                        });
+                    } else {
 
-        this.setState({
-            items: items
-        });*/
+                    }
+                })
+            .catch(() => {
+                this.props.visibleLoading("false");
+            })
+
     };
 
     markAsNotReconciled = () => {
-        console.log(this.state.selected);
-
+        this.props.visibleLoading("true");
         axios({
             withCredentials: false,
             method: 'POST',
@@ -104,27 +114,35 @@ class TransactionTable extends React.Component {
                 'Content-Type' : 'application/json; charset=utf-8'
             },
             data: {
-                markAsReconcile: true,
-                items: this.state.selected
+                markAsReconcile: false,
+                items: Object.keys(this.state.selected)
             }
         })
             .then(
                 (response) => {
+                    this.props.visibleLoading("false");
+                    if(response.data.result === "success"){
+                        let details = [];
+                        for(let i = 0; i < this.state.items.length;i++){
+                            let currentRow = this.state.items[i];
+                            if(typeof this.state.selected[currentRow.receiptNumber] !== 'undefined'){
+                                currentRow.reconciled = "Failed";
+                                currentRow.rule = "Not Reconciled by AutoReconciler";
+                            }
+                            details.push(currentRow);
+                        };
+                        this.setState({
+                            items: details,
+                            selected: {},
+                            selectAll: 0
+                        });
+                    } else {
 
-                });
-
-/*        var items = this.state.items;
-
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].isChecked) {
-                items[i].reconciled = false;
-                items[i].rule = "Manually Marked"
-            }
-        }
-
-        this.setState({
-            items: items
-        });*/
+                    }
+                })
+            .catch(() => {
+                this.props.visibleLoading("false");
+            })
     };
 
     toggleRow(receiptNumber) {
@@ -166,7 +184,6 @@ class TransactionTable extends React.Component {
                             id: "checkbox",
                             accessor: "",
                             Cell: ({ original }) => {
-                                console.log(original);
                                 return (
                                     <input type="checkbox" className="checkbox"
                                            checked={this.state.selected[original.receiptNumber] === true}

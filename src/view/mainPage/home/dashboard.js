@@ -6,12 +6,14 @@ import "../../../stylesheets/mainPage/home/dashboard.css";
 import {Bar} from 'react-chartjs-2';
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
+import Loading from "../../components/content/loading";
 
 class Dashboard extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
+            loading: "true",
             updated: false,
             chartMinIndex:96,
             chartIndex:100,
@@ -102,6 +104,7 @@ class Dashboard extends Component{
 
                 this.setState({
                     chartData:this._chartMid,
+                    loading : "false",
                 });
             });
 /*        this._chartSmall = {
@@ -217,6 +220,7 @@ class Dashboard extends Component{
                     chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
                         : null
                 }
+                <Loading visible={this.state.loading}/>
                 {/*<Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>*/}
             </div>
         )

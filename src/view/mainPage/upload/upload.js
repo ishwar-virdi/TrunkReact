@@ -61,6 +61,7 @@ class upload extends Component{
                 })
             .catch(() => {
                 this.setState({
+                    loading: "false",
                     status : "Error in calling Upload API"
                 });
             })

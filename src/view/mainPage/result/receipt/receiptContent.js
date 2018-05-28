@@ -5,11 +5,14 @@ import "../../../../stylesheets/mainPage/result/receipt/receiptContent.css";
 import React from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
+import Loading from "../../../components/content/loading";
+
 class ReceiptContent extends Component{
     constructor(props) {
         super(props);
         this.state={
             result:"",
+            loading : "true",
             receipt:props.receipt,
             transaction:{
                 header:["Transaction",""],
@@ -42,15 +45,22 @@ class ReceiptContent extends Component{
     };
 
     componentDidMount() {
+        this.setState({
+            loading : "true",
+            result : ""
+        });
+
         axios.get(apiurl + "/receipt/" + this.state.receipt)
             .then(
                 (response) => {
                     if(response.data.result === "fail"){
                         this.setState({
+                            loading : "true",
                             result : response.data.reason
                         });
                     } else {
                         this.setState({
+                            loading: "false",
                             transaction: {
                                 header: ["Transaction", ""],
                                 date: ["Transaction Date", response.data.TransactionDate],
@@ -82,6 +92,7 @@ class ReceiptContent extends Component{
                 })
             .catch(() => {
                     this.setState({
+                        loading: "false",
                         result : "Error in connect to Receipt API"
                     });
                 }
@@ -89,12 +100,17 @@ class ReceiptContent extends Component{
     }
 
     markAsReconcile(){
+        this.setState({
+            loading : "true",
+            result : ""
+        });
 
         axios.put(apiurl + "/manualReconcile/" + this.state.receipt)
             .then(
                 (response) => {
                     if(response.data.result === "fail"){
                         this.setState({
+                            loading: "false",
                             result : response.data.reason,
                             transaction: {
                                 header: ["Transaction", ""],
@@ -124,11 +140,8 @@ class ReceiptContent extends Component{
                             },
                         });
                     } else {
-                        console.log(response.data);
-                        console.log(this.state);
-
-
                         this.setState({
+                            loading: "false",
                             result : response.data.reason,
                             status: {
                                 header: ["Status", this.state.status.header[1]],
@@ -141,6 +154,7 @@ class ReceiptContent extends Component{
                 })
             .catch(() => {
                     this.setState({
+                        loading: "false",
                         result : "Error in connect to Reconcile API"
                     });
                 }
@@ -153,6 +167,7 @@ class ReceiptContent extends Component{
         return (
             <div className="receipt-content">
                 <h1>{this.state.result}</h1>
+                <Loading visible={this.state.loading}/>
                 <div className="receipt-content-table">
                     <div className="receipt-table">
                         <div>

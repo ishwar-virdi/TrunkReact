@@ -87,10 +87,10 @@ class Login extends Component{
                         isLoaded: true,
                         token: response.data.token,
                     });
-                },
+                }).catch(
                 (error) => {
                     this.setState({
-                        isLoaded: true,
+                        isLoaded: false,
                     });
                 }
             )
