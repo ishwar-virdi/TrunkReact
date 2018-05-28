@@ -77,6 +77,7 @@ class Dashboard extends Component{
                     let reconciled = data.reconciled;
                     let notReconciled = data.notReconciled;
 
+
                     let chartReconcile ={
                         labels: data.labels,
                         datasets: [
@@ -96,6 +97,11 @@ class Dashboard extends Component{
                         chartData:chartReconcile,
                         chartReconcile:chartReconcile,
                     });
+
+                this.setState({
+                    chartData:this._chartMid,
+                    loading : "false",
+
                 });
     }
     requestMonthTotalChart(page){
@@ -368,6 +374,7 @@ class Dashboard extends Component{
                     chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
                         : null
                 }
+
                 <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
                 {toolKit}
                 <Loading visible={this.state.visible}/>
