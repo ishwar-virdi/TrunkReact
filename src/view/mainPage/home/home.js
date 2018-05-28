@@ -17,7 +17,6 @@ class home extends Component{
                         <Dashboard/>
                     </div>
                 </div>
-
                 <Footer/>
             </div>
         )

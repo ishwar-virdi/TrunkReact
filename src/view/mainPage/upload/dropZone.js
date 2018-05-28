@@ -12,7 +12,7 @@ class DropZone extends Component{
             files: [] ,
             status: "none",
             dropZone:"upload-dropZone upload-default",
-            uploadSuccess:false,
+            uploadSuccess:"",
         };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
@@ -24,6 +24,7 @@ class DropZone extends Component{
             files:files,
             dropZone:"upload-dropZone upload-active",
             status:"none",
+            uploadSuccess:"",
         });
     }
 
@@ -74,9 +75,17 @@ class DropZone extends Component{
         })
             .then(
                 (response) => {
-                    this.setState({
-                        status : response.data.reason
-                    });
+                    let data = response.data;
+                    if(data.result === "success"){
+                        this.setState({
+                            uploadSuccess: response.data.reason
+                        });
+                    }else{
+                        this.setState({
+                            status : response.data.reason
+                        });
+                    }
+
                     this.props.visibleLoading("false");
                 })
             .catch(() => {
@@ -94,8 +103,8 @@ class DropZone extends Component{
         ) : (
             null
         );
-        const successLabel = (uploadSuccess === true) ? (
-            <p className="upload-success">File is uploaded</p>
+        const successLabel = (uploadSuccess !== "") ? (
+            <p className="upload-success">{this.state.uploadSuccess}</p>
         ) : (
             null
         );

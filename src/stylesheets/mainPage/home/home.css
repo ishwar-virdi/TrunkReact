@@ -3,3 +3,54 @@
     min-height: 650px;
     width: 100%;
 }
+
+.date-Button{
+    position: absolute;
+    height: 30px;
+    width: 70px;
+    border-radius: 5px;
+    top:30px;
+    right: 70px;
+}
+
+.home-arrowLeft{
+    float: left;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color:var(--subjectColor);
+    height: 28px;
+    width: 28px;
+    opacity: 0.8;
+}
+
+.home-arrowRight{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    float: right;
+    background-color:var(--subjectColor);
+    height: 28px;
+    width: 28px;
+    opacity: 0.8;
+}
+
+.home-arrowLeft .icon{
+    height: 20px;
+    width: 20px;
+    margin-top: 4px;
+    cursor: pointer;
+    color: white;
+}
+
+.home-arrowRight .icon{
+    height: 20px;
+    width: 20px;
+    margin-top: 4px;
+    cursor: pointer;
+    color: white;
+}
+.home-arrowLeft:hover{
+    opacity: 1;
+}
+.home-arrowRight:hover{
+    opacity: 1;
+}

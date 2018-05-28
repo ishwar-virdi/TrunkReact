@@ -100,6 +100,7 @@ class Login extends Component{
             })
             .then(
                     (response) => {
+
                         this.visibleLoading("false");
                         let res = response.data.result;
 
@@ -144,7 +145,6 @@ class Login extends Component{
     };
     render(){
         const {redirect,warning} = this.state;
-        console.log(warning);
         const warnLabel = warning !== "" ? (
             <p className={this.state.warnClass}>{this.state.warning}</p>
         ) : (
