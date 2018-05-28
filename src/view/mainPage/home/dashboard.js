@@ -103,7 +103,7 @@ class Dashboard extends Component{
                     loading : "false",
 
                 });
-    }
+    })}
     requestMonthTotalChart(page){
         this.setState({
             visible:"true"
