@@ -177,9 +177,11 @@ class ReceiptContent extends Component{
                             <ReceiptTable data={this.state.status}/>
                         </div>
                         <div>
-                            <div className="receipt-table-reconciled">
-                                <button onClick={this.markAsReconcile}>Mark as Reconciled</button>
-                            </div>
+                            {
+                                this.state.status.reconcileStatus[1].valueOf() === "AutoReconciled" || this.state.status.reconcileStatus[1].valueOf() ===  "Manually Reconciled" ? null : (<div className="receipt-table-reconciled">
+                                    <button onClick={this.markAsReconcile}>Mark as Reconciled</button>
+                                </div>)
+                            }
                         </div>
                     </div>
                     <div className="receipt-table">
