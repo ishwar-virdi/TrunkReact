@@ -29,7 +29,7 @@
 
 .warning{
     margin-top: 15px;
-    height: 30px;
+    height: 60px;
     border-radius: 5px;
     line-height: 30px;
     font-size: 16px;
@@ -83,22 +83,14 @@
     background: var(--subjectColor);
     border: 0;
     height: 50px;
-    width: 75%;
-    /*float: left;*/
+    width: 70%;
     color: white;
     font-size:16px;
     font-weight: bold;
+    border-radius: 5px;
+    margin: 0 auto;
 }
 
-.submit-btn-left{
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.submit-btn-right{
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
 
 .submit-btn:hover{
     opacity: 0.6;

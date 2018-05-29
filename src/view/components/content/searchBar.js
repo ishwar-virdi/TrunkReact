@@ -58,8 +58,6 @@ class SearchBar extends React.Component {
 
     requestSearchResult = (url,data) =>{
         this.props.visibleLoading("true");
-        console.log(url);
-        console.log(data);
         axios({
             withCredentials: true,
             method: 'POST',
@@ -146,14 +144,9 @@ class SearchBar extends React.Component {
                                onClick={this.handleTextClick}
                                onKeyPress={this.handSubmitEnter} type="text"/>
                     </div>
-                    <div className="searchBar-search-icon">
-                        {/*<svg className="icon" aria-hidden="true">*/}
-                            {/*<use xlinkHref="#icon-chazhao"></use>*/}
-                        {/*</svg>*/}
-                    </div>
                     <div className="searchBar-delete-icon">
                         <svg onClick={this.handleClearClick} className={this.state.deleteIcon} aria-hidden="true">
-                            <use xlinkHref="#icon-delete"></use>
+                            <use xlinkHref="#icon-chahao"></use>
                         </svg>
                     </div>
                     <div onClick={this.handleSubmitClick} className="searchBar-Submit">

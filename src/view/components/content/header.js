@@ -31,6 +31,9 @@ class Header extends React.Component {
         })
             .then(
                 (response) => {
+                    if(response === ""){
+                        localStorage.clear();
+                    }
                     let data = response.data.result;
                     if(data === true){
                         localStorage.setItem('login', "true");
@@ -58,7 +61,6 @@ class Header extends React.Component {
         })
             .then(
                 (response) => {
-                    console.log(response);
                     let data = response.data.result;
                     if(data === true){
                         localStorage.clear();

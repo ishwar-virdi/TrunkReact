@@ -13,9 +13,9 @@ class home extends Component{
                 <Header clickedClass="Home"/>
                 <div className="body">
                     <Title title="REPORTS"/>
-                </div>
-                <div className="home-view">
-                    <Dashboard/>
+                    <div className="home-view">
+                        <Dashboard/>
+                    </div>
                 </div>
                 <Footer/>
             </div>

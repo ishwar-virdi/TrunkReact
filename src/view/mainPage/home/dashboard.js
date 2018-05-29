@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 
 import "../../../stylesheets/mainPage/home/dashboard.css";
-//import Indicator from "./indicator";
+import Indicator from "./indicator";
 
 import {Bar} from 'react-chartjs-2';
 import axios from "axios/index";
@@ -13,29 +13,19 @@ class Dashboard extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            loading: "true",
-            updated: false,
+            visible:"false",
+            page:"reconcile",
             chartMinIndex:96,
             chartIndex:100,
             chartMaxIndex:104,
-            chartData:null,
+            chartData:{},
+            chartReconcile:{},
+            chartTotalAmount:{},
+            chartDailyTransaction:{},
             option:{
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: { display: true},
-/*                onClick: function(event, array) {
-                    let element = this.getElementAtEvent(event);
-                    if (element.length > 0) {
-                        let series= element[0]._datasetIndex;
-                        let label = element[0]._index;
-                        let value = this.data.datasets[series].data[label];
-                        window.open('http://localhost:3000/reconciledresult/details/'+value);
-                    }
-                },*/
-                // title: {
-                //     display: true,
-                //     text: 'Title'
-                // },
                 scales: {
                     xAxes: [{
                         labelMaxWidth: 200,
@@ -50,125 +40,211 @@ class Dashboard extends Component{
                     }],
                 },
             },
+            monthTota1Index:0,
+            dailyTransactionIndex:0,
         };
 
-        //this.handleScroll = this.handleScroll.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
+        this.handleLeftClick = this.handleLeftClick.bind(this);
+        this.handleRightClick = this.handleRightClick.bind(this);
     }
 
     componentDidMount() {
-        this._chartMid = {
-            labels: [],
-            datasets: [
-                {
-                    label: "Reconciled",
-                    data: [0],
-                    backgroundColor: "#E57373",
-                },
-                {
-                    label: "Not Reconciled",
-                    data: [0],
-                    backgroundColor:  "#7986CB",
-                }
-            ]
-        };
+        this.requestReconcileChart();
+        this.requestMonthTotalChart(0);
+        this.requestDailyTransaction(0);
+        window.addEventListener('wheel', this.handleScroll, { passive: true })
+    }
 
+    requestReconcileChart(){
+        this.setState({
+            visible:"true"
+        });
         axios({
             withCredentials: true,
             method: 'GET',
-            url: apiurl + "/api/getChartData/",
+            url: apiurl + "/api/getChartData",
             headers: {
                 'Content-Type' : 'application/json; charset=utf-8'
             }
         })
-        .then(
-            (response) => {
-                let data = response.data;
-                let reconciled = data.reconciled;
-                let notReconciled = data.notReconciled;
+            .then(
+                (response) => {
+                    this.setState({
+                        visible:"false"
+                    });
+                    let data = response.data;
+                    let reconciled = data.reconciled;
+                    let notReconciled = data.notReconciled;
 
-                this._chartMid ={
-                    labels: data.labels,
-                    datasets: [
-                        {
-                            label: reconciled.label,
-                            data: reconciled.data,
-                            backgroundColor: "#E57373",
-                        },
-                        {
-                            label: notReconciled.label,
-                            data: notReconciled.data,
-                            backgroundColor:  "#7986CB",
-                        }
-                    ]
-                }
+
+                    let chartReconcile ={
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: reconciled.label,
+                                data: reconciled.data,
+                                backgroundColor: "#E57373",
+                            },
+                            {
+                                label: notReconciled.label,
+                                data: notReconciled.data,
+                                backgroundColor:  "#7986CB",
+                            }
+                        ]
+                    };
+                    this.setState({
+                        chartData:chartReconcile,
+                        chartReconcile:chartReconcile,
+                    });
 
                 this.setState({
                     chartData:this._chartMid,
                     loading : "false",
+
                 });
-            });
-/*        this._chartSmall = {
-            labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
-            datasets: [
-                {
-                    label: "Team points 0",
-                    data: [53, 385, 270, 133, 15],
-                    backgroundColor: "#E57373"
-                },
-                {
-                    label: "Team points 1",
-                    data: [503, 305, 27, 13, 45],
-                    backgroundColor: "#7986CB"
-                },
-                {
-                    label: "Team points 2",
-                    data: [153, 325, 239, 133, 25],
-                    backgroundColor: "#F06292"
-                },
-                {
-                    label: "Team points 3",
-                    data: [523, 185, 170, 96, 64],
-                    backgroundColor: "#4DB6AC"
-                }
-            ]
-        };*/
-        /*this._chartLarge = {
-            labels: ["Team1", "Team2", "Team3", "Team4", "Team5"],
-            datasets: [
-                {
-                    label: "Team points 2",
-                    data: [303, 185, 470, 313, 65],
-                    backgroundColor: "#7986CB"
-                }
-            ]
-        };*/
+    })}
+    requestMonthTotalChart(page){
         this.setState({
-            chartData:this._chartMid,
+            visible:"true"
         });
-        //window.addEventListener('wheel', this.handleScroll, { passive: true })
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/monthTotalAmount?page="+page,
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+                (response) => {
+                    this.setState({
+                        visible:"false"
+                    });
+                    let labels = [];
+                    let settles = [];
+                    let banks = [];
+                    let data = response.data;
+                    for(let i = 0, length = data.length; i < length;i++){
+                        labels.push(data[i].date);
+                        settles.push(data[i].settleTotal);
+                        banks.push(data[i].bankTotal);
+                    }
+                    let chart ={
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Total amounts of settlement",
+                                data: settles,
+                                backgroundColor: "#70bf54",
+                            },
+                            {
+                                label: "Total amounts of bank statement",
+                                data: banks,
+                                backgroundColor:  "#464f53",
+                            }
+                        ]
+                    };
+                    this.setState({
+                        chartTotalAmount:chart,
+                    });
+                    if(this.state.page === "total"){
+                        this.setState({
+                            chartData:chart,
+                        });
+                    }
+                });
     }
+    requestDailyTransaction(pageIndex){
 
+        this.setState({
+            visible:"true"
+        });
 
-/*    chartSmall =() =>{
-        return this._chartSmall;
-    };
-    chartMid = () => {
-        return this._chartMid;
-    };
-    chartLarge = () =>{
-        return this._chartLarge;
-    };*/
-
-/*    handleScroll(event) {
+        axios({
+            withCredentials: true,
+            method: 'GET',
+            url: apiurl + "/api/v1/getDailyTransaction?page=" + pageIndex ,
+            headers: {
+                'Content-Type' : 'application/json; charset=utf-8'
+            }
+        })
+            .then(
+                (response) => {
+                    this.setState({
+                        visible:"false"
+                    });
+                    let labels = [];
+                    let settleVisa = [];
+                    let settleDebit = [];
+                    let settleAmex = [];
+                    let bankVisa = [];
+                    let bankDebit = [];
+                    let bankAmex = [];
+                    let data = response.data;
+                    for(let i = 0, length = data.length; i < length;i++){
+                        labels.push(data[i].date);
+                        settleVisa.push(data[i].settleVisa);
+                        settleDebit.push(data[i].settleDebit);
+                        settleAmex.push(data[i].settleAmex);
+                        bankVisa.push(data[i].bankVisa);
+                        bankDebit.push(data[i].bankDebit);
+                        bankAmex.push(data[i].bankAmex);
+                    }
+                    let chart ={
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Settle visa",
+                                data: settleVisa,
+                                backgroundColor: "#1a1f71",
+                            },
+                            {
+                                label: "Bank visa",
+                                data: bankVisa,
+                                backgroundColor: "#262ca6",
+                            },
+                            {
+                                label: "Settle debit",
+                                data: settleDebit,
+                                backgroundColor: "#1a1a1a",
+                            },
+                            {
+                                label: "Bank debit",
+                                data: bankDebit,
+                                backgroundColor: "#262626",
+                            },{
+                                label: "Settle amex",
+                                data: settleAmex,
+                                backgroundColor: "#6CC4EE",
+                            },
+                            {
+                                label: "Bank amex",
+                                data: bankAmex,
+                                backgroundColor: "#9BD4F5",
+                            },
+                        ]
+                    };
+                    this.setState({
+                        chartDailyTransaction:chart,
+                    });
+                    if(this.state.page === "daily"){
+                        this.setState({
+                            chartData:chart,
+                        });
+                    }
+                });
+    }
+    handleScroll(event) {
         if(this.isScrollUp(event)){
             this.setChartIndex("up");
         }else{
             this.setChartIndex("down");
         }
         this.chartUpdate();
-    }*/
+    }
 
-/*    isScrollUp(event){
+    isScrollUp(event){
         return event.wheelDeltaY > 0;
     }
     setChartIndex(action){
@@ -190,29 +266,107 @@ class Dashboard extends Component{
             chartIndex:nextIndex,
         });
     }
+
     chartUpdate(){
-        if(!this.state.updated){
-            return
-        }
 
         let index = this.state.chartIndex;
 
-        let chartData;
         if(index === this.state.chartMinIndex){
-            chartData = this.chartSmall;
-            this.setState({chartData, updated: !this.state.updated});
+            this.setState({
+                page:"daily",
+                chartData:this.state.chartDailyTransaction,
+            });
         }else if(index === 100){
-            chartData = this.chartMid;
-            this.setState({chartData, updated: !this.state.updated});
+            this.setState({
+                page:"reconcile",
+                chartData:this.state.chartReconcile,
+
+            });
         }else if(index === this.state.chartMaxIndex){
-            chartData = this.chartLarge;
-            this.setState({chartData, updated: !this.state.updated});
+            this.setState({
+                page:"total",
+                chartData:this.state.chartTotalAmount,
+
+            });
         }else{
         }
-    }*/
+    }
+
+    handleLeftClick(){
+        let pageIndex;
+        switch (this.state.page){
+            case "total":{
+                pageIndex = this.state.monthTota1Index - 1;
+                if(pageIndex < 0){
+                    return;
+                }
+                this.setState({
+                    monthTota1Index: pageIndex
+                });
+                this.requestMonthTotalChart(pageIndex);
+                break;
+            }
+            case "daily":{
+                pageIndex = this.state.dailyTransactionIndex - 1;
+                if(pageIndex < 0){
+                    return;
+                }
+                this.setState({
+                    dailyTransactionIndex: pageIndex
+                });
+                this.requestDailyTransaction(pageIndex);
+                break;
+            }
+        }
+    }
+
+    handleRightClick(){
+        let pageIndex = this.state.pageIndex + 1;
+        switch (this.state.page){
+            case "total":{
+                pageIndex = this.state.monthTota1Index + 1;
+                this.setState({
+                    monthTota1Index: pageIndex
+                });
+                this.requestMonthTotalChart(pageIndex);
+                break;
+            }
+            case "daily":{
+                pageIndex = this.state.dailyTransactionIndex + 1;
+                this.setState({
+                    dailyTransactionIndex: pageIndex
+                });
+                this.requestDailyTransaction(pageIndex);
+                break;
+            }
+        }
+    }
+    pageToolkit = () =>{
+        let page  = this.state.page;
+        if(page === "daily"
+            || page === "total"){
+            //console.log("a");
+            return (
+            <div className="date-Button">
+                <div className="transition home-arrowLeft">
+                    <svg onClick={this.handleLeftClick} className="icon" aria-hidden="true">
+                        <use xlinkHref="#icon-xiangzuo"></use>
+                    </svg>
+                </div>
+                <div className="transition home-arrowRight">
+                    <svg onClick={this.handleRightClick} className="icon" aria-hidden="true">
+                        <use xlinkHref="#icon-msnui-triangle-right"></use>
+                    </svg>
+                </div>
+            </div>
+            );
+        }
+    };
 
     render(){
         const {chartData} = this.state;
+
+        let toolKit = this.pageToolkit();
         return (
 
             <div className="dashboard">
@@ -220,8 +374,10 @@ class Dashboard extends Component{
                     chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
                         : null
                 }
-                <Loading visible={this.state.loading}/>
-                {/*<Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>*/}
+
+                <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
+                {toolKit}
+                <Loading visible={this.state.visible}/>
             </div>
         )
     }

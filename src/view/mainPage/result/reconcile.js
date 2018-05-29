@@ -12,7 +12,7 @@ let parseToDate = (string) =>{
 };
 let history;
 let historyBackUp = [
-    {month:0,letter:"Recently"},
+    //{month:0,letter:"Recently"},
     {month:1,letter:"One month ago"},
     {month:2,letter:"Two month ago"},
     {month:4,letter:"Four month ago"},
@@ -30,7 +30,7 @@ class Reconcile extends React.Component {
         this.state = {
             title: {
                 isTitle: true,
-                time: "",
+                time: "Recently",
                 dateRange: "DateRange",
                 status: "Status"
             },
@@ -86,6 +86,9 @@ class Reconcile extends React.Component {
     }
 
     jsonToResult =(json) =>{
+        if(json['reconcileDate'] === ""){
+            return;
+        }
         let result = {};
         let reconcileDate;
         let dateRange;
