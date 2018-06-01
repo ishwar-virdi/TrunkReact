@@ -7,8 +7,10 @@ import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
 
-const notReconcile = "Not Reconciled by AutoReconciler";
-const reconcile = "Manually Reconciled";
+const statusZero = "Not reconciled manually or auto";
+const statusOne = "AutoReconciler attempted but failed";
+const statusTwo = "Manually Reconciled";
+const statusThree = "AutoReconciled";
 
 
 class ReceiptContent extends Component{
@@ -60,6 +62,7 @@ class ReceiptContent extends Component{
         })
             .then(
                 (response) => {
+                    console.log(response.data);
                     let data = response.data;
                     let transaction = {};
                     let status = {};
@@ -105,21 +108,11 @@ class ReceiptContent extends Component{
                         };
                     }
 
-                    if(data.ReconcileStatus === reconcile){
+                    if(data.ReconcileStatus === statusZero || data.ReconcileStatus === statusOne){
+                        btnText = "Mark as Reconciled";
+                    }else if(data.ReconcileStatus === statusTwo || data.ReconcileStatus === statusThree){
                         btnText = "Mark as not Reconciled";
-                    }else if(data.ReconcileStatus === notReconcile){
-                        btnText = "Mark as Reconciled";
-                    }else if(data.ReconcileStatus === "AutoReconciler attempted but failed"){
-                        btnText = "Mark as Reconciled";
-                    }else if(data.ReconcileStatus === "Not Reconciled by AutoReconciler"){
-                        btnText = "Mark as Reconciled";
-                    }else if(data.ReconcileStatus === "AutoReconciled"){
-                        btnText = "Mark as not Reconciled";
-                    }else if(data.ReconcileStatus === "Reconcile Status Incorrectly Set"){
-                        btnText = "Mark as Reconciled";
                     }
-
-
 
                     this.setState({
                         transaction:transaction,
@@ -153,11 +146,11 @@ class ReceiptContent extends Component{
         let btnText = "";
         if(type === "reconcileBtn"){
             url =  apiurl + "/api/v1/manualReconcile/" + this.state.receipt;
-            resultStatue = reconcile;
+            resultStatue = statusTwo;
             btnText = "Mark as not Reconciled";
         }else if(type === "notReconcileBtn"){
             url =  apiurl + "/api/v1/manualNotReconcile/" + this.state.receipt;
-            resultStatue = notReconcile;
+            resultStatue = statusZero;
             btnText = "Mark as Reconciled";
         }else{
             throw new Error("type is wrong (reconcile or notReconcile)");
@@ -177,9 +170,15 @@ class ReceiptContent extends Component{
                         loadingVisible:"false"
                     });
                     let data = response.data;
+                    if(data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     if(data.result === "success"){
                         let status = this.state.status;
                         status.reconcileStatus[1] = resultStatue;
+                        status.reconcileDate[1] = data.time;
                         this.setState({
                             status : status,
                             btnText: btnText,
