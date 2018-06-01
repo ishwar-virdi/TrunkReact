@@ -1,10 +1,13 @@
-import React from "react";
-import 'react-dates/initialize';
-import { SingleDatePicker } from 'react-dates';
-import 'react-dates/lib/css/_datepicker.css';
+/**
+ * Deprecated
+ *
+ * import React from "react";
+ import 'react-dates/initialize';
+ import { SingleDatePicker } from 'react-dates';
+ import 'react-dates/lib/css/_datepicker.css';
 
 
-class SingDatePicker extends React.Component {
+ class SingDatePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,4 +29,6 @@ class SingDatePicker extends React.Component {
     };
 }
 
-export default SingDatePicker;
+ export default SingDatePicker;
+ */
+

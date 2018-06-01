@@ -3,6 +3,10 @@
     width: 100%;
     background-color: white;
     border-radius: 15px;
+    table-layout:fixed;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .receipt-detail-table th{

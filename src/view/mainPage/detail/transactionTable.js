@@ -4,6 +4,7 @@ import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
 import ReactTable from "react-table";
+import moment from "moment";
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -12,7 +13,8 @@ class TransactionTable extends React.Component {
         this.state = {
             items: [],
             selected: {},
-            selectAll: 0
+            selectAll: 0,
+            notDataFound:"rt-notDateFound rt-notDateFound-hidden",
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
@@ -21,6 +23,9 @@ class TransactionTable extends React.Component {
 
     componentDidMount() {
         this.props.visibleLoading("true");
+        this.setState({
+            notDataFound:"rt-notDateFound rt-notDateFound-hidden"
+        });
         axios({
             withCredentials: true,
             method: 'GET',
@@ -33,7 +38,22 @@ class TransactionTable extends React.Component {
             (response) => {
                 this.props.visibleLoading("false");
                 let data = response.data;
+
+                if(data === ""){
+                    localStorage.clear();
+                    this.forceUpdate();
+                    return;
+                }
+                if(response.data.length === 0){
+                    this.setState({
+                        notDataFound:"rt-notDateFound"
+                    });
+                    return;
+                }
+
                 let details = [];
+                let date = moment(data[0].date,"MMM DD, YYYY HH:mm").format('MMMM YYYY');
+                this.props.setTitle("Reconcile Results: " + date);
                 for(let i = 0; i < data.length;i++){
                     details.push(this.jsonToResult(data[i]));
                 }
@@ -41,7 +61,9 @@ class TransactionTable extends React.Component {
                     items: details,
                     selectAll: 0
                 });
-        });
+        }).then((error)=>{
+            this.props.visibleLoading("false");
+        });;
     };
 
     jsonToResult = (json) =>{
@@ -62,7 +84,7 @@ class TransactionTable extends React.Component {
 
     markAsReconciled = () => {
         console.log(this.state.selected);
-
+        this.props.visibleLoading("true");
         axios({
             withCredentials: true,
             method: 'POST',
@@ -77,8 +99,16 @@ class TransactionTable extends React.Component {
         })
             .then(
                 (response) => {
-
-                });
+                    this.props.visibleLoading("false");
+                    let data = response.data;
+                    // if(data === ""){
+                    //     localStorage.clear();
+                    //     this.forceUpdate();
+                    //     return;
+                    // }
+                }).then((error)=>{
+            this.props.visibleLoading("false");
+        });
         /*var items = this.state.items;
 
         for (var i = 0; i < items.length; i++) {
@@ -95,7 +125,7 @@ class TransactionTable extends React.Component {
 
     markAsNotReconciled = () => {
         console.log(this.state.selected);
-
+        this.props.visibleLoading("true");
         axios({
             withCredentials: false,
             method: 'POST',
@@ -110,8 +140,17 @@ class TransactionTable extends React.Component {
         })
             .then(
                 (response) => {
-
-                });
+                    this.props.visibleLoading("false");
+                    let data = response.data;
+                    // if(data === ""){
+                    //     localStorage.clear();
+                    //     this.forceUpdate();
+                    //     return;
+                    // }
+                })
+            .then((error)=>{
+            this.props.visibleLoading("false");
+        });
 
 /*        var items = this.state.items;
 
@@ -159,14 +198,30 @@ class TransactionTable extends React.Component {
         return (
             // Defining table structure
             <div>
+                <div className="transaction-btn-group">
+                    <p className="transition" onClick={this.markAsReconciled}>Mark as Reconciled</p>
+                    <p className="transition" onClick={this.markAsNotReconciled}>Mark as Failed</p>
+                </div>
                 <ReactTable
                     data={items}
                     columns={[
                         {
                             id: "checkbox",
                             accessor: "",
+                            Header: x => {
+                                return (
+                                    <input type="checkbox" className="checkbox"
+                                           checked={this.state.selectAll === 1}
+                                           ref={input => {
+                                               if (input) {
+                                                   input.indeterminate = this.state.selectAll === 2;
+                                               }
+                                           }}
+                                           onChange={() => this.toggleSelectAll()}
+                                    />
+                                );
+                            },
                             Cell: ({ original }) => {
-                                console.log(original);
                                 return (
                                     <input type="checkbox" className="checkbox"
                                            checked={this.state.selected[original.receiptNumber] === true}
@@ -174,19 +229,7 @@ class TransactionTable extends React.Component {
                                     />
                                 );
                             },
-                            Header: x => {
-                                return (
-                                    <input type="checkbox" className="checkbox"
-                                        checked={this.state.selectAll === 1}
-                                        ref={input => {
-                                            if (input) {
-                                                input.indeterminate = this.state.selectAll === 2;
-                                            }
-                                        }}
-                                        onChange={() => this.toggleSelectAll()}
-                                    />
-                                );
-                            },
+
                             sortable:false,
                             width: 45
                         },
@@ -243,10 +286,12 @@ class TransactionTable extends React.Component {
                             }
                         };
                     }}
+                    noDataText = ''
                 />
                 <br />
-                <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
-                <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
+                <div className={this.state.notDataFound}>
+                    <p>No data Found</p>
+                </div>
             </div>
 
         );

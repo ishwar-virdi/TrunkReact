@@ -8,28 +8,16 @@ import DropZone from '../../mainPage/upload/dropZone'
 class upload extends Component{
     constructor(props) {
         super(props);
-        this.state = {
-            loading: "false",
-        };
     }
-
-    visibleLoading = (visible)=>{
-        this.setState({
-            loading:visible,
-        });
-    };
 
     render(){
         return (
             <div className="container">
                 <Header clickedClass="Upload"/>
-                <Loading visible={this.state.loading}/>
                 <div className="body">
                     <Title title="RECONCILE"/>
                     <div className="upload-view">
-                        <DropZone
-                            visibleLoading = {(visible)=>this.visibleLoading(visible)} // PropTypes.string.isRequired,
-                        />
+                        <DropZone/>
                     </div>
                 </div>
                 <Footer/>

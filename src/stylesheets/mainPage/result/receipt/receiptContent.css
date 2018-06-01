@@ -10,9 +10,50 @@
     margin:0 auto;
 }
 
-.receipt-content-back{
-    height: 50px;
-    width: 100%;
+.receipt-content-btn-group{
+    position: relative;
+    height: 34px;
+    width: 96%;
+    margin: 0 auto;
+}
+
+.receipt-content-btn{
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.receipt-content-btn p{
+    margin: 0 auto;
+    width: 200px;
+    display: block;
+    line-height: 34px;
+    background-color: var(--subjectColor);
+    color: white;
+    border-radius: 15px;
+    font-weight: bolder;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.receipt-content-btn .default-btn{
+    display: inline-block;
+    float: right;
+    height: 32px;
+    width: 100px;
+    color: #333;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    line-height: 34px;
+}
+
+.receipt-content-btn .default-btn:hover{
+    background-color: lightgrey;
+}
+.receipt-content-btn p:hover{
+    background-color: #66CCFF;
 }
 
 .receipt-table{
@@ -34,20 +75,8 @@
     margin-left: calc(50% - 90px);
 }
 
-.receipt-table-reconciled button{
-    display: block;
-    line-height: 48px;
-    border: 2px solid black;
-    background-color: #d9534f;
-    color: black;
-    border-radius: 15px;
-    font-weight: bolder;
-    font-size: 16px;
-}
 
-.receipt-table-reconciled button:hover{
-    background-color: #66CCFF;
-}
+
 
 .receipt-back-btn{
     height: 40px;

@@ -4,6 +4,8 @@ import {apiurl} from "../../../config/constants";
 import "../../../stylesheets/mainPage/upload/dropZone.css";
 import Dropzone from 'react-dropzone';
 import React from "react";
+import {Redirect} from "react-router-dom";
+import Loading from "../../components/content/loading";
 class DropZone extends Component{
     constructor(props) {
         super(props);
@@ -12,12 +14,20 @@ class DropZone extends Component{
             files: [] ,
             status: "none",
             dropZone:"upload-dropZone upload-default",
-            uploadSuccess:"",
+            uploadRedirect:false,
+            loading:"false",
         };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
         this.uploadDocs = this.uploadDocs.bind(this);
     }
+
+    componentWillUnmount() {
+        this.setState({
+            loading:"true",
+        });
+    }
+
 
     onDrop(files) {
         this.setState({
@@ -47,9 +57,9 @@ class DropZone extends Component{
 
     uploadDocs() {
         this.setState({
-            status : "none"
+            status : "none",
+            loading: "true",
         });
-
         if(this.state.files.length === 0){
             this.setState({
                 status : "Please select upload file"
@@ -66,7 +76,6 @@ class DropZone extends Component{
         this.state.files.forEach(file => {
             data.append("file",file);
         });
-        this.props.visibleLoading("true");
         axios({
             withCredentials: true,
             method: 'POST',
@@ -76,41 +85,46 @@ class DropZone extends Component{
             .then(
                 (response) => {
                     let data = response.data;
+                    if(data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     if(data.result === "success"){
                         this.setState({
-                            uploadSuccess: response.data.reason
+                            uploadRedirect: true,
+                            loading:"false",
                         });
                     }else{
                         this.setState({
-                            status : response.data.reason
+                            status : response.data.reason,
+                            loading:"false",
                         });
                     }
-
-                    this.props.visibleLoading("false");
                 })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 this.setState({
-                    status : "Error in calling Upload API"
+                    status : "Error in calling Upload API",
+                    loading:"false",
                 });
-                this.props.visibleLoading("false");
             })
     };
 
     render() {
-        const {status,uploadSuccess} = this.state;
+        const {status,uploadRedirect} = this.state;
         const warnLabel = (status !== "none") ? (
             <p className="upload-fail">{this.state.status}</p>
-        ) : (
-            null
-        );
-        const successLabel = (uploadSuccess !== "") ? (
-            <p className="upload-success">{this.state.uploadSuccess}</p>
         ) : (
             null
         );
 
         return (
             <div className="upload-view-Handler">
+                {
+                    uploadRedirect === true ? ( <Redirect to={{pathname:'/uploadSuccess'}}/>)
+                        : null
+                }
                 <div className="upload-view-context">
                     <div className="upload-title">
                         <p>Import Documents</p>
@@ -124,7 +138,6 @@ class DropZone extends Component{
                         <div className="upload-dropZone-handle">
                             <div className="upload-warning">
                                 {warnLabel}
-                                {successLabel}
                             </div>
                             <div className="upload-dropZone-north">
                                 <div className="upload-dropZone-btn upload-border transition">
@@ -152,12 +165,16 @@ class DropZone extends Component{
                                 <option value="Bank">Bank statement</option>
                                 <option value="Settlement">Settlement file</option>
                             </select>
+                            <svg className="icon" aria-hidden="true">
+                                <use xlinkHref="#icon-xiangxia"></use>
+                            </svg>
                         </div>
                     </div>
                     <div className="upload-submit">
                         <p className="transition" onClick={this.uploadDocs}>Submit</p>
                     </div>
                 </div>
+                <Loading visible={this.state.loading}/>
             </div>
         );
     }

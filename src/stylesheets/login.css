@@ -29,11 +29,11 @@
 
 .warning{
     margin-top: 15px;
-    height: 60px;
+    height: 30px;
     border-radius: 5px;
     line-height: 30px;
     font-size: 16px;
-
+    margin-bottom: 10px;
 }
 
 .warning p{
@@ -83,7 +83,7 @@
     background: var(--subjectColor);
     border: 0;
     height: 50px;
-    width: 70%;
+    width: 100%;
     color: white;
     font-size:16px;
     font-weight: bold;
@@ -93,7 +93,7 @@
 
 
 .submit-btn:hover{
-    opacity: 0.6;
+    background-color: #66CCFF;
     cursor: pointer;
 }
 

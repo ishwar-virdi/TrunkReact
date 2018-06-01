@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
-// import { Link,Redirect} from 'react-router-dom';
-import {Bar} from 'react-chartjs-2';
+/**
+ *
+ * Deprecated
+ *
+ * import React, { Component } from 'react';
+ // import { Link,Redirect} from 'react-router-dom';
+ import {Bar} from 'react-chartjs-2';
 
 
-class Chart extends Component{
+ class Chart extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -49,4 +53,6 @@ class Chart extends Component{
     }
 };
 
-export default Chart;
+ export default Chart;
+ */
+

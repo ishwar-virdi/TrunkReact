@@ -34,8 +34,6 @@ class result extends Component{
         });
     }
 
-    componentDidMount() {
-    }
 
 
     setSearchResult(result) {
@@ -71,7 +69,7 @@ class result extends Component{
             <div className="container">
                 <Header clickedClass="Result"/>
                 <div className="body">
-                    <Title title="RECONCILIATION PROGRESS"/>
+                    <Title title="Reconciliation Results"/>
                     <div className="result-search">
                         <div className="result-search-dataPicker">
                             <DateRangePicker

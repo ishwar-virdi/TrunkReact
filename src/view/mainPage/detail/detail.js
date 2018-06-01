@@ -14,6 +14,7 @@ class detail extends Component{
         this.state = {
             id : props.match.params.id,
             loading:"false",
+            title:"Reconcile Results",
         };
     }
     componentDidMount() {
@@ -25,14 +26,24 @@ class detail extends Component{
         });
     };
 
+    setTitle =(title) =>{
+        this.setState({
+            title:title,
+        });
+    };
     render(){
         return (
             <div className="container">
                 <Header clickedClass="Result"/>
                 <div className="body">
-                    <Title title="SHOW RESULTS"/>
+                    <Title title={this.state.title}/>
                     <div className="detail-view">
-                        <TransactionTable id={this.state.id} visibleLoading = {(visible)=>this.visibleLoading(visible)}/>
+                        <TransactionTable
+                            setTitle={(title)=>{
+                                this.setTitle(title)
+                            }}
+                            id={this.state.id}
+                            visibleLoading = {(visible)=>this.visibleLoading(visible)}/>
                     </div>
                 </div>
                 <Loading visible={this.state.loading}/>

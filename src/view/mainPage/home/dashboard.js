@@ -7,22 +7,23 @@ import {Bar} from 'react-chartjs-2';
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
 import Loading from "../../components/content/loading";
+import {Redirect} from "react-router-dom";
+import moment from "moment/moment";
 
 class Dashboard extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            visible:"false",
-            page:"reconcile",
+            loading:"false",
+            page:"monthly",
             chartMinIndex:96,
             chartIndex:100,
             chartMaxIndex:104,
-            chartData:{},
             chartReconcile:{},
             chartTotalAmount:{},
             chartDailyTransaction:{},
-            option:{
+            reconcileOption:{
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: { display: true},
@@ -32,13 +33,100 @@ class Dashboard extends Component{
                         gridLines: {
                             offsetGridLines: false
                         },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
                     }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Quantity'
                         }
                     }],
                 },
+                tooltips: {
+                    callbacks: {
+                        label: function (t, d) {
+                            let xLabel = d.datasets[t.datasetIndex].label;
+                            let yLabel =  ' Quantity： ' + t.yLabel;
+                            return xLabel + yLabel;
+                        }
+                    }
+                }
+            },
+            monthlyOption:{
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: { display: true},
+                scales: {
+                    xAxes: [{
+                        labelMaxWidth: 200,
+                        gridLines: {
+                            offsetGridLines: false
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Total Amount'
+                        }
+                    }],
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (t, d) {
+                            let xLabel = d.datasets[t.datasetIndex].label;
+                            let yLabel = t.yLabel >= 1000 ? '$' + t.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '$' + t.yLabel;
+                            return xLabel + ': ' + yLabel;
+                        }
+                    }
+                }
+            },
+            dailyOption:{
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: { display: true},
+                scales: {
+                    xAxes: [{
+                        labelMaxWidth: 200,
+                        gridLines: {
+                            offsetGridLines: false
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Total Amount'
+                        }
+                    }],
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (t, d) {
+                            let xLabel = d.datasets[t.datasetIndex].label;
+                            let yLabel = t.yLabel >= 1000 ? '$' + t.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '$' + t.yLabel;
+                            return xLabel + ': ' + yLabel;
+                        }
+                    }
+                }
             },
             monthTota1Index:0,
             dailyTransactionIndex:0,
@@ -53,12 +141,20 @@ class Dashboard extends Component{
         this.requestReconcileChart();
         this.requestMonthTotalChart(0);
         this.requestDailyTransaction(0);
-        window.addEventListener('wheel', this.handleScroll, { passive: true })
+        window.addEventListener('wheel', this.handleScroll, { passive: true });
+        this.props.setTitle("Reconcile quantity chart");
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('wheel',this.handleScroll);
+        this.setState({
+            loading:"false"
+        });
     }
 
     requestReconcileChart(){
         this.setState({
-            visible:"true"
+            loading:"true"
         });
         axios({
             withCredentials: true,
@@ -71,36 +167,46 @@ class Dashboard extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        visible:"false"
+                        loading:"false"
                     });
+                    if(response.data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     let data = response.data;
+                    //console.log(data.labels);
                     let reconciled = data.reconciled;
                     let notReconciled = data.notReconciled;
 
                     let chartReconcile ={
-                        labels: data.labels,
+                        labels: data.labels.reverse(),
                         datasets: [
                             {
                                 label: reconciled.label,
-                                data: reconciled.data,
+                                data: reconciled.data.reverse(),
                                 backgroundColor: "#E57373",
                             },
                             {
                                 label: notReconciled.label,
-                                data: notReconciled.data,
+                                data: notReconciled.data.reverse(),
                                 backgroundColor:  "#7986CB",
                             }
                         ]
                     };
                     this.setState({
-                        chartData:chartReconcile,
                         chartReconcile:chartReconcile,
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        loading:"false"
                     });
                 });
     }
     requestMonthTotalChart(page){
         this.setState({
-            visible:"true"
+            loading:"true"
         });
         axios({
             withCredentials: true,
@@ -113,16 +219,23 @@ class Dashboard extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        visible:"false"
+                        loading:"false"
                     });
+                    if(response.data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     let labels = [];
                     let settles = [];
                     let banks = [];
                     let data = response.data;
                     for(let i = 0, length = data.length; i < length;i++){
-                        labels.push(data[i].date);
-                        settles.push(data[i].settleTotal);
-                        banks.push(data[i].bankTotal);
+                        let date = moment(data[i].date,"MM/DD/YYYY").format('MMM. YY');
+                        labels[length - i - 1] = date;
+                        labels[length - i - 1] = date;
+                        settles[length - i - 1] = data[i].settleTotal;
+                        banks[length - i - 1] = data[i].bankTotal;
                     }
                     let chart ={
                         labels: labels,
@@ -142,17 +255,17 @@ class Dashboard extends Component{
                     this.setState({
                         chartTotalAmount:chart,
                     });
-                    if(this.state.page === "total"){
-                        this.setState({
-                            chartData:chart,
-                        });
+                },
+                (error) => {
+                    this.setState({
+                        loading:"false"
+                    });
                     }
-                });
+                );
     }
     requestDailyTransaction(pageIndex){
-
         this.setState({
-            visible:"true"
+            loading:"true"
         });
 
         axios({
@@ -166,8 +279,13 @@ class Dashboard extends Component{
             .then(
                 (response) => {
                     this.setState({
-                        visible:"false"
+                        loading:"false"
                     });
+                    if(response.data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     let labels = [];
                     let settleVisa = [];
                     let settleDebit = [];
@@ -177,13 +295,14 @@ class Dashboard extends Component{
                     let bankAmex = [];
                     let data = response.data;
                     for(let i = 0, length = data.length; i < length;i++){
-                        labels.push(data[i].date);
-                        settleVisa.push(data[i].settleVisa);
-                        settleDebit.push(data[i].settleDebit);
-                        settleAmex.push(data[i].settleAmex);
-                        bankVisa.push(data[i].bankVisa);
-                        bankDebit.push(data[i].bankDebit);
-                        bankAmex.push(data[i].bankAmex);
+                        let date = moment(data[i].date,"MM/DD/YYYY").format('DD MMM. YY');
+                        labels[length - i - 1 ] = date;
+                        settleVisa[length - i - 1] = data[i].settleVisa;
+                        settleDebit[length - i - 1] = data[i].settleDebit;
+                        settleAmex[length - i - 1] = data[i].settleAmex;
+                        bankVisa[length - i - 1] = data[i].bankVisa;
+                        bankDebit[length - i - 1] = data[i].bankDebit;
+                        bankAmex[length - i - 1] = data[i].bankAmex;
                     }
                     let chart ={
                         labels: labels,
@@ -222,11 +341,12 @@ class Dashboard extends Component{
                     this.setState({
                         chartDailyTransaction:chart,
                     });
-                    if(this.state.page === "daily"){
-                        this.setState({
-                            chartData:chart,
-                        });
-                    }
+                },
+                (error) => {
+                    this.setState({
+                        loading:"false"
+                    });
+                    console.log(error);
                 });
     }
     handleScroll(event) {
@@ -247,8 +367,6 @@ class Dashboard extends Component{
             nextIndex = this.state.chartIndex + 1;
         }else if(action === "down"){
             nextIndex = this.state.chartIndex - 1;
-        }else{
-            throw new Error("action is wrong");
         }
 
         if(nextIndex < this.state.chartMinIndex || nextIndex > this.state.chartMaxIndex){
@@ -270,26 +388,51 @@ class Dashboard extends Component{
                 page:"daily",
                 chartData:this.state.chartDailyTransaction,
             });
+            this.props.setTitle("Daily total amounts chart");
         }else if(index === 100){
+            this.setState({
+                page:"monthly",
+                chartData:this.state.chartTotalAmount,
+            });
+            this.props.setTitle("Monthly total amounts chart");
+        }else if(index === this.state.chartMaxIndex){
             this.setState({
                 page:"reconcile",
                 chartData:this.state.chartReconcile,
-
             });
-        }else if(index === this.state.chartMaxIndex){
-            this.setState({
-                page:"total",
-                chartData:this.state.chartTotalAmount,
-
-            });
+            this.props.setTitle("Reconcile quantity chart");
         }else{
         }
     }
 
     handleLeftClick(){
+        let pageIndex = this.state.pageIndex + 1;
+        switch (this.state.page){
+            case "monthly":{
+                pageIndex = this.state.monthTota1Index + 1;
+                this.setState({
+                    monthTota1Index: pageIndex
+                });
+                this.requestMonthTotalChart(pageIndex);
+                break;
+            }
+            case "daily":{
+                pageIndex = this.state.dailyTransactionIndex + 1;
+                this.setState({
+                    dailyTransactionIndex: pageIndex
+                });
+                this.requestDailyTransaction(pageIndex);
+                break;
+            }default:{
+
+            }
+        }
+    }
+
+    handleRightClick(){
         let pageIndex;
         switch (this.state.page){
-            case "total":{
+            case "monthly":{
                 pageIndex = this.state.monthTota1Index - 1;
                 if(pageIndex < 0){
                     return;
@@ -311,34 +454,16 @@ class Dashboard extends Component{
                 this.requestDailyTransaction(pageIndex);
                 break;
             }
-        }
-    }
+            default:{
 
-    handleRightClick(){
-        let pageIndex = this.state.pageIndex + 1;
-        switch (this.state.page){
-            case "total":{
-                pageIndex = this.state.monthTota1Index + 1;
-                this.setState({
-                    monthTota1Index: pageIndex
-                });
-                this.requestMonthTotalChart(pageIndex);
-                break;
-            }
-            case "daily":{
-                pageIndex = this.state.dailyTransactionIndex + 1;
-                this.setState({
-                    dailyTransactionIndex: pageIndex
-                });
-                this.requestDailyTransaction(pageIndex);
-                break;
             }
         }
+
     }
     pageToolkit = () =>{
         let page  = this.state.page;
         if(page === "daily"
-            || page === "total"){
+            || page === "monthly"){
             //console.log("a");
             return (
             <div className="date-Button">
@@ -358,19 +483,35 @@ class Dashboard extends Component{
     };
 
     render(){
-        const {chartData} = this.state;
-
+        const isLogin = localStorage.getItem('login');
         let toolKit = this.pageToolkit();
-        return (
 
+        let lists;
+
+        switch (this.state.page){
+            case "monthly":
+                lists = <Bar data={this.state.chartTotalAmount} options={this.state.monthlyOption}/>;
+                break;
+            case "daily":
+                lists = <Bar data={this.state.chartDailyTransaction} options={this.state.dailyOption}/>;
+                break;
+            case "reconcile":
+                lists = <Bar data={this.state.chartReconcile} options={this.state.reconcileOption}/>;
+                break;
+            default:
+                break;
+        }
+
+        return (
             <div className="dashboard">
                 {
-                    chartData !== null ||"" ? (<Bar data={this.state.chartData} options={this.state.option}/>)
+                    isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }
+                {lists}
                 <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
                 {toolKit}
-                <Loading visible={this.state.visible}/>
+                <Loading visible={this.state.loading}/>
             </div>
         )
     }

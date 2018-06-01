@@ -46,7 +46,7 @@ legend { color: #000; } /* for ie6 */
 fieldset, img { border: 0; } /* img on border in link */
 button, input, select, textarea { font-size: 100%; }
 table { border-collapse: collapse; border-spacing: 0; }
-
+input{cursor: pointer}
 
 
 :root{
@@ -165,4 +165,8 @@ body{
     webkit-transition: all 0.8s ease;
     -o-transition: all 0.8s ease;
     transition: all 0.8s ease;
+}
+
+.fontBold{
+    font-weight: bolder;
 }

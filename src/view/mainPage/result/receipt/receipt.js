@@ -10,13 +10,10 @@ class receipt extends Component{
         super(props);
         this.state={
             id:props.match.params.id,
-            title: "RECEIPT NUMBER: " + props.match.params.id,
+            title: "Receipt Detail: " + props.match.params.id,
             backTo:props.match.params.backTo,
         };
 
-    }
-
-    componentDidMount() {
     }
 
     render(){
