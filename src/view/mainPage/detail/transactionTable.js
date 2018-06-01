@@ -83,7 +83,6 @@ class TransactionTable extends React.Component {
     };
 
     markAsReconciled = () => {
-        console.log(this.state.selected);
         this.props.visibleLoading("true");
         axios({
             withCredentials: true,
@@ -100,6 +99,7 @@ class TransactionTable extends React.Component {
             .then(
                 (response) => {
                     this.props.visibleLoading("false");
+                    console.log(response);
                     let data = response.data;
                     // if(data === ""){
                     //     localStorage.clear();
@@ -142,6 +142,7 @@ class TransactionTable extends React.Component {
                 (response) => {
                     this.props.visibleLoading("false");
                     let data = response.data;
+                    console.log(data);
                     // if(data === ""){
                     //     localStorage.clear();
                     //     this.forceUpdate();

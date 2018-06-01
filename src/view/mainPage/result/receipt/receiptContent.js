@@ -109,7 +109,17 @@ class ReceiptContent extends Component{
                         btnText = "Mark as not Reconciled";
                     }else if(data.ReconcileStatus === notReconcile){
                         btnText = "Mark as Reconciled";
+                    }else if(data.ReconcileStatus === "AutoReconciler attempted but failed"){
+                        btnText = "Mark as Reconciled";
+                    }else if(data.ReconcileStatus === "Not Reconciled by AutoReconciler"){
+                        btnText = "Mark as Reconciled";
+                    }else if(data.ReconcileStatus === "AutoReconciled"){
+                        btnText = "Mark as not Reconciled";
+                    }else if(data.ReconcileStatus === "Reconcile Status Incorrectly Set"){
+                        btnText = "Mark as Reconciled";
                     }
+
+
 
                     this.setState({
                         transaction:transaction,
