@@ -4,6 +4,8 @@ import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
 import ReactTable from "react-table";
+import moment from "moment";
+import {Redirect} from "react-router-dom";
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -12,7 +14,8 @@ class TransactionTable extends React.Component {
         this.state = {
             items: [],
             selected: {},
-            selectAll: 0
+            selectAll: 0,
+            notDataFound:"rt-notDateFound rt-notDateFound-hidden",
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
@@ -21,6 +24,9 @@ class TransactionTable extends React.Component {
 
     componentDidMount() {
         this.props.visibleLoading("true");
+        this.setState({
+            notDataFound:"rt-notDateFound rt-notDateFound-hidden"
+        });
         axios({
             withCredentials: true,
             method: 'GET',
@@ -33,7 +39,22 @@ class TransactionTable extends React.Component {
             (response) => {
                 this.props.visibleLoading("false");
                 let data = response.data;
+
+                if(data === ""){
+                    localStorage.clear();
+                    this.forceUpdate();
+                    return;
+                }
+                if(response.data.length === 0){
+                    this.setState({
+                        notDataFound:"rt-notDateFound"
+                    });
+                    return;
+                }
+
                 let details = [];
+                let date = moment(data[0].date,"MMM DD, YYYY HH:mm").format('MMMM YYYY');
+                this.props.setTitle("Reconcile Results: " + date);
                 for(let i = 0; i < data.length;i++){
                     details.push(this.jsonToResult(data[i]));
                 }
@@ -41,7 +62,9 @@ class TransactionTable extends React.Component {
                     items: details,
                     selectAll: 0
                 });
-        });
+        }).then((error)=>{
+            this.props.visibleLoading("false");
+        });;
     };
 
     jsonToResult = (json) =>{
@@ -62,6 +85,13 @@ class TransactionTable extends React.Component {
 
     markAsReconciled = () => {
         this.props.visibleLoading("true");
+        let selectedItemKey = Object.keys(this.state.selected);
+        let selectedItems = [];
+        for(let i = 0, keys = selectedItemKey.length;i<keys;i++){
+            if(this.state.selected[selectedItemKey[i]] === true){
+                selectedItems.push(selectedItemKey[i]);
+            }
+        }
         axios({
             withCredentials: true,
             method: 'POST',
@@ -71,43 +101,50 @@ class TransactionTable extends React.Component {
             },
             data: {
                 markAsReconcile: true,
-                items: Object.keys(this.state.selected)
+                items: selectedItems,
             }
         })
             .then(
                 (response) => {
                     this.props.visibleLoading("false");
-                    if(response.data.result === "success"){
-                        let details = [];
-
-                        for(let i = 0; i < this.state.items.length;i++){
-                            let currentRow = this.state.items[i];
-                            if(typeof this.state.selected[currentRow.receiptNumber] !== 'undefined'){
-                                currentRow.reconciled = "Success";
-                                currentRow.rule = "Manually Reconciled";
-                            }
-                            details.push(currentRow);
-                        };
-
-                        this.setState({
-                            items: details,
-                            selected: {},
-                            selectAll: 0
-                        });
-                    } else {
-
+                    let data = response.data;
+                    if(data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
                     }
-                })
-            .catch(() => {
-                this.props.visibleLoading("false");
-            })
-
+                    if(data.result === "success"){
+                        let items = this.state.items;
+                        for(let i = 0,selectedLength = selectedItems.length;i<selectedLength;i++){
+                            let id = Number(selectedItems[i]);
+                            for(let j = 0, itemLen = items.length;j<itemLen;j++){
+                                if(items[j].receiptNumber === id){
+                                    items[j].reconciled = "Success";
+                                    items[j].rule = "Manually Reconciled";
+                                    break;
+                                }
+                            }
+                        }
+                        this.setState({
+                            items: items
+                        });
+                    }
+                }).then((error)=>{
+            this.props.visibleLoading("false");
+        });
     };
 
     markAsNotReconciled = () => {
         this.props.visibleLoading("true");
+        let selectedItemKey = Object.keys(this.state.selected);
+        let selectedItems = [];
+        for(let i = 0, keys = selectedItemKey.length;i<keys;i++){
+            if(this.state.selected[selectedItemKey[i]] === true){
+                selectedItems.push(selectedItemKey[i]);
+            }
+        }
         axios({
-            withCredentials: false,
+            withCredentials: true,
             method: 'POST',
             url: apiurl + "/api/markReconcile",
             headers: {
@@ -115,40 +152,57 @@ class TransactionTable extends React.Component {
             },
             data: {
                 markAsReconcile: false,
-                items: Object.keys(this.state.selected)
+                items: selectedItems,
             }
         })
             .then(
                 (response) => {
                     this.props.visibleLoading("false");
-                    if(response.data.result === "success"){
-                        let details = [];
-                        for(let i = 0; i < this.state.items.length;i++){
-                            let currentRow = this.state.items[i];
-                            if(typeof this.state.selected[currentRow.receiptNumber] !== 'undefined'){
-                                currentRow.reconciled = "Failed";
-                                currentRow.rule = "Not Reconciled by AutoReconciler";
+                    let data = response.data;
+                    if(data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
+                    if(data.result === "success"){
+                        let items = this.state.items;
+                        for(let i = 0,selectedLength = selectedItems.length;i<selectedLength;i++){
+                            let id = Number(selectedItems[i]);
+                            for(let j = 0, itemLen = items.length;j<itemLen;j++){
+                                if(items[j].receiptNumber === id){
+                                    items[j].reconciled = "Failed";
+                                    items[j].rule = "Not reconciled manually or auto";
+                                    break;
+                                }
                             }
-                            details.push(currentRow);
-                        };
+                        }
                         this.setState({
-                            items: details,
-                            selected: {},
-                            selectAll: 0
+                            items: items,
                         });
-                    } else {
-
                     }
                 })
-            .catch(() => {
-                this.props.visibleLoading("false");
-            })
+            .then((error)=>{
+            this.props.visibleLoading("false");
+        });
+
+/*        var items = this.state.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].isChecked) {
+                items[i].reconciled = false;
+                items[i].rule = "Manually Marked"
+            }
+        }
+
+        this.setState({
+            items: items
+        });*/
     };
 
     toggleRow(receiptNumber) {
+
         const newSelected = Object.assign({}, this.state.selected);
         newSelected[receiptNumber] = !this.state.selected[receiptNumber];
-
         this.setState({
             selected: newSelected,
             selectAll: 2
@@ -173,16 +227,38 @@ class TransactionTable extends React.Component {
     render () {
         // Table structure
         const { items } = this.state;
+        const isLogin = localStorage.getItem('login');
 
         return (
             // Defining table structure
             <div>
+                {
+                    isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
+                        : null
+                }
+                <div className="transaction-btn-group">
+                    <p className="transition" onClick={this.markAsReconciled}>Mark as Reconciled</p>
+                    <p className="transition" onClick={this.markAsNotReconciled}>Mark as Failed</p>
+                </div>
                 <ReactTable
                     data={items}
                     columns={[
                         {
                             id: "checkbox",
                             accessor: "",
+                            Header: x => {
+                                return (
+                                    <input type="checkbox" className="checkbox"
+                                           checked={this.state.selectAll === 1}
+                                           ref={input => {
+                                               if (input) {
+                                                   input.indeterminate = this.state.selectAll === 2;
+                                               }
+                                           }}
+                                           onChange={() => this.toggleSelectAll()}
+                                    />
+                                );
+                            },
                             Cell: ({ original }) => {
                                 return (
                                     <input type="checkbox" className="checkbox"
@@ -191,19 +267,7 @@ class TransactionTable extends React.Component {
                                     />
                                 );
                             },
-                            Header: x => {
-                                return (
-                                    <input type="checkbox" className="checkbox"
-                                        checked={this.state.selectAll === 1}
-                                        ref={input => {
-                                            if (input) {
-                                                input.indeterminate = this.state.selectAll === 2;
-                                            }
-                                        }}
-                                        onChange={() => this.toggleSelectAll()}
-                                    />
-                                );
-                            },
+
                             sortable:false,
                             width: 45
                         },
@@ -260,10 +324,12 @@ class TransactionTable extends React.Component {
                             }
                         };
                     }}
+                    noDataText = ''
                 />
                 <br />
-                <button type="button" onClick={this.markAsReconciled}>Mark as Reconciled</button>
-                <button type="button" onClick={this.markAsNotReconciled}>Mark as Failed</button>
+                <div className={this.state.notDataFound}>
+                    <p>No data Found</p>
+                </div>
             </div>
 
         );

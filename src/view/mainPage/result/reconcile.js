@@ -6,13 +6,12 @@ import ReconcileItem from './reconcileItem';
 import moment from "moment";
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
+import {Redirect} from "react-router-dom";
 
-let parseToDate = (string) =>{
-    return string.slice(4,6) + "/" + string.slice(6,8)  + "/" + string.slice(0,4);
-};
+
 let history;
 let historyBackUp = [
-    {month:0,letter:"Recently"},
+    //{month:0,letter:"Recently"},
     {month:1,letter:"One month ago"},
     {month:2,letter:"Two month ago"},
     {month:4,letter:"Four month ago"},
@@ -30,9 +29,9 @@ class Reconcile extends React.Component {
         this.state = {
             title: {
                 isTitle: true,
-                time: "",
-                dateRange: "DateRange",
-                status: "Status"
+                time: "Last Modified ",
+                dateRange: "Month",
+                status: "Reconciled(%)"
             },
             pageIndex:0,
             items: [],
@@ -44,6 +43,11 @@ class Reconcile extends React.Component {
     componentDidMount() {
         this.requestResult(0);
     }
+
+    componentWillUnmount() {
+        this.props.visibleLoading("false");
+    }
+
     componentDidUpdate(previousProps){
         if(
             previousProps.searchResult !== this.props.searchResult
@@ -55,6 +59,7 @@ class Reconcile extends React.Component {
             sortItems = list;
         }
     }
+
     requestResult(pageIndex){
         this.props.visibleLoading("true");
         axios({
@@ -66,13 +71,19 @@ class Reconcile extends React.Component {
                 (response) => {
                     this.props.visibleLoading("false");
                     let data = response.data;
+                    let results = [];
+                    if(data === ""){
+                        localStorage.clear();
+                        this.forceUpdate();
+                        return;
+                    }
                     for(let i = 0; i < data.length;i++){
                         let result = this.jsonToResult(data[i]);
                         this.setState(prevState => ({
                             items: [...prevState.items, result]
                         }))
                     }
-                    if(data.length < 13){
+                    if(data.length < 20){
                         this.setState({
                             isEnd:true
                         })
@@ -86,15 +97,17 @@ class Reconcile extends React.Component {
     }
 
     jsonToResult =(json) =>{
+        if(json['reconcileDate'] === ""){
+            return;
+        }
         let result = {};
-        let reconcileDate;
-        let dateRange;
-        reconcileDate = json['reconcileDate'].toString();
-        //dateRange
-        dateRange = parseToDate(json['startDate'].toString()) + " - " + parseToDate(json['endDate'].toString());
+        let date;
+        let month;
+        date = moment(json['reconcileDate'].toString(),"MM/DD/YYYY HH:mm").format('DD MMM. YY HH:mm');
+        month = moment( json['startDate'].toString(),"YYYY/MM/DD ").format('MMM. YY');
         result.id = json['reconcileResultId'].toString();
-        result.time = reconcileDate;
-        result.dateRange = dateRange;
+        result.time = date;
+        result.dateRange = month;
         result.status = json['percentage'];
         return result;
     };
@@ -170,8 +183,9 @@ class Reconcile extends React.Component {
         let timeFromNow = [];
         let totalTime;
         for (let i=0; i<items.length; i++) {
-            timeFromNow = moment(items[i].time,"MM/DD/YYYY HH:mm").fromNow().split(" ");
+            timeFromNow = moment(items[i].time,"DD MMM. YY HH:mm").fromNow().split(" ");
             totalTime = this.calculateTime(timeFromNow);
+
             if(this.isTimeTitle(totalTime)){
                 this.pushTimeTitle(lists,"time"+i);
             }
@@ -181,9 +195,7 @@ class Reconcile extends React.Component {
     };
     returnListByDateRange = () =>{
         let getTime = (item) =>{
-            let tempTime = item.dateRange.split("-");
-            let endTime = tempTime[1];
-            let timeFromNow = moment(endTime,"MM/DD/YYYY").fromNow().split(" ");
+            let timeFromNow = moment(item.dateRange,"MMM. YY").fromNow().split(" ");
             return timeFromNow
         };
         let lists = [];
@@ -217,19 +229,18 @@ class Reconcile extends React.Component {
     };
     returnSearchList = ()=>{
         let lists = [];
-        if(this.props.searchResult.result === "fail"){
+        if(this.props.searchResult.length <= 0){
         }else{
             for(let i = 0; i < sortItems.length;i++){
                 let value = sortItems[i];
                 lists.push(<ReconcileItem key={i} value={value}/>);
             }
         }
-
         return lists;
     };
     render() {
         const sort = this.props.sort;
-
+        const isLogin = localStorage.getItem('login');
         let lists = [];
 
         switch (sort){
@@ -248,9 +259,12 @@ class Reconcile extends React.Component {
             default:
                 break;
         }
-
         return (
             <ul className="reconcile-content" ref={ (divElement) => this.divElement = divElement}>
+                {
+                    isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
+                        : null
+                }
                 <ReconcileItem value={this.state.title}
                                setSort={sort => this.props.setSort(sort)}
                                setNotFoundVisible = {(visible)=>this.props.setNotFoundVisible(visible)}

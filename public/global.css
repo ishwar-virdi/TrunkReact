@@ -1,7 +1,8 @@
 html{
     font-size:10px;
+    height:100%;
 }
-
+select::-ms-expand { display: none; }
 /** reset margin and padding **/
 body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements */
 dl, dt, dd, ul, ol, li, /* list elements */
@@ -45,7 +46,7 @@ legend { color: #000; } /* for ie6 */
 fieldset, img { border: 0; } /* img on border in link */
 button, input, select, textarea { font-size: 100%; }
 table { border-collapse: collapse; border-spacing: 0; }
-
+input{cursor: pointer}
 
 
 :root{
@@ -77,9 +78,11 @@ table { border-collapse: collapse; border-spacing: 0; }
     color: white;
 }
 
+
+
 body{
     position: relative;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
     background-color: #f7f7f7;
 }
@@ -149,12 +152,7 @@ body{
     background-color: #f7f7f7;
 }
 
-.gl-title{
-    color: #fff;
-    font-weight: bold;
-    background-color: var(--subjectColor);
-    opacity: 0.8;
-}
+
 
 .icon {
     width: 1em; height: 1em;
@@ -167,4 +165,8 @@ body{
     webkit-transition: all 0.8s ease;
     -o-transition: all 0.8s ease;
     transition: all 0.8s ease;
+}
+
+.fontBold{
+    font-weight: bolder;
 }

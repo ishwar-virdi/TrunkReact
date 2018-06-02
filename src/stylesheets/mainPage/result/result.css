@@ -6,7 +6,7 @@
 .result-search-dataPicker{
     margin-top: 15px;
     height: 55px;
-    width: 350px;
+    width: 320px;
     float: left;
 }
 
@@ -18,8 +18,8 @@
 
 .result-view{
     position: relative;
-    height: auto;
-    min-height: calc(100vh - 230px);
+    height: calc(100% - 150px);
+    min-height: 650px;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;

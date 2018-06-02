@@ -5,16 +5,23 @@
     padding-left: 2%;
     font-size: 16px;
     text-align: left;
+    border-bottom: 1px solid #e3e6eb;
 }
 
+.gl-title{
+    color: #fff;
+    font-weight: bold;
+    background-color: var(--subjectColor);
+    cursor: pointer;
+}
 
 .ren-Item-hover:hover{
-    background-color: lightgrey;
+    background-color: #fff;
     webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    cursor: pointer
 }
+
 
 .reconcile-date{
     height: 100%;
@@ -27,6 +34,7 @@
     webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
+    cursor: pointer
 }
 
 /* Status */

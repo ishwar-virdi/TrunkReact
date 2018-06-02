@@ -9,40 +9,15 @@ class Header extends React.Component {
         this.state={
             clicked:props.clickedClass,
             redirect:null,
-            items:["Home","Result","Upload"],
+            items:["Dashboard","Result","Upload"],
             logoutUrl: apiurl + "/api/v1/userLogout",
             url:{
-                "Home":"home",
+                "Dashboard":"home",
                 "Result":"reconciledresults",
                 "Upload":"upload",
             },
         };
         this.handleLogOut = this.handleLogOut.bind(this);
-    }
-
-    componentDidMount() {
-        axios({
-            withCredentials: true,
-            method: 'GET',
-            url: apiurl + "/api/v1/userLogin",
-            headers: {
-                'Content-Type' : 'application/json; charset=utf-8'
-            }
-        })
-            .then(
-                (response) => {
-                    let data = response.data.result;
-                    if(data === true){
-                        localStorage.setItem('login', "true");
-                    }else{
-                        localStorage.clear();
-
-                    }
-                },
-                (error) => {
-                    console.log(error);
-                }
-            );
     }
 
     handleLogOut(e){
@@ -58,13 +33,8 @@ class Header extends React.Component {
         })
             .then(
                 (response) => {
-                    console.log(response);
-                    let data = response.data.result;
-                    if(data === true){
-                        localStorage.clear();
-                        this.setState({
-                        });
-                    }
+                    localStorage.clear();
+                    this.forceUpdate();
                 },
                 (error) => {
                     console.log(error);
@@ -101,7 +71,6 @@ class Header extends React.Component {
         return (
             <header>
                 {
-                    // console.log(redirect);
                     isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }

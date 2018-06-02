@@ -140,7 +140,7 @@ class ReconcileItem extends React.Component {
                     <div className={this.state.progressClass} style={this.state.progressStyle}>
 
                     </div>
-                    <p>{value.status}</p>
+                    <p>{value.status}%</p>
                 </div>
             </div>
         );

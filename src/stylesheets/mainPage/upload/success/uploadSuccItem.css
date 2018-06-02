@@ -1,0 +1,25 @@
+.uploadSucc-view-context{
+    position: relative;
+    height: calc(100% - 80px);
+    width: calc(100% - 200px);
+    min-width: 200px;
+    margin: 30px auto;
+}
+
+
+.uploadSucc-title{
+    font-weight: bolder;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.uploadSucc-table-short{
+    width: calc(17% - 12px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.uploadSucc-table-long{
+    width: calc(49% - 12px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

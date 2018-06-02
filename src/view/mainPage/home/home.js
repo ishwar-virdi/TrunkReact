@@ -7,15 +7,27 @@ import "../../../stylesheets/mainPage/home/home.css";
 
 class home extends Component{
 
+    constructor(props){
+        super(props);
+        this.state={
+            title:"CHART",
+        }
+    }
+
+    setTitle = (title)=>{
+        this.setState({
+            title:title,
+        });
+    };
     render(){
         return (
             <div className="container">
-                <Header clickedClass="Home"/>
+                <Header clickedClass="Dashboard"/>
                 <div className="body">
-                    <Title title="REPORTS"/>
-                </div>
-                <div className="home-view">
-                    <Dashboard/>
+                    <Title title={this.state.title}/>
+                    <div className="home-view">
+                        <Dashboard setTitle={(title)=> this.setTitle(title)}/>
+                    </div>
                 </div>
                 <Footer/>
             </div>

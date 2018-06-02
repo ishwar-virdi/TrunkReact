@@ -1,8 +1,7 @@
 .recipe-view{
     position: relative;
+
     height: auto;
     min-height: calc(100vh - 130px);
-    overflow-y: auto;
-    overflow-x: hidden;
     width: 100%;
 }

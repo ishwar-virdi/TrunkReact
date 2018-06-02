@@ -6,6 +6,27 @@
     margin-right: auto;
 }
 
+.transaction-btn-group{
+    width: 250px;
+    height: 28px;
+    padding:10px 0 10px 0;
+}
+
+.transaction-btn-group p{
+    float: left;
+    margin-right: 10px;
+    height: 100%;
+    line-height: 28px;
+    width: calc(50% - 10px);
+    color: white;
+    background-color: var(--subjectColor);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.transaction-btn-group p:hover{
+    background-color: #66CCFF;
+}
 .transaction-table tr:hover {
     background: #d3d3d3;
 }
@@ -202,12 +223,24 @@ input:hover {
 .ReactTable .rt-tbody .rt-tr-group{
     border-bottom:solid 1px rgba(0,0,0,0.05);
 }
+
+.ReactTable .rt-tbody .rt-tr-group:hover{
+    cursor: pointer;
+    background-color: var(--subjectColor);
+    color: white;
+
+}
 .ReactTable .rt-tbody .rt-tr-group:last-child{
     border-bottom:0
 }
 .ReactTable .rt-tbody .rt-td{
+
     border-right:1px solid rgba(0,0,0,0.02);
 }
+
+/*.ReactTable .rt-tbody .rt-td input{*/
+    /*margin-top: 2px;    */
+/*}*/
 .ReactTable .rt-tbody .rt-td:last-child{
     border-right:0
 }
@@ -417,7 +450,7 @@ input:hover {
     top:50%;
     -webkit-transform:translate(-50%,-50%);
     transform:translate(-50%,-50%);
-    background:rgba(255,255,255,0.8);
+    background:transparent;
     transition:all .3s ease;
     z-index:1;
     pointer-events:none;
@@ -466,4 +499,14 @@ input:hover {
     -moz-user-select:none;
     -ms-user-select:none;
     user-select:none
+}
+
+.rt-notDateFound{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    color:var(--fontColorGrey);
+}
+.rt-notDateFound-hidden{
+    display: none;
 }
