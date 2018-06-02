@@ -5,6 +5,9 @@ import "../../../stylesheets/mainPage/upload/upload.css";
 import Footer from "../../components/content/footer";
 import Loading from "../../components/content/loading";
 import DropZone from '../../mainPage/upload/dropZone'
+import axios from 'axios';
+import {apiurl} from '../../../config/constants';
+
 class upload extends Component{
     constructor(props) {
         super(props);
