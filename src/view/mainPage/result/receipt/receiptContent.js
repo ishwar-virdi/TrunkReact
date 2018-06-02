@@ -204,6 +204,7 @@ class ReceiptContent extends Component{
                         : null
                 }
                 <h1>{this.state.result}</h1>
+                <Loading visible={this.state.loading}/>
                 <div className="receipt-content-table">
                     <div className="receipt-table">
                         <div>

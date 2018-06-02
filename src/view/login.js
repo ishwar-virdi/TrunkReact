@@ -43,8 +43,11 @@ class Login extends Component{
                     this.setState({
                         token: response.data.token,
                     });
-                },
+                }).catch(
                 (error) => {
+                    this.setState({
+                        isLoaded: false,
+                    });
                 }
             )
     }

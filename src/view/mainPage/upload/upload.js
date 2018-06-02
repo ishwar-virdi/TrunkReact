@@ -10,6 +10,42 @@ class upload extends Component{
         super(props);
     }
 
+    handleDocTypeChange(e) {
+        this.setState({
+            docType: e.target.value,
+        })
+    };
+
+    uploadDocs() {
+        this.setState({
+            loading : "true",
+            status : ""
+        });
+
+        let data = new FormData();
+        this.state.files.forEach(file => {
+            data.append("file",file);
+        });
+        axios
+            .post(
+                apiurl + "/" + this.state.docType.toString() + "/upload",
+                data
+            )
+            .then(
+                (response) => {
+                    this.setState({
+                        loading: "false",
+                        status : response.data.reason
+                    });
+                })
+            .catch(() => {
+                this.setState({
+                    loading: "false",
+                    status : "Error in calling Upload API"
+                });
+            })
+    };
+
     render(){
         return (
             <div className="container">
