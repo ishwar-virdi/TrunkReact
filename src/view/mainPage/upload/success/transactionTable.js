@@ -46,7 +46,7 @@ class UploadSuccTable extends Component{
                     let data = response.data;
                     let transactions = [];
                     let number = 0;
-                    if(data.result === "fail" || data.transactions[0] != null){
+                    if(data.result === "fail"){
                         this.setState({
                             noDataLabel:"No data be found",
                             successLabel:"You have not upload any documents",
