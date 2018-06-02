@@ -46,10 +46,18 @@ class UploadSuccTable extends Component{
                     let data = response.data;
                     let transactions = [];
                     let number = 0;
-                    if(data.result === "fail"){
+                    if(data.result === "fail" || data.transactions[0] != null){
                         this.setState({
                             noDataLabel:"No data be found",
                             successLabel:"You have not upload any documents",
+                            successBar:"uploadSucc-processBar uploadBar-fail",
+                        });
+                        return;
+                    }
+                    if(data.transactions[0] == null){
+                        this.setState({
+                            noDataLabel:"No data to show",
+                            successLabel:"No New Transactions have been added. Duplicate File used.",
                             successBar:"uploadSucc-processBar uploadBar-fail",
                         });
                         return;
