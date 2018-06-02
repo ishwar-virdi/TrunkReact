@@ -261,7 +261,13 @@ class Dashboard extends Component{
                         loading:"false"
                     });
                     }
-                );
+                )
+            .catch(() => {
+                this.setState({
+                    loading:"false"
+                });
+            })
+        ;
     }
     requestDailyTransaction(pageIndex){
         this.setState({
@@ -347,7 +353,13 @@ class Dashboard extends Component{
                         loading:"false"
                     });
                     console.log(error);
+                })
+            .catch(() => {
+                this.setState({
+                    loading:"false"
                 });
+            })
+        ;
     }
     handleScroll(event) {
         if(this.isScrollUp(event)){

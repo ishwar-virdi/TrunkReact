@@ -104,7 +104,7 @@ class Reconcile extends React.Component {
         let date;
         let month;
         date = moment(json['reconcileDate'].toString(),"MM/DD/YYYY HH:mm").format('DD MMM. YY HH:mm');
-        month = moment( json['startDate'].toString(),"YYYY/MM/DD ").format('MMM. YY');
+        month = json['startDate'].toString();
         result.id = json['reconcileResultId'].toString();
         result.time = date;
         result.dateRange = month;
