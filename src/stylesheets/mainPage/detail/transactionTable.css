@@ -56,7 +56,22 @@ input:hover {
     -moz-border-radius: 0 0 8px 0;
 }
 
-/*React Transaction table CSS RULES */
+
+/*CSS Rules for bootstrap */
+
+.transaction-table-ButtonToolbar{
+
+    padding: 10px;
+}
+
+.transaction-table-ButtonToolbarButton{
+
+    margin-right: 15px;
+}
+
+
+
+    /*React Transaction table CSS RULES */
 
 .ReactTable{
     position:relative;
@@ -138,6 +153,9 @@ input:hover {
     border-right:1px solid rgba(0,0,0,0.05);
     transition:box-shadow .3s cubic-bezier(.175,.885,.32,1.275);
     box-shadow:inset 0 0 0 0 transparent;
+    /*increase font size */
+    font-size: 120%;
+    font-weight: bold;
 }
 .ReactTable .rt-thead .rt-th.-sort-asc,.ReactTable .rt-thead .rt-td.-sort-asc{
     box-shadow:inset 0 3px 0 0 rgba(0,0,0,0.6)
@@ -228,7 +246,10 @@ input:hover {
     flex-direction:column;
     -webkit-box-align:stretch;
     -ms-flex-align:stretch;
-    align-items:stretch
+    align-items:stretch;
+    /* changing to pointer */
+    cursor: pointer;
+
 }
 .ReactTable .rt-tr{
     -webkit-box-flex:1;
@@ -236,7 +257,7 @@ input:hover {
     flex:1 0 auto;
     display:-webkit-inline-box;
     display:-ms-inline-flexbox;
-    display:inline-flex
+    display:inline-flex;
 }
 .ReactTable .rt-th,.ReactTable .rt-td{
     -webkit-box-flex:1;
