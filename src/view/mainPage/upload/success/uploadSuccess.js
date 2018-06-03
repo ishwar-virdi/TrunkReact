@@ -21,7 +21,7 @@ class uploadSuccess extends Component{
 
     render(){
         return (
-            <div className="container">
+            <div className="updatedContainer">
                 <Header clickedClass="Upload"/>
                 <Loading visible={this.state.loading}/>
                 <div className="body">
