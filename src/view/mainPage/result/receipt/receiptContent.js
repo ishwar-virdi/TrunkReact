@@ -6,8 +6,7 @@ import React from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
-
-//importing bootstrap components
+import {Alert, Button, ButtonToolbar} from "react-bootstrap";
 
 
 class ReceiptContent extends Component{
@@ -167,32 +166,36 @@ class ReceiptContent extends Component{
     }
 
     render(){
+        if (this.state.result==="Error in connect to Receipt API**"){
+            return(
+
+            <Alert bsStyle="warning">
+                <h1>{this.state.result}</h1>
+                <strong>Problem with connecting Database</strong> Please press the 'Try again' button...
+                <Button className="" bsStyle="danger" bsSize="large" > Try again</Button>
+            </Alert>
+
+            )
+        }else{
         return (
             <div className="receipt-content">
-
-                <Alert bsStyle="warning">
-                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too
-                    good.
-                </Alert>;
-
-                <h1>{this.state.result}</h1>
-
                 <Loading visible={this.state.loading}/>
-                <div className="receipt-content-table">
+                {/*<h1>{this.state.result}</h1>*/}
+                <ButtonToolbar className="transaction-table-ButtonToolbar">
+                    <Button className="transaction-table-ButtonToolbarButton" bsStyle="default" bsSize="large" ><Link className="transition" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link></Button>
+                    <Button className="transaction-table-ButtonToolbarButton " bsStyle="success" bsSize="large" onClick={this.markAsReconcile}>Mark as Reconciled</Button>
+                </ButtonToolbar>
+
                     <div className="receipt-table">
                         <div>
                             <ReceiptTable data={this.state.transaction}/>
+
                         </div>
                         <div>
                             <ReceiptTable data={this.state.status}/>
+
                         </div>
-                        <div>
-                            {
-                                this.state.status.reconcileStatus[1].valueOf() === "AutoReconciled" || this.state.status.reconcileStatus[1].valueOf() ===  "Manually Reconciled" ? null : (<div className="receipt-table-reconciled">
-                                    <button onClick={this.markAsReconcile}>Mark as Reconciled</button>
-                                </div>)
-                            }
-                        </div>
+
                     </div>
                     <div className="receipt-table">
                         <div>
@@ -202,15 +205,10 @@ class ReceiptContent extends Component{
                             <ReceiptTable data={this.state.amount}/>
                         </div>
                     </div>
-                </div>
-                <div className="receipt-content-back">
-                    <div className="receipt-back-btn">
 
-                        <Link className="transition" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link>
-                    </div>
-                </div>
             </div>
         )
+        }
     }
 };
 export default ReceiptContent;

@@ -15,6 +15,8 @@ class ReceiptTable extends Component {
         this.statusColor();
     }
 
+
+
     statusColor = () =>{
         let data = this.props.data;
         let keys = Object.keys(data);
@@ -29,6 +31,7 @@ class ReceiptTable extends Component {
             });
         }
     };
+
     returnHeader = () =>{
         let list = [];
         let data = this.props.data;

@@ -3,6 +3,8 @@ import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
+
+
 //React table
 import ReactTable from "react-table";
 // React button
