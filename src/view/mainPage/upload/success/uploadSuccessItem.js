@@ -17,7 +17,7 @@ class UploadSuccessItem extends Component{
             list.push(<div key="2" className="uploadSucc-table-short"><p>{this.props.value[2]}</p></div>);
             list.push(<div key="3" className="uploadSucc-table-long"><p>{this.props.value[3]}</p></div>);
         }else if("BANKSTATEMENT" === this.props.type){
-            let date = moment(this.props.value[0],"DD/MM/YYYY").format('DD MMM. YY');
+            let date = moment(this.props.value[0]).format('DD MMM. YY');
             if(date === "Invalid date"){
                 list.push(<div key="0" className="uploadSucc-table-short"><p>{this.props.value[0]}</p></div>);
             }else{

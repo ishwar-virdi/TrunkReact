@@ -7,12 +7,6 @@ import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
 
-const statusZero = "Not reconciled manually or auto";
-const statusOne = "AutoReconciler attempted but failed";
-const statusTwo = "Manually Reconciled";
-const statusThree = "AutoReconciled";
-
-
 class ReceiptContent extends Component{
     constructor(props) {
         super(props);
@@ -108,11 +102,10 @@ class ReceiptContent extends Component{
                         };
                     }
 
-                    if(data.ReconcileStatus === statusZero || data.ReconcileStatus === statusOne){
+                    if(data.ReconcileStatusCode <= 1 || data.ReconcileStatusCode === 4)
                         btnText = "Mark as Reconciled";
-                    }else if(data.ReconcileStatus === statusTwo || data.ReconcileStatus === statusThree){
-                        btnText = "Mark as not Reconciled";
-                    }
+                    else if (data.ReconcileStatusCode === 2 || data.ReconcileStatusCode === 3)
+                        btnText = "Mark as Not Reconciled";
 
                     this.setState({
                         transaction:transaction,
@@ -126,32 +119,31 @@ class ReceiptContent extends Component{
                 },
                 (error) => {
                     this.setState({
-                        loadingVisible:"false"
+                        loadingVisible:"false",
+                        result : "Error in Receipt API"
                     });
                 }
             )
+            .catch(() => {
+                this.setState({
+                    loadingVisible:"false",
+                    result : "Error in calling Receipt API"
+                });
+            })
     }
 
     markAsReconcile(){
-        if(this.state.btnText === "Mark as Reconciled"){
-            this.requestReconcile("reconcileBtn");
-        }if(this.state.btnText === "Mark as not Reconciled"){
-            this.requestReconcile("notReconcileBtn");
-        }
-    }
-
-    requestReconcile(type){
         let url = "";
-        let resultStatue = "";
         let btnText = "";
-        if(type === "reconcileBtn"){
-            url =  apiurl + "/api/v1/manualReconcile/" + this.state.receipt;
-            resultStatue = statusTwo;
-            btnText = "Mark as not Reconciled";
-        }else if(type === "notReconcileBtn"){
-            url =  apiurl + "/api/v1/manualNotReconcile/" + this.state.receipt;
-            resultStatue = statusZero;
+        let resultStatue = "";
+        if(this.state.btnText === "Mark as Reconciled"){
+            url =  apiurl + "/api/v1/manualReconcile/" + true + "/" + this.state.receipt;
+            btnText = "Mark as Not Reconciled";
+            resultStatue = "Manually Reconciled";
+        }else if(this.state.btnText === "Mark as Not Reconciled"){
+            url =  apiurl + "/api/v1/manualReconcile/" + false + "/" + this.state.receipt;
             btnText = "Mark as Reconciled";
+            resultStatue = "Manually Not Reconciled";
         }else{
             throw new Error("type is wrong (reconcile or notReconcile)");
         }
@@ -188,10 +180,16 @@ class ReceiptContent extends Component{
                 ,
                 (error) => {
                     this.setState({
-                        loadingVisible:"false"
+                        loadingVisible:"false",
+                        result : "Error in Receipt API"
                     });
                 }
-            )
+            ).catch(() => {
+            this.setState({
+                loadingVisible:"false",
+                result: "Error in calling Receipt API"
+            });
+        })
     }
 
 
