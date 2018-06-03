@@ -245,8 +245,8 @@ input:hover {
 
 .ReactTable .rt-tbody .rt-tr-group:hover{
     cursor: pointer;
-    background-color: var(--subjectColor);
-    color: white;
+    background-color:#ddd;
+    color: black;
 
 }
 .ReactTable .rt-tbody .rt-tr-group:last-child{
@@ -255,6 +255,9 @@ input:hover {
 .ReactTable .rt-tbody .rt-td{
 
     border-right:1px solid rgba(0,0,0,0.02);
+
+    /*increasing td font size*/
+    font-size: 115%;
 }
 
 /*.ReactTable .rt-tbody .rt-td input{*/
