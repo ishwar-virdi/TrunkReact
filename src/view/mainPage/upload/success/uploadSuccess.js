@@ -25,7 +25,7 @@ class uploadSuccess extends Component{
                 <Header clickedClass="Upload"/>
                 <Loading visible={this.state.loading}/>
                 <div className="body">
-                    <Title title="RECONCILE"/>
+                    <Title title="UPLOAD RESULT"/>
                     <div className="upload-view">
                         <UploadSuccTable/>
                     </div>

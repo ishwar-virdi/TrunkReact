@@ -54,7 +54,7 @@ class upload extends Component{
             <div className="container">
                 <Header clickedClass="Upload"/>
                 <div className="body">
-                    <Title title="RECONCILE"/>
+                    <Title title="UPLOAD"/>
                     <div className="upload-view">
                         <DropZone/>
                     </div>

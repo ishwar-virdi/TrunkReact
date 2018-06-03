@@ -229,13 +229,11 @@ class Dashboard extends Component{
                     let labels = [];
                     let settles = [];
                     let banks = [];
-                    let data = response.data;
-                    for(let i = 0, length = data.length; i < length;i++){
-                        let date = moment(data[i].date,"MM/DD/YYYY").format('MMM. YY');
-                        labels[length - i - 1] = date;
-                        labels[length - i - 1] = date;
-                        settles[length - i - 1] = data[i].settleTotal;
-                        banks[length - i - 1] = data[i].bankTotal;
+                    let data = response.data.reverse();
+                    for(let i = 0; i < data.length;i++){
+                        labels[i] = data[i].date;
+                        settles[i] = data[i].settleTotal;
+                        banks[i] = data[i].bankTotal;
                     }
                     let chart ={
                         labels: labels,
@@ -300,15 +298,14 @@ class Dashboard extends Component{
                     let bankDebit = [];
                     let bankAmex = [];
                     let data = response.data;
-                    for(let i = 0, length = data.length; i < length;i++){
-                        let date = moment(data[i].date,"MM/DD/YYYY").format('DD MMM. YY');
-                        labels[length - i - 1 ] = date;
-                        settleVisa[length - i - 1] = data[i].settleVisa;
-                        settleDebit[length - i - 1] = data[i].settleDebit;
-                        settleAmex[length - i - 1] = data[i].settleAmex;
-                        bankVisa[length - i - 1] = data[i].bankVisa;
-                        bankDebit[length - i - 1] = data[i].bankDebit;
-                        bankAmex[length - i - 1] = data[i].bankAmex;
+                    for(let i = 0; i < data.length;i++){
+                        labels[i] = data[i].date;
+                        settleVisa[i] = data[i].settleVisa;
+                        settleDebit[i] = data[i].settleDebit;
+                        settleAmex[i] = data[i].settleAmex;
+                        bankVisa[i] = data[i].bankVisa;
+                        bankDebit[i] = data[i].bankDebit;
+                        bankAmex[i] = data[i].bankAmex;
                     }
                     let chart ={
                         labels: labels,
