@@ -70,7 +70,7 @@ class TransactionTable extends React.Component {
     jsonToResult = (json) =>{
         let result = {};
         result.isChecked = false;
-        result.dateTime = json.date.slice(0, -12);
+        result.dateTime = json.date.slice(0, -13);
         result.description = json.description;
         result.amount = <NumberFormat value={json.amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
         result.receiptNumber = json.accountNumber;
@@ -171,7 +171,7 @@ class TransactionTable extends React.Component {
                             for(let j = 0, itemLen = items.length;j<itemLen;j++){
                                 if(items[j].receiptNumber === id){
                                     items[j].reconciled = "Failed";
-                                    items[j].rule = "Not reconciled manually or auto";
+                                    items[j].rule = "Manually Not Reconciled";
                                     break;
                                 }
                             }
