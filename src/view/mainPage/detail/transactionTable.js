@@ -70,7 +70,7 @@ class TransactionTable extends React.Component {
     jsonToResult = (json) =>{
         let result = {};
         result.isChecked = false;
-        result.dateTime = json.date.slice(0, -13);
+        result.dateTime = json.date.slice(0, -12);
         result.description = json.description;
         result.amount = <NumberFormat value={json.amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
         result.receiptNumber = json.accountNumber;
