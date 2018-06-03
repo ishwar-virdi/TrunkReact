@@ -105,14 +105,14 @@ class UploadSuccTable extends Component{
     returnTitle = () =>{
         let lists = [];
         let titles = this.state.title;
-        lists.push(<UploadSuccessItem key="-1" type={this.state.type} value={titles}/>);
+        lists.push(<lh><UploadSuccessItem key="-1" type={this.state.type} value={titles}/></lh>);
         return lists;
     };
     returnTransactions = () =>{
         let lists = [];
         let transactions = this.state.transactions;
         for(let i = 0,length = transactions.length;i < length;i++){
-            lists.push(<UploadSuccessItem key={i} type={this.state.type} value={transactions[i]}/>);
+            lists.push(<li><UploadSuccessItem key={i} type={this.state.type} value={transactions[i]}/></li>);
         }
         return lists;
     };

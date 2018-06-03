@@ -79,7 +79,7 @@ class Dashboard extends Component{
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Total Amount'
+                            labelString: 'Total Amount ($)'
                         }
                     }],
                 },
@@ -114,7 +114,7 @@ class Dashboard extends Component{
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Total Amount'
+                            labelString: 'Total Amount ($)'
                         }
                     }],
                 },
@@ -239,12 +239,12 @@ class Dashboard extends Component{
                         labels: labels,
                         datasets: [
                             {
-                                label: "Total amounts of settlement",
+                                label: "Total amounts of settlement ($)",
                                 data: settles,
                                 backgroundColor: "#70bf54",
                             },
                             {
-                                label: "Total amounts of bank statement",
+                                label: "Total amounts of bank statement ($)",
                                 data: banks,
                                 backgroundColor:  "#464f53",
                             }

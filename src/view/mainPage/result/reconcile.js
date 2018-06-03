@@ -31,16 +31,20 @@ class Reconcile extends React.Component {
                 isTitle: true,
                 time: "Last Modified ",
                 dateRange: "Month",
-                status: "Reconciled(%)"
+                status: "Reconciled (%)"
             },
             pageIndex:0,
             items: [],
             isEnd: false,
+            notDataFound:"rt-notDateFound",
         };
         this.handleNextPage = this.handleNextPage.bind(this);
     }
 
     componentDidMount() {
+        this.setState({
+            notDataFound:"rt-notDateFound"
+        });
         this.requestResult(0);
     }
 
@@ -94,6 +98,9 @@ class Reconcile extends React.Component {
                     this.props.visibleLoading("false");
                 }
             );
+        this.setState({
+            notDataFound:"rt-notDateFound rt-notDateFound-hidden"
+        });
     }
 
     jsonToResult =(json) =>{
