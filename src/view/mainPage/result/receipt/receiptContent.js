@@ -7,6 +7,9 @@ import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
 
+// importing bootstrap components
+import {Alert, Button, ButtonToolbar} from "react-bootstrap";
+
 class ReceiptContent extends Component{
     constructor(props) {
         super(props);
@@ -132,6 +135,10 @@ class ReceiptContent extends Component{
             })
     }
 
+    refreshPage(){
+        window.location.reload()
+    }
+
     markAsReconcile(){
         let url = "";
         let btnText = "";
@@ -194,6 +201,17 @@ class ReceiptContent extends Component{
 
 
     render(){
+        if (this.state.result==="Error in Receipt API"){
+            return(
+
+                <Alert bsStyle="warning">
+                    <h1>{this.state.result}</h1>
+                    <strong>Problem with connecting Database</strong> Please press the 'Try again' button...
+                    <Button className="" bsStyle="danger" bsSize="large" onClick={ this.refreshPage} > Try again</Button>
+                </Alert>
+
+            )
+        }else{
         const isLogin = localStorage.getItem('login');
         return (
             <div className="receipt-content">
@@ -227,6 +245,7 @@ class ReceiptContent extends Component{
                 <Loading visible={this.state.loadingVisible}/>
             </div>
         )
+    }
     }
 };
 export default ReceiptContent;
