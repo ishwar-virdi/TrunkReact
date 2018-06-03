@@ -1,11 +1,17 @@
 import React from "react";
-//import "../../../stylesheets/mainPage/detail/transactionTable.css";
+import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
 import ReactTable from "react-table";
 import moment from "moment";
 import {Redirect} from "react-router-dom";
+
+
+// React button
+import Bootstrap from 'bootstrap/dist/css/bootstrap.min.css'
+import {Button} from 'react-bootstrap'
+import {ButtonToolbar} from 'react-bootstrap'
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -19,8 +25,7 @@ class TransactionTable extends React.Component {
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
-        this.markAsNotReconciled = this.markAsNotReconciled.bind(this);
-        this.markAsReconciled = this.markAsReconciled.bind(this);
+
     }
 
     componentDidMount() {
@@ -65,10 +70,10 @@ class TransactionTable extends React.Component {
                 });
         }).then((error)=>{
             this.props.visibleLoading("false");
-        });
+        });;
     };
 
-    jsonToResult(json){
+    jsonToResult = (json) =>{
         let result = {};
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
@@ -76,16 +81,15 @@ class TransactionTable extends React.Component {
         result.amount = <NumberFormat value={json.amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
         result.receiptNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        if (json.status){
+        if (json.status)
             result.reconciled = "Success";
-        }else{
+        else
             result.reconciled = "Failed";
-        }
         result.rule = json.rule;
         return result;
     };
 
-    markAsReconciled (){
+    markAsReconciled = () => {
         this.props.visibleLoading("true");
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
@@ -136,7 +140,7 @@ class TransactionTable extends React.Component {
         });
     };
 
-    markAsNotReconciled () {
+    markAsNotReconciled = () => {
         this.props.visibleLoading("true");
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
@@ -211,7 +215,7 @@ class TransactionTable extends React.Component {
         });
     }
 
-    toggleSelectAll(){
+    toggleSelectAll = () => {
         let newSelected = {};
 
         if (this.state.selectAll === 0) {
@@ -232,16 +236,18 @@ class TransactionTable extends React.Component {
         const isLogin = localStorage.getItem('login');
 
         return (
-            // Defining table structure
+
             <div>
                 {
                     isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }
-                <div className="transaction-btn-group">
-                    <p className="transition" onClick={this.markAsReconciled}>Mark as Reconciled</p>
-                    <p className="transition" onClick={this.markAsNotReconciled}>Mark as Failed</p>
-                </div>
+
+                <ButtonToolbar className="transaction-table-ButtonToolbar">
+                    <Button className="transaction-table-ButtonToolbarButton" bsStyle="success" bsSize="large" onClick={this.markAsReconciled}>Mark as Reconciled</Button>
+                    <Button className="transaction-table-ButtonToolbarButton " bsStyle="danger" bsSize="large" onClick={this.markAsNotReconciled}>Mark as Failed</Button>
+                </ButtonToolbar>
+
                 <ReactTable
                     data={items}
                     columns={[

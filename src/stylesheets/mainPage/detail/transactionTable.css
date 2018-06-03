@@ -77,6 +77,20 @@ input:hover {
     -moz-border-radius: 0 0 8px 0;
 }
 
+
+/*CSS Rules for bootstrap */
+
+.transaction-table-ButtonToolbar{
+
+    padding: 10px;
+}
+
+.transaction-table-ButtonToolbarButton{
+
+    margin-right: 15px;
+}
+
+
 /*React Transaction table CSS RULES */
 
 .ReactTable{
