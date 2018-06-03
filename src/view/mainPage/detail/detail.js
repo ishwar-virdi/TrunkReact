@@ -27,7 +27,7 @@ class detail extends Component{
 
     render(){
         return (
-            <div className="container">
+            <div className="containerUpdated">
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="SHOW RESULTS"/>

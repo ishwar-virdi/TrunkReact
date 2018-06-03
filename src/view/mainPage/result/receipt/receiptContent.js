@@ -7,6 +7,9 @@ import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
 
+//importing bootstrap components
+
+
 class ReceiptContent extends Component{
     constructor(props) {
         super(props);
@@ -166,7 +169,14 @@ class ReceiptContent extends Component{
     render(){
         return (
             <div className="receipt-content">
+
+                <Alert bsStyle="warning">
+                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too
+                    good.
+                </Alert>;
+
                 <h1>{this.state.result}</h1>
+
                 <Loading visible={this.state.loading}/>
                 <div className="receipt-content-table">
                     <div className="receipt-table">

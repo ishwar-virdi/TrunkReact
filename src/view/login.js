@@ -189,7 +189,7 @@ class Login extends Component{
             null
         );
         return (
-            <div className="container">
+            <div className="containerUpdated">
                     {
                         redirect === "success" || "" ? (<Redirect to={{pathname:'/home'}}/>)
                                 : null

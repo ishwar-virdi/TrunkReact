@@ -69,7 +69,7 @@ class upload extends Component{
 
     render(){
         return (
-            <div className="container">
+            <div className="containerUpdated">
                 <Header clickedClass="Upload"/>
                 <Loading visible={this.state.loading}/>
                 <div className="body">

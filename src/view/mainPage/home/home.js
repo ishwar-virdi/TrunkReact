@@ -9,7 +9,7 @@ class home extends Component{
 
     render(){
         return (
-            <div className="container">
+            <div className="containerUpdated">
                 <Header clickedClass="Home"/>
                 <div className="body">
                     <Title title="REPORTS"/>
