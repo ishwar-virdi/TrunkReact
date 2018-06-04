@@ -52,9 +52,11 @@ class SearchBar extends React.Component {
             endDate = this.props.endDate.format('MM/DD/YYYY');
         }
         if(!textAllow && !dateAllow) {
-            this.setState({
-                searchPlaceHolder: this.state.searchPlaceHolder,
-            });
+            // this.setState({
+            //     searchPlaceHolder: this.state.searchPlaceHolder,
+            // });
+            this.props.setSort("time");
+            this.props.setNotFoundVisible("false");
         }
         else{
             let url = apiurl + "/api/v1/search";
