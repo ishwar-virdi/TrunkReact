@@ -1,11 +1,13 @@
+
 import {Component} from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
-//import "../../../stylesheets/mainPage/upload/dropZone.css";
+import "../../../stylesheets/mainPage/upload/dropZone.css";
 import Dropzone from 'react-dropzone';
 import React from "react";
 import {Redirect} from "react-router-dom";
 import Loading from "../../components/content/loading";
+import {Button, ButtonToolbar} from "react-bootstrap";
 class DropZone extends Component{
     constructor(props) {
         super(props);
@@ -56,7 +58,10 @@ class DropZone extends Component{
     };
 
     uploadDocs() {
-
+        this.setState({
+            status : "none",
+            loading: "true",
+        });
         if(this.state.files.length === 0){
             this.setState({
                 status : "Please select upload file"
@@ -69,10 +74,6 @@ class DropZone extends Component{
             });
             return;
         }
-        this.setState({
-            status : "none",
-            loading: "true",
-        });
         let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
@@ -171,9 +172,9 @@ class DropZone extends Component{
                             </svg>
                         </div>
                     </div>
-                    <div className="upload-submit">
-                        <p className="transition" onClick={this.uploadDocs}>Submit</p>
-                    </div>
+                    <ButtonToolbar className="dropZone-ButtonToolbar">
+                        <Button className="dropZone-ButtonToolbarButton" bsStyle="primary" bsSize="large" onClick={this.uploadDocs}>Submit</Button>
+                    </ButtonToolbar>
                 </div>
                 <Loading visible={this.state.loading}/>
             </div>

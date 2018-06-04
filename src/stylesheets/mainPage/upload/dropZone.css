@@ -192,3 +192,17 @@
     background-color: #66CCFF;
 }
 
+/*CSS Rules for bootstrap */
+
+.dropZone-ButtonToolbar{
+
+    padding:10px;
+    float:right;
+
+}
+
+.dropZone-ButtonToolbarButton{
+
+    border-radius: 12px;
+
+}
