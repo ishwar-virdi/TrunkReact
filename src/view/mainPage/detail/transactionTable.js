@@ -19,7 +19,8 @@ class TransactionTable extends React.Component {
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
-
+        this.markAsNotReconciled = this.markAsNotReconciled.bind(this);
+        this.markAsReconciled = this.markAsReconciled.bind(this);
     }
 
     componentDidMount() {
@@ -64,7 +65,7 @@ class TransactionTable extends React.Component {
                 });
         }).then((error)=>{
             this.props.visibleLoading("false");
-        });;
+        });
     };
 
     jsonToResult(json){
@@ -75,10 +76,11 @@ class TransactionTable extends React.Component {
         result.amount = <NumberFormat value={json.amount} displayType={'text'} thousandSeparator={true} prefix={'$'}/>;
         result.receiptNumber = json.accountNumber;
         result.transactionType = json.transactionType;
-        if (json.status)
+        if (json.status){
             result.reconciled = "Success";
-        else
+        }else{
             result.reconciled = "Failed";
+        }
         result.rule = json.rule;
         return result;
     };
