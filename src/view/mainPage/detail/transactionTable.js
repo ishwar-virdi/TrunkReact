@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../stylesheets/mainPage/detail/transactionTable.css";
+//import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
@@ -67,7 +67,7 @@ class TransactionTable extends React.Component {
         });;
     };
 
-    jsonToResult = (json) =>{
+    jsonToResult(json){
         let result = {};
         result.isChecked = false;
         result.dateTime = json.date.slice(0, -12);
@@ -83,7 +83,7 @@ class TransactionTable extends React.Component {
         return result;
     };
 
-    markAsReconciled = () => {
+    markAsReconciled (){
         this.props.visibleLoading("true");
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
@@ -134,7 +134,7 @@ class TransactionTable extends React.Component {
         });
     };
 
-    markAsNotReconciled = () => {
+    markAsNotReconciled () {
         this.props.visibleLoading("true");
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
@@ -209,7 +209,7 @@ class TransactionTable extends React.Component {
         });
     }
 
-    toggleSelectAll = () => {
+    toggleSelectAll(){
         let newSelected = {};
 
         if (this.state.selectAll === 0) {

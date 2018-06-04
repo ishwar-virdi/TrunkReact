@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import Header from "../../../components/content/header";
 import Title from "../../../components/content/title";
 import ReceiptContent from "../../../mainPage/result/receipt/receiptContent"
-import "../../../../stylesheets/mainPage/result/receipt/receipt.css";
+//import "../../../../stylesheets/mainPage/result/receipt/receipt.css";
 import Footer from "../../../components/content/footer";
 class receipt extends Component{
 

@@ -1,7 +1,7 @@
 import {Component} from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
-import "../../../stylesheets/mainPage/upload/dropZone.css";
+//import "../../../stylesheets/mainPage/upload/dropZone.css";
 import Dropzone from 'react-dropzone';
 import React from "react";
 import {Redirect} from "react-router-dom";

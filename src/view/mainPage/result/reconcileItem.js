@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import React from "react";
-import "../../../stylesheets/mainPage/result/reconcileItem.css";
+//import "../../../stylesheets/mainPage/result/reconcileItem.css";
 
 class ReconcileItem extends React.Component {
     constructor(props) {
@@ -40,7 +40,7 @@ class ReconcileItem extends React.Component {
         }
     }
 
-    progressSetColor = (status) =>{
+    progressSetColor(status){
         let percent = Number(status);
         if(percent >= 80){
             this.setState({
@@ -60,7 +60,7 @@ class ReconcileItem extends React.Component {
             });
         }
     };
-    progressAnimation = (status)=>{
+    progressAnimation(status){
         let percent = Number(status);
         this.progressSetColor(percent);
         let i = 0;
@@ -83,7 +83,7 @@ class ReconcileItem extends React.Component {
     };
 
 
-    isTitle = (value) =>{
+    isTitle(value){
         if(value.isTitle === true || ""){
             this.setState({
                 btnClass:"reconcileItem gl-title",

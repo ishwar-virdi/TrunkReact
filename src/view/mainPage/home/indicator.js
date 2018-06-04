@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import "../../../stylesheets/mainPage/home/indicator.css"
+//import "../../../stylesheets/mainPage/home/indicator.css"
 class Indicator extends Component{
     constructor(props) {
         super(props);

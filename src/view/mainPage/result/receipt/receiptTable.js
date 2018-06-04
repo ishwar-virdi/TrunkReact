@@ -1,6 +1,6 @@
 import {Component} from "react";
 import React from "react";
-import "../../../../stylesheets/mainPage/result/receipt/receiptTable.css";
+//import "../../../../stylesheets/mainPage/result/receipt/receiptTable.css";
 class ReceiptTable extends Component {
 
     constructor(props) {
@@ -15,7 +15,7 @@ class ReceiptTable extends Component {
         this.statusColor();
     }
 
-    statusColor = () =>{
+    statusColor(){
         let data = this.props.data;
         let keys = Object.keys(data);
         let value = data[keys[0]];
@@ -29,7 +29,7 @@ class ReceiptTable extends Component {
             });
         }
     };
-    returnHeader = () =>{
+    returnHeader(){
         let list = [];
         let data = this.props.data;
         let keys = Object.keys(data);
@@ -40,7 +40,7 @@ class ReceiptTable extends Component {
         return list;
     };
 
-    returnBody = () =>{
+    returnBody(){
         let list = [];
         let data = this.props.data;
         let keys = Object.keys(data);

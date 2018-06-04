@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../../stylesheets/mainPage/result/formSeparateLayer.css";
+//import "../../../stylesheets/mainPage/result/formSeparateLayer.css";
 
 class formSeparateLayer extends React.Component {
     render() {
