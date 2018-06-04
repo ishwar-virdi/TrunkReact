@@ -1,7 +1,7 @@
 import {Component} from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
-import "../../../../stylesheets/mainPage/upload/success/uploadSuccTable.css";
+//import "../../../../stylesheets/mainPage/upload/success/uploadSuccTable.css";
 import React from "react";
 import UploadSuccessItem from "./uploadSuccessItem";
 import Loading from "../../../components/content/loading";
@@ -105,14 +105,31 @@ class UploadSuccTable extends Component{
     returnTitle = () =>{
         let lists = [];
         let titles = this.state.title;
-        lists.push(<lh><UploadSuccessItem key="-1" type={this.state.type} value={titles}/></lh>);
+        let displayTitles = [];
+        for (let i = 0,length = titles.length;i < length; i++){
+            let displayTitle = "";
+            for(let j = 0,letterLen = titles[i].length; j<letterLen; j++){
+                if(j === 0){
+                    displayTitle += titles[i][j].toUpperCase();
+                }else if(/[A-Z]/.test(titles[i][j]) === true){
+                    displayTitle += " " + titles[i][j];
+                }else{
+                    displayTitle += titles[i][j];
+                }
+
+                if(j === titles[i].length-1){
+                    displayTitles[i] = displayTitle;
+                }
+            }
+        }
+        lists.push(<UploadSuccessItem key="-1" type={this.state.type} value={displayTitles} isTitle="true"/>);
         return lists;
     };
     returnTransactions = () =>{
         let lists = [];
         let transactions = this.state.transactions;
         for(let i = 0,length = transactions.length;i < length;i++){
-            lists.push(<li><UploadSuccessItem key={i} type={this.state.type} value={transactions[i]}/></li>);
+            lists.push(<UploadSuccessItem key={i} type={this.state.type} value={transactions[i]} isTitle="false"/>);
         }
         return lists;
     };

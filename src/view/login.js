@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../stylesheets/login.css';
+//import '../stylesheets/login.css';
 import {apiurl} from '../config/constants';
 import { Redirect } from 'react-router-dom';
 import Loading from './components/content/loading';
@@ -125,7 +125,7 @@ class Login extends Component{
         }
     }
 
-    visibleLoading = (visible)=>{
+    visibleLoading(visible){
         this.setState({
             loading:visible,
         });
