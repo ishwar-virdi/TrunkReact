@@ -56,10 +56,7 @@ class DropZone extends Component{
     };
 
     uploadDocs() {
-        this.setState({
-            status : "none",
-            loading: "true",
-        });
+
         if(this.state.files.length === 0){
             this.setState({
                 status : "Please select upload file"
@@ -72,6 +69,10 @@ class DropZone extends Component{
             });
             return;
         }
+        this.setState({
+            status : "none",
+            loading: "true",
+        });
         let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
