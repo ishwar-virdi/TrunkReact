@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../../stylesheets/content/searchBar.css";
+//import "../../../stylesheets/content/searchBar.css";
 import {apiurl} from "../../../config/constants";
 import axios from "axios/index";
 import moment from "moment";
@@ -11,6 +11,7 @@ class SearchBar extends React.Component {
 
         this.state={
             searchInput:"",
+            searchPlaceHolder:"Please input text",
             deleteIcon: "icon transition iconFontNonClickColor",
             isDelete:false,
             searchGreater: "Greater than 0 : \">10\"",
@@ -22,27 +23,26 @@ class SearchBar extends React.Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
         this.handleSubmitClick = this.handleSubmitClick.bind(this);
-        this.handleTextClick = this.handleTextClick.bind(this);
     }
 
     componentDidMount(){
         this.setState({
             searchModifiedHint: moment().format('DD MMM. YY HH:mm'),
-            searchMonthHint: moment().format('MMM. YY'),
+            searchMonthHint: moment().format('MMM-YYYY'),
         });
     }
 
     componentWillUnmount() {
         this.props.visibleLoading("false");
     }
-    submit=()=>{
+    submit(){
         if(this.props.page === undefined){
             throw new Error("props.page is required");
         }
         this.returnSearchResult();
     };
 
-    returnSearchResult = ()=>{
+    returnSearchResult(){
         let dateAllow = this.props.startDate !== null && this.props.endDate !== null;
         let textAllow = this.state.searchInput !== "";
         let startDate;
@@ -52,9 +52,11 @@ class SearchBar extends React.Component {
             endDate = this.props.endDate.format('MM/DD/YYYY');
         }
         if(!textAllow && !dateAllow) {
-            this.setState({
-                warningPlaceHolder: "Please input text",
-            });
+            // this.setState({
+            //     searchPlaceHolder: this.state.searchPlaceHolder,
+            // });
+            this.props.setSort("time");
+            this.props.setNotFoundVisible("false");
         }
         else{
             let url = apiurl + "/api/v1/search";
@@ -73,7 +75,7 @@ class SearchBar extends React.Component {
         }
     };
 
-    requestSearchResult = (url,data) =>{
+    requestSearchResult(url,data){
         this.props.visibleLoading("true");
         axios({
             withCredentials: true,
@@ -111,7 +113,7 @@ class SearchBar extends React.Component {
     };
 
     //delete Button
-    clearInputText = () =>{
+    clearInputText(){
         if(this.state.isDelete){
             this.setState({
                 searchInput: "",
@@ -119,6 +121,11 @@ class SearchBar extends React.Component {
         }
     };
     handleTextChange(e){
+        if(e.target.value.length === 0){
+            this.setState({
+                searchPlaceHolder: this.state.searchPlaceHolder,
+            });
+        }
         this.setState({
             searchInput: e.target.value
         });
@@ -138,11 +145,7 @@ class SearchBar extends React.Component {
             isDelete: !this.state.isDelete,
         });
     }
-    handleTextClick(e){
-        this.setState({
-            warningPlaceHolder: "",
-        });
-    }
+
     handleSubmitClick(){
         this.submit();
     }
@@ -183,10 +186,9 @@ class SearchBar extends React.Component {
                         </div>
                     </div>
                     <div className="searchBar-box">
-                        <input placeholder={this.state.warningPlaceHolder}
+                        <input placeholder={this.state.searchPlaceHolder}
                                value= {this.state.searchInput}
                                onChange={this.handleTextChange}
-                               onClick={this.handleTextClick}
                                onKeyPress={this.handSubmitEnter} type="text"/>
                     </div>
                     <div className="searchBar-delete-icon">

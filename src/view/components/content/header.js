@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../../stylesheets/content/header.css";
+//import "../../../stylesheets/content/header.css";
 import {Link, Redirect } from 'react-router-dom';
 import {apiurl} from "../../../config/constants"
 import axios from "axios/index";
@@ -50,7 +50,7 @@ class Header extends React.Component {
         }
     }
 
-    returnHeader =()=>{
+    returnHeader(){
         let list = [];
         let items = this.state.items;
         for(let i = 0; i < items.length;i++){

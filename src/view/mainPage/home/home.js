@@ -3,7 +3,7 @@ import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import Dashboard from "../../mainPage/home/dashboard";
 import Footer from "../../components/content/footer";
-import "../../../stylesheets/mainPage/home/home.css";
+//import "../../../stylesheets/mainPage/home/home.css";
 
 class home extends Component{
 
@@ -11,10 +11,17 @@ class home extends Component{
         super(props);
         this.state={
             title:"CHART",
+            hintMessage:"",
         }
     }
 
-    setTitle = (title)=>{
+    setHintMessage(message){
+        this.setState({
+            hintMessage:message,
+        });
+    };
+
+    setTitle(title){
         this.setState({
             title:title,
         });
@@ -25,8 +32,23 @@ class home extends Component{
                 <Header clickedClass="Dashboard"/>
                 <div className="body">
                     <Title title={this.state.title}/>
+
+                    <div className="chart-hint">
+                        <svg className="transition icon" aria-hidden="true">
+                            <use xlinkHref="#icon-icon  "></use>
+                        </svg>
+                        <div className="transition chart-hint-box">
+                            <div className="chart-hint-arrow"></div>
+                            <div className="chart-hint-text">
+                                <p>{this.state.hintMessage}</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="home-view">
-                        <Dashboard setTitle={(title)=> this.setTitle(title)}/>
+                        <Dashboard
+                            setHintMessage = {(message)=>this.setHintMessage((message))}
+                            setTitle={(title)=> this.setTitle(title)}/>
                     </div>
                 </div>
                 <Footer/>

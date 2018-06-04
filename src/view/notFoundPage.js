@@ -1,7 +1,7 @@
 import {Component} from "react";
 import { Link } from 'react-router-dom';
 import React from "react";
-import '../stylesheets/notFoundPage.css';
+//import '../stylesheets/notFoundPage.css';
 class notFoundPage extends Component {
 
     render(){
