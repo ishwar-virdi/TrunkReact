@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../../stylesheets/content/loading.css";
+//import "../../../stylesheets/content/loading.css";
 
 class Loading extends React.Component {
 
@@ -22,7 +22,7 @@ class Loading extends React.Component {
         }
     }
 
-    setVisible = () =>{
+    setVisible(){
         if(this.props.visible === "false"){
             this.setState({
                 loadingClass:"loading loading-hidden"

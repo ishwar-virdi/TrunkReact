@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import "../../../stylesheets/mainPage/result/searchNotFound.css";
+//import "../../../stylesheets/mainPage/result/searchNotFound.css";
 
 class SearchNotFound extends Component{
 
@@ -22,7 +22,7 @@ class SearchNotFound extends Component{
         }
     }
 
-    setVisible = () =>{
+    setVisible(){
         if(this.props.visible === "true"){
             this.setState({
                 loadingClass:"searchNotFound-Container searchNotFound-visible"

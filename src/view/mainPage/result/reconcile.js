@@ -1,7 +1,7 @@
 import React from "react";
 import FormSeperateLayerfrom from "./formSeperateLayer";
 
-import "../../../stylesheets/mainPage/result/reconcile.css";
+//import "../../../stylesheets/mainPage/result/reconcile.css";
 import ReconcileItem from './reconcileItem';
 import moment from "moment";
 import {apiurl} from "../../../config/constants";
@@ -75,7 +75,6 @@ class Reconcile extends React.Component {
                 (response) => {
                     this.props.visibleLoading("false");
                     let data = response.data;
-                    let results = [];
                     if(data === ""){
                         localStorage.clear();
                         this.forceUpdate();
@@ -103,7 +102,7 @@ class Reconcile extends React.Component {
         });
     }
 
-    jsonToResult =(json) =>{
+    jsonToResult(json){
         if(json['reconcileDate'] === ""){
             return;
         }
@@ -118,7 +117,7 @@ class Reconcile extends React.Component {
         result.status = json['percentage'];
         return result;
     };
-    calculateTime = (timeArray) => {
+    calculateTime(timeArray) {
         let time;
         let num = timeArray[0];
         let unit = timeArray[1];
@@ -140,7 +139,7 @@ class Reconcile extends React.Component {
         }
         return time;
     };
-    isTimeTitle = (totalTime)=>{
+    isTimeTitle(totalTime){
         if(history.length === 1 && totalTime >= history[0].month){
             return true;
         }
@@ -156,7 +155,7 @@ class Reconcile extends React.Component {
         }
         return false;
     };
-    pushTimeTitle = (lists,key) =>{
+    pushTimeTitle(lists,key){
         let removeFix = 0;
         for(let i = 0; i < removeIndex.length;i++){
             history.splice(i-removeFix,1);
@@ -169,7 +168,7 @@ class Reconcile extends React.Component {
         history.splice(0,1);
     };
 
-    handleNextPage = () =>{
+    handleNextPage(){
         if(this.state.isEnd === false
         && this.props.sort === "time"){
             let index = this.state.pageIndex + 1;
@@ -179,7 +178,7 @@ class Reconcile extends React.Component {
             this.requestResult(index);
         }
     };
-    returnListByTime = () =>{
+    returnListByTime(){
         //restore history
         [ ...history] = historyBackUp;
         sortItems = this.state.items;
@@ -200,7 +199,7 @@ class Reconcile extends React.Component {
         }
         return lists;
     };
-    returnListByDateRange = () =>{
+    returnListByDateRange(){
         let getTime = (item) =>{
             let timeFromNow = moment(item.dateRange,"MMM. YY").fromNow().split(" ");
             return timeFromNow
@@ -220,7 +219,7 @@ class Reconcile extends React.Component {
         }
         return lists;
     };
-    returnListByStatus = () =>{
+    returnListByStatus(){
         let lists = [];
         let value;
         let order = Object.keys(sortItems).sort(
@@ -234,7 +233,7 @@ class Reconcile extends React.Component {
         }
         return lists;
     };
-    returnSearchList = ()=>{
+    returnSearchList(){
         let lists = [];
         if(this.props.searchResult.length <= 0){
         }else{

@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 
-import "../../../stylesheets/mainPage/home/dashboard.css";
+//import "../../../stylesheets/mainPage/home/dashboard.css";
 import Indicator from "./indicator";
 
 import {Bar} from 'react-chartjs-2';
@@ -8,7 +8,6 @@ import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
 import Loading from "../../components/content/loading";
 import {Redirect} from "react-router-dom";
-import moment from "moment/moment";
 
 class Dashboard extends Component{
 
@@ -130,6 +129,12 @@ class Dashboard extends Component{
             },
             monthTota1Index:0,
             dailyTransactionIndex:0,
+            reconcileChartTitle:"Reconcile Quantity by Month",
+            monthlyChartTitle:"Bank and Settlement Total Amounts by Month",
+            dailyChartTitle:"Bank and Settlement Total Amounts by Day",
+            reconcileChartHint:"Shows the count of reconciled and not reconciled settlement items",
+            monthlyChartHint:"Shows the total monetary amount for the bank statement and settlement documents for each month",
+            dailyChartHint:"Shows the total monetary amount categorized by transaction types for the bank statement and settlement documents for each day",
         };
 
         this.handleScroll = this.handleScroll.bind(this);
@@ -142,7 +147,7 @@ class Dashboard extends Component{
         this.requestMonthTotalChart(0);
         this.requestDailyTransaction(0);
         window.addEventListener('wheel', this.handleScroll, { passive: true });
-        this.props.setTitle("Reconcile quantity chart");
+        this.props.setTitle(this.state.monthlyChartTitle);
     }
 
     componentWillUnmount() {
@@ -185,12 +190,12 @@ class Dashboard extends Component{
                             {
                                 label: reconciled.label,
                                 data: reconciled.data.reverse(),
-                                backgroundColor: "#E57373",
+                                backgroundColor:  "#7986CB",
                             },
                             {
                                 label: notReconciled.label,
                                 data: notReconciled.data.reverse(),
-                                backgroundColor:  "#7986CB",
+                                backgroundColor: "#E57373",
                             }
                         ]
                     };
@@ -253,6 +258,7 @@ class Dashboard extends Component{
                     this.setState({
                         chartTotalAmount:chart,
                     });
+                    this.props.setHintMessage(this.state.monthlyChartHint);
                 },
                 (error) => {
                     this.setState({
@@ -313,12 +319,12 @@ class Dashboard extends Component{
                             {
                                 label: "Settle visa",
                                 data: settleVisa,
-                                backgroundColor: "#1a1f71",
+                                backgroundColor: "#4056A1",
                             },
                             {
                                 label: "Bank visa",
                                 data: bankVisa,
-                                backgroundColor: "#262ca6",
+                                backgroundColor: "#1B9CE5",
                             },
                             {
                                 label: "Settle debit",
@@ -328,16 +334,16 @@ class Dashboard extends Component{
                             {
                                 label: "Bank debit",
                                 data: bankDebit,
-                                backgroundColor: "#262626",
+                                backgroundColor: "#8590AA",
                             },{
                                 label: "Settle amex",
                                 data: settleAmex,
-                                backgroundColor: "#6CC4EE",
+                                backgroundColor: "#3AAFA9",
                             },
                             {
                                 label: "Bank amex",
                                 data: bankAmex,
-                                backgroundColor: "#9BD4F5",
+                                backgroundColor: "#88DDBC",
                             },
                         ]
                     };
@@ -397,19 +403,22 @@ class Dashboard extends Component{
                 page:"daily",
                 chartData:this.state.chartDailyTransaction,
             });
-            this.props.setTitle("Daily total amounts chart");
+            this.props.setHintMessage(this.state.dailyChartHint);
+            this.props.setTitle(this.state.dailyChartTitle);
         }else if(index === 100){
             this.setState({
                 page:"monthly",
                 chartData:this.state.chartTotalAmount,
             });
-            this.props.setTitle("Monthly total amounts chart");
+            this.props.setHintMessage(this.state.monthlyChartHint);
+            this.props.setTitle(this.state.monthlyChartTitle);
         }else if(index === this.state.chartMaxIndex){
             this.setState({
                 page:"reconcile",
                 chartData:this.state.chartReconcile,
             });
-            this.props.setTitle("Reconcile quantity chart");
+            this.props.setHintMessage(this.state.reconcileChartHint);
+            this.props.setTitle(this.state.reconcileChartTitle);
         }else{
         }
     }
@@ -517,6 +526,7 @@ class Dashboard extends Component{
                     isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }
+
                 {lists}
                 <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
                 {toolKit}

@@ -1,7 +1,7 @@
 import {Component} from "react";
 import ReceiptTable from "./receiptTable";
 import {Link, Redirect} from 'react-router-dom';
-import "../../../../stylesheets/mainPage/result/receipt/receiptContent.css";
+//import "../../../../stylesheets/mainPage/result/receipt/receiptContent.css";
 import React from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";

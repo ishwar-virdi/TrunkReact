@@ -1,6 +1,6 @@
 .home-view{
     height: calc(100vh - 130px);
-    min-height: 650px;
+    /*min-height: 650px;*/
     width: 100%;
 }
 
@@ -52,5 +52,69 @@
     opacity: 1;
 }
 .home-arrowRight:hover{
+    opacity: 1;
+}
+
+.chart-hint{
+    position: absolute;
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin-top: -29px;
+    margin-left: 390px;
+    color: var(--fontColorGrey);
+    cursor: pointer;
+}
+
+.chart-hint .icon{
+    position: relative;
+    height: 16px;
+    width: 15px;
+    z-index: 1000;
+}
+
+
+.chart-hint-box{
+    position: absolute;
+    color: white;
+    top: 29px;
+    right: -90px;
+    text-align: center;
+    width:180px;
+    height:auto;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 12px;
+}
+
+.chart-hint-arrow{
+    position: absolute;
+    right: 87px;
+    top:-20px;
+    width:0;
+    height:0;
+    z-index: 0;
+    border: 10px solid transparent;
+    border-bottom-color: #454545;
+}
+
+.chart-hint-text{
+    position: absolute;
+    width:calc(100% - 10px);
+    height:auto;
+    padding: 5px 5px 5px 5px;
+    z-index: 0;
+    background-color: #454545;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.chart-hint:hover{
+    color: #66CCFF;
+}
+
+.chart-hint:hover .chart-hint-box{
+    display: block;
+    visibility: visible;
     opacity: 1;
 }
