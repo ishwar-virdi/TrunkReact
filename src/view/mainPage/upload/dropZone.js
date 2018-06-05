@@ -18,6 +18,9 @@ class DropZone extends Component{
             dropZone:"upload-dropZone upload-default",
             uploadRedirect:false,
             loading:"false",
+            //variables for popup function
+            infoButton:"dropZone-hidden",
+            docName:"",
         };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
@@ -52,6 +55,26 @@ class DropZone extends Component{
     }
 
     handleDocTypeChange(e) {
+
+        // Displaying the infoButton
+        if(e.target.value==="Bank"){
+
+            this.state.docName = e.target.value;
+            this.setState({
+                infoButton:"dropZone-show",
+            })
+
+        }else if(e.target.value==="Settlement"){
+            this.state.docName = e.target.value;
+            this.setState({
+                infoButton:"dropZone-show"
+            })
+        }else{
+            this.setState({
+                infoButton:"dropZone-hidden"
+            })
+        };
+
         this.setState({
             docType: e.target.value,
         })
@@ -171,7 +194,9 @@ class DropZone extends Component{
                                 <use xlinkHref="#icon-xiangxia"></use>
                             </svg>
                         </div>
+                        <Button className={this.state.infoButton} id="dropZone-warning" bsStyle="warning"> ? </Button>
                     </div>
+
                     <ButtonToolbar className="dropZone-ButtonToolbar">
                         <Button className="dropZone-ButtonToolbarButton" bsStyle="primary" bsSize="large" onClick={this.uploadDocs}>Submit</Button>
                     </ButtonToolbar>
