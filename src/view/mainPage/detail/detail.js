@@ -1,7 +1,8 @@
+
 import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
-//import "../../../stylesheets/mainPage/detail/detail.css";
+import "../../../stylesheets/mainPage/detail/detail.css";
 import Footer from "../../components/content/footer";
 import TransactionTable from "../detail/transactionTable"
 import Loading from "../../components/content/loading";
@@ -20,20 +21,20 @@ class detail extends Component{
     componentDidMount() {
     }
 
-    visibleLoading(visible){
+    visibleLoading = (visible)=>{
         this.setState({
             loading:visible,
         });
     };
 
-    setTitle(title){
+    setTitle =(title) =>{
         this.setState({
             title:title,
         });
     };
     render(){
         return (
-            <div className="container">
+            <div className="updatedContainer">
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title={this.state.title}/>
