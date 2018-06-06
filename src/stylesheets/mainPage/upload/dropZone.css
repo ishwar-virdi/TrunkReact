@@ -226,3 +226,15 @@
     visibility: visible;
     opacity: 1;
 }
+/*Css for settlement*/
+.dropZone-hidden-s{
+    height: 0;
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dropZone-show-s{
+    visibility: visible;
+    opacity: 1;
+}

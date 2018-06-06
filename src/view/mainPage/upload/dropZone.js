@@ -7,10 +7,14 @@ import Dropzone from 'react-dropzone';
 import React from "react";
 import {Redirect} from "react-router-dom";
 import Loading from "../../components/content/loading";
-import {Button, ButtonToolbar} from "react-bootstrap";
+import { Button, ButtonToolbar} from "react-bootstrap";
+import {SettlementStatementAlert,BankStatementAlert} from "./instruction";
+
 class DropZone extends Component{
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
+
         this.state = {
             docType: "",
             files: [] ,
@@ -21,11 +25,18 @@ class DropZone extends Component{
             //variables for popup function
             infoButton:"dropZone-hidden",
             docName:"",
+            showAlertBank:false,
+            showAlertStatement:false,
+            showStructureAlertBank:"dropZone-hidden",
+            showStructureAlertStatement:"dropZone-hidden"
+
         };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
         this.uploadDocs = this.uploadDocs.bind(this);
+        this.showStructureAlert= this.showStructureAlert.bind(this);
     }
+
 
     componentWillUnmount() {
         this.setState({
@@ -136,7 +147,44 @@ class DropZone extends Component{
             })
     };
 
+
+
+    showStructureAlert(){
+
+// logic for bank alert
+        if(this.state.docName==="Bank" && this.state.showAlertBank=== false) {
+            this.setState({
+                showStructureAlertBank: "dropZone-show",
+                showAlertBank: true,
+            });
+        }else{
+
+            this.setState({
+                showStructureAlertBank : "dropZone-hidden",
+                showAlertBank: false,
+            });
+        }
+
+console.log(this.state.docName)
+        if(this.state.docName==="Settlement" && this.state.showAlertStatement=== false) {
+            this.setState({
+                showStructureAlertStatement: "dropZone-show",
+                showAlertStatement: true,
+            });
+        }else{
+
+            this.setState({
+                showStructureAlertStatement : "dropZone-hidden",
+                showAlertStatement: false,
+            });
+        }
+
+
+
+    }
     render() {
+
+
         const {status,uploadRedirect} = this.state;
         const warnLabel = (status !== "none") ? (
             <p className="upload-fail">{this.state.status}</p>
@@ -145,7 +193,14 @@ class DropZone extends Component{
         );
 
         return (
-            <div className="upload-view-Handler">
+            <div>
+                <div className={this.state.showStructureAlertBank} >
+                <BankStatementAlert />
+                </div>
+                <div className={this.state.showStructureAlertStatement}>
+                <SettlementStatementAlert/>
+                </div>
+                <div className="upload-view-Handler">
                 {
                     uploadRedirect === true ? ( <Redirect to={{pathname:'/uploadSuccess'}}/>)
                         : null
@@ -180,6 +235,7 @@ class DropZone extends Component{
                             </div>
                         </div>
                     </Dropzone>
+
                     <div className="upload-select">
                         <div className="upload-select-text">
                             <p>Select document type</p>
@@ -194,7 +250,7 @@ class DropZone extends Component{
                                 <use xlinkHref="#icon-xiangxia"></use>
                             </svg>
                         </div>
-                        <Button className={this.state.infoButton} id="dropZone-warning" bsStyle="warning"> ? </Button>
+                        <Button className={this.state.infoButton} id="dropZone-warning" onClick={this.showStructureAlert} bsStyle="warning"> ? </Button>
                     </div>
 
                     <ButtonToolbar className="dropZone-ButtonToolbar">
@@ -202,6 +258,8 @@ class DropZone extends Component{
                     </ButtonToolbar>
                 </div>
                 <Loading visible={this.state.loading}/>
+            </div>
+
             </div>
         );
     }
