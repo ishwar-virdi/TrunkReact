@@ -18,7 +18,7 @@ class receipt extends Component{
 
     render(){
         return (
-            <div className="updatedContainer">
+            <div className="container">
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title={this.state.title}/>

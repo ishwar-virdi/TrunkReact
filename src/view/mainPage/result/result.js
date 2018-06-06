@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 import SearchBar from "../../components/content/searchBar";
-import "../../../stylesheets/mainPage/result/result.css";
+//import "../../../stylesheets/mainPage/result/result.css";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import 'react-dates/initialize';
@@ -66,7 +66,7 @@ class result extends Component{
 
     render(){
         return (
-            <div className="updatedContainer">
+            <div className="container">
                 <Header clickedClass="Result"/>
                 <div className="body">
                     <Title title="Reconciliation Results"/>
