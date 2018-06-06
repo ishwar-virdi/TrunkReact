@@ -9,7 +9,7 @@ class upload extends Component{
 
     render(){
         return (
-            <div className="updatedContainer">
+            <div className="container">
                 <Header clickedClass="Upload"/>
                 <div className="body">
                     <Title title="Upload"/>

@@ -7,9 +7,6 @@ import axios from "axios/index";
 import {apiurl} from "../../../../config/constants";
 import Loading from "../../../components/content/loading";
 
-// importing bootstrap components
-import {Alert, Button, ButtonToolbar} from "react-bootstrap";
-
 class ReceiptContent extends Component{
     constructor(props) {
         super(props);
@@ -135,25 +132,6 @@ class ReceiptContent extends Component{
             })
     }
 
-    refreshPage(){
-        window.location.reload()
-    }
-
-    /*Change the button colour according to the states of results */
-    changeButtonColour(){
-        let buttonStatus;
-
-        if(this.state.btnText==="Mark as Reconciled"){
-            buttonStatus="success"
-        }else{
-            buttonStatus="danger"
-        }
-
-
-        return buttonStatus.toString();
-    }
-
-
     markAsReconcile(){
         let url = "";
         let btnText = "";
@@ -216,16 +194,6 @@ class ReceiptContent extends Component{
 
 
     render(){
-        if (this.state.result==="Error in Receipt API"){
-            return(
-
-                <Alert bsStyle="warning">
-                    <h1>{this.state.result}</h1>
-                    <strong>Problem with connecting Database</strong> Please press the 'Try again' button...
-                    <Button className="" bsStyle="danger" bsSize="large" onClick={ this.refreshPage} > Try again</Button>
-                </Alert>
-            )
-        }else{
         const isLogin = localStorage.getItem('login');
         return (
             <div className="receipt-content">
@@ -234,12 +202,6 @@ class ReceiptContent extends Component{
                         : null
                 }
                 <h1>{this.state.result}</h1>
-
-                <ButtonToolbar className="receiptContent-ButtonToolbar">
-                    <Button className="receiptContent-ButtonToolbarButton" bsStyle="default" bsSize="large" ><Link className="transition" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link></Button>
-                    <Button className="receiptContent-ButtonToolbarButton " bsStyle={this.changeButtonColour()} bsSize="large" onClick={this.markAsReconcile}>{this.state.btnText}</Button>
-                </ButtonToolbar>
-
                 <div className="receipt-content-table">
                     <div className="receipt-table">
                         <div>
@@ -254,10 +216,17 @@ class ReceiptContent extends Component{
                         </div>
                     </div>
                 </div>
+                <div className="receipt-content-btn-group">
+                    <div className="receipt-content-btn">
+                        <p className="transition" onClick={this.markAsReconcile}>{this.state.btnText}</p>
+                    </div>
+                    <div className="receipt-content-btn">
+                        <Link className="transition default-btn" to={{pathname:"/reconciledresult/details/" + this.props.backTo}}>Back</Link>
+                    </div>
+                </div>
                 <Loading visible={this.state.loadingVisible}/>
             </div>
         )
-    }
     }
 };
 export default ReceiptContent;

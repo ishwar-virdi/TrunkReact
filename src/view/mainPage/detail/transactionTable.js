@@ -1,4 +1,3 @@
-
 import React from "react";
 //import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';
@@ -43,7 +42,7 @@ class TransactionTable extends React.Component {
             .then(
             (response) => {
 
-                let data = response.data;
+              let data = response.data;
 
                 if(data === ""){
                     localStorage.clear();
@@ -173,7 +172,6 @@ class TransactionTable extends React.Component {
         })
             .then(
                 (response) => {
-
                     let data = response.data;
                     if(data === ""){
                         localStorage.clear();
@@ -203,7 +201,6 @@ class TransactionTable extends React.Component {
                     loading:"false",
                 });
         });
-
     };
 
     toggleRow(receiptNumber) {
