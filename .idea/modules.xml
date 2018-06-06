@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TrunkReact.iml" filepath="$PROJECT_DIR$/TrunkReact.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartreconcilereact.iml" filepath="$PROJECT_DIR$/smartreconcilereact.iml/smartreconcilereact.iml"/>
     </modules>
   </component>
 </project>

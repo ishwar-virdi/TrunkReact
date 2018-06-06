@@ -184,7 +184,7 @@ class TransactionTable extends React.Component {
                             let id = Number(selectedItems[i]);
                             for(let j = 0, itemLen = items.length;j<itemLen;j++){
                                 if(items[j].receiptNumber === id){
-                                    items[j].reconciled = "Failed";
+                                    items[j].reconciled = "Unsuccessful";
                                     items[j].rule = "Manually Not Reconciled";
                                     break;
                                 }
