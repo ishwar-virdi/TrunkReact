@@ -1,8 +1,5 @@
 import React,{Component} from "react";
-
 //import "../../../stylesheets/mainPage/home/dashboard.css";
-import Indicator from "./indicator";
-
 import {Bar} from 'react-chartjs-2';
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
@@ -15,10 +12,6 @@ class Dashboard extends Component{
         super(props);
         this.state = {
             loading:"false",
-            page:"monthly",
-            chartMinIndex:96,
-            chartIndex:100,
-            chartMaxIndex:104,
             chartReconcile:{},
             chartTotalAmount:{},
             chartDailyTransaction:{},
@@ -129,15 +122,10 @@ class Dashboard extends Component{
             },
             monthTota1Index:0,
             dailyTransactionIndex:0,
-            reconcileChartTitle:"Reconcile Quantity by Month",
-            monthlyChartTitle:"Bank and Settlement Total Amounts by Month",
-            dailyChartTitle:"Bank and Settlement Total Amounts by Day",
-            reconcileChartHint:"Shows the count of reconciled and not reconciled settlement items",
-            monthlyChartHint:"Shows the total monetary amount for the bank statement and settlement documents for each month",
-            dailyChartHint:"Shows the total monetary amount categorized by transaction types for the bank statement and settlement documents for each day",
+            arrowLeft:"home-arrowLeft",
+            arrowRight:"home-arrowRight border-right",
         };
 
-        this.handleScroll = this.handleScroll.bind(this);
         this.handleLeftClick = this.handleLeftClick.bind(this);
         this.handleRightClick = this.handleRightClick.bind(this);
     }
@@ -146,12 +134,52 @@ class Dashboard extends Component{
         this.requestReconcileChart();
         this.requestMonthTotalChart(0);
         this.requestDailyTransaction(0);
-        window.addEventListener('wheel', this.handleScroll, { passive: true });
-        this.props.setTitle(this.state.monthlyChartTitle);
     }
 
+    componentDidUpdate(previousProps){
+        if(
+            previousProps.chartIndex !== this.props.chartIndex
+        ){
+            this.indicator();
+        }
+    }
+
+    indicator(){
+        let chartIndex = this.props.chartIndex;
+        switch (chartIndex){
+            case 104:
+                this.setState({
+                    arrowLeft:"home-arrowLeft border-top",
+                    arrowRight:"home-arrowRight"
+                });
+                break;
+            case 102:
+                this.setState({
+                    arrowLeft:"home-arrowLeft",
+                    arrowRight:"home-arrowRight border-top"
+                });
+                break;
+            case 100:
+                this.setState({
+                    arrowLeft:"home-arrowLeft",
+                    arrowRight:"home-arrowRight border-right"
+                });
+                break;
+            case 98:
+                this.setState({
+                    arrowLeft:"home-arrowLeft",
+                    arrowRight:"home-arrowRight border-bottom"
+                });
+                break;
+            case 96:
+                this.setState({
+                    arrowLeft:"home-arrowLeft border-bottom",
+                    arrowRight:"home-arrowRight"
+                });
+                break;
+        }
+    };
     componentWillUnmount() {
-        window.removeEventListener('wheel',this.handleScroll);
         this.setState({
             loading:"false"
         });
@@ -258,7 +286,6 @@ class Dashboard extends Component{
                     this.setState({
                         chartTotalAmount:chart,
                     });
-                    this.props.setHintMessage(this.state.monthlyChartHint);
                 },
                 (error) => {
                     this.setState({
@@ -364,68 +391,11 @@ class Dashboard extends Component{
             })
         ;
     }
-    handleScroll(event) {
-        if(this.isScrollUp(event)){
-            this.setChartIndex("up");
-        }else{
-            this.setChartIndex("down");
-        }
-        this.chartUpdate();
-    }
 
-    isScrollUp(event){
-        return event.wheelDeltaY > 0;
-    }
-    setChartIndex(action){
-        let nextIndex;
-        if(action === "up"){
-            nextIndex = this.state.chartIndex + 1;
-        }else if(action === "down"){
-            nextIndex = this.state.chartIndex - 1;
-        }
-
-        if(nextIndex < this.state.chartMinIndex || nextIndex > this.state.chartMaxIndex){
-            return
-        }
-
-        this.setState({
-            updated:true,
-            chartIndex:nextIndex,
-        });
-    }
-
-    chartUpdate(){
-
-        let index = this.state.chartIndex;
-
-        if(index === this.state.chartMinIndex){
-            this.setState({
-                page:"daily",
-                chartData:this.state.chartDailyTransaction,
-            });
-            this.props.setHintMessage(this.state.dailyChartHint);
-            this.props.setTitle(this.state.dailyChartTitle);
-        }else if(index === 100){
-            this.setState({
-                page:"monthly",
-                chartData:this.state.chartTotalAmount,
-            });
-            this.props.setHintMessage(this.state.monthlyChartHint);
-            this.props.setTitle(this.state.monthlyChartTitle);
-        }else if(index === this.state.chartMaxIndex){
-            this.setState({
-                page:"reconcile",
-                chartData:this.state.chartReconcile,
-            });
-            this.props.setHintMessage(this.state.reconcileChartHint);
-            this.props.setTitle(this.state.reconcileChartTitle);
-        }else{
-        }
-    }
 
     handleLeftClick(){
         let pageIndex = this.state.pageIndex + 1;
-        switch (this.state.page){
+        switch (this.props.page){
             case "monthly":{
                 pageIndex = this.state.monthTota1Index + 1;
                 this.setState({
@@ -446,10 +416,9 @@ class Dashboard extends Component{
             }
         }
     }
-
     handleRightClick(){
         let pageIndex;
-        switch (this.state.page){
+        switch (this.props.page){
             case "monthly":{
                 pageIndex = this.state.monthTota1Index - 1;
                 if(pageIndex < 0){
@@ -476,26 +445,33 @@ class Dashboard extends Component{
 
             }
         }
-
     }
-    pageToolkit = () =>{
-        let page  = this.state.page;
+    pageToolkit(){
+        let page  = this.props.page;
         if(page === "daily"
             || page === "monthly"){
-            //console.log("a");
             return (
-            <div className="date-Button">
-                <div className="transition home-arrowLeft">
+            <div className="transition date-Button">
+                <div className={this.state.arrowLeft}>
                     <svg onClick={this.handleLeftClick} className="icon" aria-hidden="true">
                         <use xlinkHref="#icon-xiangzuo"></use>
                     </svg>
                 </div>
-                <div className="transition home-arrowRight">
+                <div className={this.state.arrowRight}>
                     <svg onClick={this.handleRightClick} className="icon" aria-hidden="true">
                         <use xlinkHref="#icon-msnui-triangle-right"></use>
                     </svg>
                 </div>
             </div>
+            );
+        }else if(page === "reconcile"){
+            return (
+                <div className="transition date-Button">
+                    <div className={this.state.arrowLeft}>
+                    </div>
+                    <div className={this.state.arrowRight}>
+                    </div>
+                </div>
             );
         }
     };
@@ -506,7 +482,7 @@ class Dashboard extends Component{
 
         let lists;
 
-        switch (this.state.page){
+        switch (this.props.page){
             case "monthly":
                 lists = <Bar data={this.state.chartTotalAmount} options={this.state.monthlyOption}/>;
                 break;
@@ -526,9 +502,7 @@ class Dashboard extends Component{
                     isLogin === null ? (<Redirect to={{pathname:'/login'}}/>)
                         : null
                 }
-
                 {lists}
-                <Indicator min={this.state.chartMinIndex} max={this.state.chartMaxIndex} index={this.state.chartIndex}/>
                 {toolKit}
                 <Loading visible={this.state.loading}/>
             </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import FormSeperateLayerfrom from "./formSeperateLayer";
-
 //import "../../../stylesheets/mainPage/result/reconcile.css";
 import ReconcileItem from './reconcileItem';
 import moment from "moment";

@@ -3,7 +3,6 @@ import Header from "../../components/content/header";
 import Title from "../../components/content/title";
 //import "../../../stylesheets/mainPage/upload/upload.css";
 import Footer from "../../components/content/footer";
-
 import DropZone from '../../mainPage/upload/dropZone'
 
 class upload extends Component{

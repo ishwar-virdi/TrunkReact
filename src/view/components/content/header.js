@@ -21,6 +21,8 @@ class Header extends React.Component {
     }
 
     handleLogOut(e){
+        localStorage.clear();
+        this.forceUpdate();
         axios({
             withCredentials: true,
             method: 'POST',
@@ -33,8 +35,6 @@ class Header extends React.Component {
         })
             .then(
                 (response) => {
-                    localStorage.clear();
-                    this.forceUpdate();
                 },
                 (error) => {
                     console.log(error);
@@ -46,7 +46,6 @@ class Header extends React.Component {
             this.setState({
                 redirect: params.value,
             });
-
         }
     }
 

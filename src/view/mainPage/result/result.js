@@ -6,7 +6,7 @@ import SearchBar from "../../components/content/searchBar";
 import Reconcile from "../result/reconcile";
 import Footer from "../../components/content/footer";
 import 'react-dates/initialize';
-import 'react-dates/lib/css/_datepicker.css';
+//import 'react-dates/lib/css/_datepicker.css';
 import DateRangePicker from "react-dates/esm/components/DateRangePicker";
 import Loading from "../../components/content/loading";
 import SearchNotFound from "./searchNotFound";

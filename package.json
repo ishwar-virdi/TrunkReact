@@ -31,8 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "mocha": "mocha --compilers js:babel-register --recursive",
-    "test": "react-scripts test --env=jsdom",
+    "test": "mocha --compilers js:babel-register -r mock-local-storage --recursive --require ./test/setup.js",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
@@ -46,6 +45,7 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "expect": "^23.1.0",
     "jest": "^23.1.0",
+    "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
     "moment": "^2.22.1",
     "react-test-renderer": "^16.4.0",
