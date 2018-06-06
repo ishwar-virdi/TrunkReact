@@ -77,6 +77,20 @@ input:hover {
     -moz-border-radius: 0 0 8px 0;
 }
 
+
+/*CSS Rules for bootstrap */
+
+.transaction-table-ButtonToolbar{
+
+    padding: 10px;
+}
+
+.transaction-table-ButtonToolbarButton{
+
+    margin-right: 15px;
+}
+
+
 /*React Transaction table CSS RULES */
 
 .ReactTable{
@@ -161,7 +175,7 @@ input:hover {
     box-shadow:inset 0 0 0 0 transparent;
 
     /*Increase font szie*/
-    font-size:120%;
+    font-size:140%;
     font-weight: bold;
 
 }
@@ -231,8 +245,8 @@ input:hover {
 
 .ReactTable .rt-tbody .rt-tr-group:hover{
     cursor: pointer;
-    background-color: var(--subjectColor);
-    color: white;
+    background-color:#ddd;
+    color: black;
 
 }
 .ReactTable .rt-tbody .rt-tr-group:last-child{
@@ -241,6 +255,9 @@ input:hover {
 .ReactTable .rt-tbody .rt-td{
 
     border-right:1px solid rgba(0,0,0,0.02);
+
+    /*increasing td font size*/
+    font-size: 115%;
 }
 
 /*.ReactTable .rt-tbody .rt-td input{*/

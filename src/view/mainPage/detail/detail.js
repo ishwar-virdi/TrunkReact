@@ -1,3 +1,4 @@
+
 import React,{Component} from "react";
 import Header from "../../components/content/header";
 import Title from "../../components/content/title";
@@ -32,5 +33,4 @@ class detail extends Component{
         )
     }
 }
-
 export default detail;

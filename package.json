@@ -5,13 +5,14 @@
   "dependencies": {
     "ajv": "^6.4.0",
     "axios": "^0.18.0",
+    "bootstrap": "^4.1.1",
     "chart.js": "^2.7.2",
-    "jquery": "^3.3.1",
     "lodash": "latest",
     "moment-range": "^2.1.0",
     "prop-types": "latest",
     "react": "^16.4.0",
     "react-addons-shallow-compare": "^15.6.2",
+    "react-bootstrap": "^0.32.1",
     "react-chartjs-2": "^2.7.2",
     "react-dates": "^16.7.0",
     "react-day-picker": "^7.1.9",
@@ -51,6 +52,8 @@
     "react-test-renderer": "^16.4.0",
     "sinon": "^5.0.10",
     "style-loader": "^0.21.0",
-    "webpack": "^3.11.0"
+    "webpack": "^3.11.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
   }
 }

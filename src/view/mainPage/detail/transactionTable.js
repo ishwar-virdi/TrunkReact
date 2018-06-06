@@ -1,3 +1,4 @@
+
 import React from "react";
 //import "../../../stylesheets/mainPage/detail/transactionTable.css";
 import NumberFormat from 'react-number-format';

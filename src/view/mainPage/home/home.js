@@ -87,7 +87,7 @@ class home extends Component{
 
     render(){
         return (
-            <div className="container">
+            <div className="updatedContainer">
                 <Header clickedClass="Dashboard"/>
                 <div className="body">
                     <Title title={this.state.title}/>
