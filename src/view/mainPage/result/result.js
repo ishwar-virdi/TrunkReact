@@ -70,18 +70,6 @@ class result extends Component{
                 <div className="body">
                     <Title title="Reconciliation Results"/>
                     <div className="result-search">
-                        <div className="result-search-dataPicker">
-                            <DateRangePicker
-                                startDate={this.state.startDate} // momentPropTypes.momentObj or null,
-                                startDateId={this.state.startDateId} // PropTypes.string.isRequired,
-                                endDate={this.state.endDate} // momentPropTypes.momentObj or null,
-                                endDateId={this.state.endDateId} // PropTypes.string.isRequired,
-                                onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
-                                focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-                                onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
-                                isOutsideRange={() => false}
-                            />
-                        </div>
                         <div className="result-search-bar">
                             <SearchBar setSort={(sort) => this.setSort(sort)}  // PropTypes.func.isRequired,
                                        setSearchResult={(result) => this.setSearchResult(result)} // PropTypes.func.isRequired,
