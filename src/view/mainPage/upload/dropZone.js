@@ -1,20 +1,14 @@
-
 import {Component} from "react";
 import axios from "axios/index";
 import {apiurl} from "../../../config/constants";
-import "../../../stylesheets/mainPage/upload/dropZone.css";
+//import "../../../stylesheets/mainPage/upload/dropZone.css";
 import Dropzone from 'react-dropzone';
 import React from "react";
 import {Redirect} from "react-router-dom";
 import Loading from "../../components/content/loading";
-import { Button, ButtonToolbar} from "react-bootstrap";
-import {SettlementStatementAlert,BankStatementAlert} from "./instruction";
-
 class DropZone extends Component{
-    constructor(props, context) {
-        super(props, context);
-
-
+    constructor(props) {
+        super(props);
         this.state = {
             docType: "",
             files: [] ,
@@ -22,21 +16,11 @@ class DropZone extends Component{
             dropZone:"upload-dropZone upload-default",
             uploadRedirect:false,
             loading:"false",
-            //variables for popup function
-            infoButton:"dropZone-hidden",
-            docName:"",
-            showAlertBank:false,
-            showAlertStatement:false,
-            showStructureAlertBank:"dropZone-hidden",
-            showStructureAlertStatement:"dropZone-hidden"
-
         };
         this.onDrop = this.onDrop.bind(this);
         this.handleDocTypeChange = this.handleDocTypeChange.bind(this);
         this.uploadDocs = this.uploadDocs.bind(this);
-        this.showStructureAlert= this.showStructureAlert.bind(this);
     }
-
 
     componentWillUnmount() {
         this.setState({
@@ -66,36 +50,13 @@ class DropZone extends Component{
     }
 
     handleDocTypeChange(e) {
-
-        // Displaying the infoButton
-        if(e.target.value==="Bank"){
-
-            this.state.docName = e.target.value;
-            this.setState({
-                infoButton:"dropZone-show",
-            })
-
-        }else if(e.target.value==="Settlement"){
-            this.state.docName = e.target.value;
-            this.setState({
-                infoButton:"dropZone-show"
-            })
-        }else{
-            this.setState({
-                infoButton:"dropZone-hidden"
-            })
-        };
-
         this.setState({
             docType: e.target.value,
         })
     };
 
     uploadDocs() {
-        this.setState({
-            status : "none",
-            loading: "true",
-        });
+
         if(this.state.files.length === 0){
             this.setState({
                 status : "Please select upload file"
@@ -108,6 +69,10 @@ class DropZone extends Component{
             });
             return;
         }
+        this.setState({
+            status : "none",
+            loading: "true",
+        });
         let data = new FormData();
         this.state.files.forEach(file => {
             data.append("file",file);
@@ -147,44 +112,7 @@ class DropZone extends Component{
             })
     };
 
-
-
-    showStructureAlert(){
-
-// logic for bank alert
-        if(this.state.docName==="Bank" && this.state.showAlertBank=== false) {
-            this.setState({
-                showStructureAlertBank: "dropZone-show",
-                showAlertBank: true,
-            });
-        }else{
-
-            this.setState({
-                showStructureAlertBank : "dropZone-hidden",
-                showAlertBank: false,
-            });
-        }
-
-console.log(this.state.docName)
-        if(this.state.docName==="Settlement" && this.state.showAlertStatement=== false) {
-            this.setState({
-                showStructureAlertStatement: "dropZone-show",
-                showAlertStatement: true,
-            });
-        }else{
-
-            this.setState({
-                showStructureAlertStatement : "dropZone-hidden",
-                showAlertStatement: false,
-            });
-        }
-
-
-
-    }
     render() {
-
-
         const {status,uploadRedirect} = this.state;
         const warnLabel = (status !== "none") ? (
             <p className="upload-fail">{this.state.status}</p>
@@ -193,14 +121,7 @@ console.log(this.state.docName)
         );
 
         return (
-            <div>
-                <div className={this.state.showStructureAlertBank} >
-                <BankStatementAlert />
-                </div>
-                <div className={this.state.showStructureAlertStatement}>
-                <SettlementStatementAlert/>
-                </div>
-                <div className="upload-view-Handler">
+            <div className="upload-view-Handler">
                 {
                     uploadRedirect === true ? ( <Redirect to={{pathname:'/uploadSuccess'}}/>)
                         : null
@@ -235,7 +156,6 @@ console.log(this.state.docName)
                             </div>
                         </div>
                     </Dropzone>
-
                     <div className="upload-select">
                         <div className="upload-select-text">
                             <p>Select document type</p>
@@ -250,16 +170,12 @@ console.log(this.state.docName)
                                 <use xlinkHref="#icon-xiangxia"></use>
                             </svg>
                         </div>
-                        <Button className={this.state.infoButton} id="dropZone-warning" onClick={this.showStructureAlert} bsStyle="warning"> ? </Button>
                     </div>
-
-                    <ButtonToolbar className="dropZone-ButtonToolbar">
-                        <Button className="dropZone-ButtonToolbarButton" bsStyle="primary" bsSize="large" onClick={this.uploadDocs}>Submit</Button>
-                    </ButtonToolbar>
+                    <div className="upload-submit">
+                        <p className="transition" onClick={this.uploadDocs}>Submit</p>
+                    </div>
                 </div>
                 <Loading visible={this.state.loading}/>
-            </div>
-
             </div>
         );
     }

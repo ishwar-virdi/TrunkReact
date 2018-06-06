@@ -99,17 +99,3 @@
     border: 3px solid #aaaaaa;
     color: #aaaaaa;
 }
-
-
-
-/*CSS Rules for bootstrap */
-
-.receiptContent-ButtonToolbar{
-
-    padding: 10px;
-}
-
-.receiptContent-ButtonToolbarButton{
-
-    margin-right: 15px;
-}
