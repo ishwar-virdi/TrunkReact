@@ -25,7 +25,7 @@ class Loading extends React.Component {
     setVisible(){
         if(this.props.visible === "false"){
             this.setState({
-                loadingClass:"loading loading-hidden"
+                loadingClass:"loading loading-hidden",
             });
         }else{
             this.setState({
@@ -38,18 +38,10 @@ class Loading extends React.Component {
     render() {
         return (
             <div className={this.state.loadingClass}>
-                <div className="loading-spinner1">
-                    <div className="loading-dot1"></div>
-                    <div className="loading-dot2"></div>
-                    <div className="loading-dot3"></div>
-                    <div className="loading-dot4"></div>
-                </div>
-                <div className="loading-spinner2">
-                    <div className="loading-dot5"></div>
-                    <div className="loading-dot6"></div>
-                    <div className="loading-dot7"></div>
-                    <div className="loading-dot8"></div>
-                </div>
+                <div className="loading-spinner0"></div>
+                <div className="loading-spinner1"></div>
+                <div className="loading-spinner2"></div>
+                <div className="loading-spinner3"></div>
             </div>
 
         );

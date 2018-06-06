@@ -33,8 +33,6 @@ class UploadSuccTable extends Component{
         })
             .then(
                 (response) => {
-
-                    console.log(response);
                     if(response.data === ""){
                         localStorage.clear();
                         this.forceUpdate();
@@ -84,7 +82,7 @@ class UploadSuccTable extends Component{
             );
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(){
         this.setState({
             visible:"false"
         });
@@ -102,7 +100,7 @@ class UploadSuccTable extends Component{
         return transaction;
     }
 
-    returnTitle = () =>{
+    returnTitle(){
         let lists = [];
         let titles = this.state.title;
         let displayTitles = [];
@@ -125,7 +123,7 @@ class UploadSuccTable extends Component{
         lists.push(<UploadSuccessItem key="-1" type={this.state.type} value={displayTitles} isTitle="true"/>);
         return lists;
     };
-    returnTransactions = () =>{
+    returnTransactions(){
         let lists = [];
         let transactions = this.state.transactions;
         for(let i = 0,length = transactions.length;i < length;i++){

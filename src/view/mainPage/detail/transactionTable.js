@@ -4,8 +4,8 @@ import NumberFormat from 'react-number-format';
 import {apiurl, selfurl} from "../../../config/constants";
 import axios from "axios/index";
 import ReactTable from "react-table";
-import moment from "moment";
 import {Redirect} from "react-router-dom";
+import Loading from "../../components/content/loading";
 
 class TransactionTable extends React.Component {
     constructor(props) {
@@ -16,6 +16,7 @@ class TransactionTable extends React.Component {
             selected: {},
             selectAll: 0,
             notDataFound:"rt-notDateFound rt-notDateFound-hidden",
+            loading:"false",
         };
 
         this.jsonToResult = this.jsonToResult.bind(this);
@@ -24,7 +25,9 @@ class TransactionTable extends React.Component {
     }
 
     componentDidMount() {
-        this.props.visibleLoading("true");
+        this.setState({
+            loading:"true",
+        });
         this.setState({
             notDataFound:"rt-notDateFound rt-notDateFound-hidden"
         });
@@ -38,8 +41,8 @@ class TransactionTable extends React.Component {
         })
             .then(
             (response) => {
-                this.props.visibleLoading("false");
-                let data = response.data;
+
+              let data = response.data;
 
                 if(data === ""){
                     localStorage.clear();
@@ -54,17 +57,18 @@ class TransactionTable extends React.Component {
                 }
 
                 let details = [];
-                let date = moment(data[0].date,"MMM DD, YYYY HH:mm").format('MMMM YYYY');
-                this.props.setTitle("Reconcile Results: " + date);
                 for(let i = 0; i < data.length;i++){
                     details.push(this.jsonToResult(data[i]));
                 }
                 this.setState({
                     items: details,
-                    selectAll: 0
+                    selectAll: 0,
+                    loading:"false",
                 });
         }).then((error)=>{
-            this.props.visibleLoading("false");
+            this.setState({
+                loading:"false",
+            });
         });
     };
 
@@ -79,14 +83,16 @@ class TransactionTable extends React.Component {
         if (json.status){
             result.reconciled = "Success";
         }else{
-            result.reconciled = "Failed";
+            result.reconciled = "Unsuccessful";
         }
         result.rule = json.rule;
         return result;
     };
 
     markAsReconciled (){
-        this.props.visibleLoading("true");
+        this.setState({
+            loading:"true",
+        });
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
         for(let i = 0, keys = selectedItemKey.length;i<keys;i++){
@@ -108,7 +114,9 @@ class TransactionTable extends React.Component {
         })
             .then(
                 (response) => {
-                    this.props.visibleLoading("false");
+                    this.setState({
+                        loading:"true",
+                    });
                     let data = response.data;
                     if(data === ""){
                         localStorage.clear();
@@ -128,16 +136,21 @@ class TransactionTable extends React.Component {
                             }
                         }
                         this.setState({
-                            items: items
+                            items: items,
+                            loading:"false",
                         });
                     }
                 }).then((error)=>{
-            this.props.visibleLoading("false");
+            this.setState({
+                loading:"false",
+            });
         });
     };
 
     markAsNotReconciled () {
-        this.props.visibleLoading("true");
+        this.setState({
+            loading:"true",
+        });
         let selectedItemKey = Object.keys(this.state.selected);
         let selectedItems = [];
         for(let i = 0, keys = selectedItemKey.length;i<keys;i++){
@@ -159,7 +172,6 @@ class TransactionTable extends React.Component {
         })
             .then(
                 (response) => {
-                    this.props.visibleLoading("false");
                     let data = response.data;
                     if(data === ""){
                         localStorage.clear();
@@ -180,25 +192,15 @@ class TransactionTable extends React.Component {
                         }
                         this.setState({
                             items: items,
+                            loading:"false",
                         });
                     }
                 })
             .then((error)=>{
-            this.props.visibleLoading("false");
+                this.setState({
+                    loading:"false",
+                });
         });
-
-/*        var items = this.state.items;
-
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].isChecked) {
-                items[i].reconciled = false;
-                items[i].rule = "Manually Marked"
-            }
-        }
-
-        this.setState({
-            items: items
-        });*/
     };
 
     toggleRow(receiptNumber) {
@@ -332,6 +334,7 @@ class TransactionTable extends React.Component {
                 <div className={this.state.notDataFound}>
                     <p>No data Found</p>
                 </div>
+                <Loading visible={this.state.loading}/>
             </div>
 
         );
