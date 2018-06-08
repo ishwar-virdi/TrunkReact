@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch,Route } from 'react-router-dom'
 import login from './view/login';
+import register from './view/register';
 import home from './view/mainPage/home/home';
 import history from './view/mainPage/result/result';
 import upload from './view/mainPage/upload/upload';
@@ -17,6 +18,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={login} />
                         <Route exact path="/login" component={login} />
+                        <Route exact path="/register" component={register} />
                         <Route path="/home" component={home} />
                         <Route path="/reconciledresults" component={history} />
                         <Route path="/upload" component={upload} />
